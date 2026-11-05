@@ -5,7 +5,7 @@ A five-page, frontend-only Housebets sportsbook concept built around fast match 
 **Owner:** bayuewalker  
 **Repository:** `bayuewalker/housebets-sportsbook-contest`  
 **Hosting target:** GitHub Pages  
-**Status:** Implemented and locally tested. GitHub repository access is confirmed; public deployment is pending. No contest entry has been submitted.
+**Status:** Implemented and locally tested. Source is published on `main`; public deployment is pending. The first GitHub Actions job failed before any steps ran, and its log was unavailable. No contest entry has been submitted.
 
 ## Run
 

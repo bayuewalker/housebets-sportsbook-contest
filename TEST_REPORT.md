@@ -14,7 +14,7 @@ Local testing used Node.js 24, TypeScript 5.9.3, Vite 8.0.13, ESLint 9.39.4 and 
 | ESLint | PASS |
 | Node behavioral tests | 17 passed, 0 failed |
 | Vite production build | PASS |
-| Hosted GitHub Actions | NOT RUN — initial source push pending |
+| Hosted GitHub Actions | BLOCKED — run 42079919726 failed before any steps executed; root cause unconfirmed |
 | Public Pages URL | NOT DEPLOYED |
 
 Behavioral coverage: decimal returns; independent singles; selection removal; quote-change blocking; repeat quote acceptance; suspension/reopening; disabled suspended markets; failure without balance/history mutation; successful retry; invalid stakes and precision; valid boundaries; aggregate balance limits; idempotent cash out; settlement crediting; search dimensions; required leagues/categories; invalid selections; final transaction revalidation.
@@ -56,7 +56,7 @@ Behavioral coverage: decimal returns; independent singles; selection removal; qu
 
 - Relative-path production build and final mobile stake-focus regression passed. Desktop Match Center and mobile betslip screenshots are saved in `docs/screenshots/`.
 - Desktop screenshot includes the viewport QA toolbar; mobile screenshot is cropped to its 390×844 frame.
-- No public deployment, hosted CI result, Safari/Firefox run or physical-device keyboard test is claimed.
+- No successful public deployment or hosted validation is claimed. The first workflow failed before executing steps (empty steps API; missing log blob). Browser/terminal environment then became unavailable. Safari/Firefox and physical-device keyboard tests remain unperformed.
 - No full screen-reader audit or WCAG conformance claim is made.
 - The official starter shell and brand pack have not been inspected; brand compliance remains provisional.
 - Normal registry installation was restricted in the execution environment; local checks used matching package versions from the provided toolchain cache. A clean install must pass in GitHub Actions.
