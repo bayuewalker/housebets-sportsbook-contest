@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.vercel/
+.DS_Store
+
+.openai/
+.sites-runtime/
+*.tar.gz
