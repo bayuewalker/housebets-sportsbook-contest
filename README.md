@@ -5,7 +5,7 @@ A five-page, frontend-only Housebets sportsbook concept built around fast match 
 **Owner:** bayuewalker  
 **Repository:** `bayuewalker/housebets-sportsbook-contest`  
 **Hosting target:** GitHub Pages  
-**Status:** Implemented and locally tested. Source is published on `main`; public deployment is pending. Hosted runs are blocked by an account-level runner restriction; the owner has selected GitHub Actions as the Pages source. No contest entry has been submitted.
+**Status:** Implemented and locally tested. Source is published on `main`; public deployment is pending. Publishing uses a locally tested static build on `gh-pages`, with Pages set to Deploy from a branch. The final Pages setting and public URL still need verification. No contest entry has been submitted.
 
 ## Run
 
@@ -51,19 +51,25 @@ Price and suspension actions target the first selected market, or Arsenal's matc
 - `src/style.css`: design tokens, responsive layout and component styles.
 - `tests/engine.test.ts`: behavioral tests for stake, quote, suspension, transaction, settlement and search invariants.
 - `qa.html`: development-only 1440px / 390px viewport harness; not included in the production build.
-- `.github/workflows/pages.yml`: validation followed by deployment of the tested static artifact.
+- `scripts/prepare-pages.mjs`: prepares `.pages/` with the static build, `.nojekyll` and a source-commit/checksum manifest.
 
 There is no server, authentication, account connection, betting API or real-money transaction. Google Fonts is the only external presentation dependency; system font fallbacks remain available.
 
 ## GitHub Pages setup
 
-1. Create the intended repository, preferably private if the account plan supports private-repository Pages.
-2. Push this source to `main` and grant the GitHub connection access to it.
-3. In repository **Settings → Pages**, select **GitHub Actions** as the source.
-4. The included workflow checks types, lint, tests and build before publishing.
-5. Verify the URL returned by the successful Pages deployment without signing in.
+The owner selected **Deploy from a branch**. There is no custom Actions workflow in this repository.
 
-Relative Vite asset paths and hash routing support GitHub project subpaths. GitHub Free requires a public repository for Pages; retain a private repository if Pro/Team/Enterprise permits it. Do not change an existing repository's visibility without the owner's decision.
+1. Set repository **Settings → Pages → Source → Deploy from a branch**.
+2. Select **gh-pages** and **/ (root)**, then Save.
+3. Verify the URL displayed by GitHub after deployment finishes, without signing in.
+
+`main` contains source and documentation; `gh-pages` contains only the compiled static site. `.nojekyll` skips Jekyll processing. Relative assets and hash routing support the repository subpath.
+
+### Publish an update
+
+From a clean checkout of the intended `main` commit, run `pnpm install --frozen-lockfile` then `pnpm pages:prepare`. This runs lint, all tests, typecheck/build, and produces `.pages/` with `build-info.json` tying the output to the exact source commit and file checksums. Copy all contents of `.pages/` to the root of `gh-pages`, removing obsolete generated assets, then commit and push without force. Do not copy source files or node_modules to the publishing branch. Verify the deployed manifest against the intended source commit.
+
+GitHub still performs an internal Pages deployment for branch publishing. This setting does not guarantee that an account-level service restriction is resolved. See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
 ## Contest and brand provenance
 

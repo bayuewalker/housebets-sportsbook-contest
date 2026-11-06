@@ -15,7 +15,7 @@ All five linked views and the single-bet interaction engine are implemented. Loc
 - [x] Implement combined Betslip + My Bets and mobile bottom sheet.
 - [x] Implement changed odds, suspension/reopening, failure/retry, settlement and cash out.
 - [x] Add behavioral tests and local browser QA.
-- [x] Prepare GitHub Pages workflow and relative asset paths.
+- [x] Prepare relative asset paths and local validation for branch-based Pages.
 - [x] Write project, design, QA and submission documentation.
 - [ ] Obtain and compare the official starter shell and brand pack.
 - [x] Access `bayuewalker/housebets-sportsbook-contest` (public, owner-created).
@@ -25,7 +25,7 @@ All five linked views and the single-bet interaction engine are implemented. Loc
 
 ## Access and deployment blockers
 
-The owner created the public GitHub repository and selected GitHub Actions as the Pages publishing source (confirmed in the supplied settings screenshot). Source is published; the latest inspected hosted run `42080493828` still failed before application checks ran. The owner-supplied annotation establishes an account-level runner restriction. Owner action is required to restore hosted execution. No public deployment is claimed.
+The owner created the public GitHub repository and subsequently requested Deploy from a branch. The publishing target is `gh-pages` / (root); custom Actions deployment has been removed. Source is published; the latest inspected hosted run `42080493828` still failed before application checks ran. The owner-supplied annotation establishes an account-level runner restriction. Owner action is required to restore hosted execution. No public deployment is claimed.
 
 The terminal environment recovered. A further quality pass corrected live markets whose outcomes were already decided, consistent no-live labels, home-navigation filters, persistent-session validation and keyboard navigation in My Bets. The exact esbuild build-script approval is now recorded in `pnpm-workspace.yaml`, preventing a separate dependency-installation failure.
 
@@ -39,9 +39,9 @@ The latest official screenshots override the earlier request for match statistic
 
 ## Next execution steps
 
-1. Owner resolves the GitHub account-level runner restriction.
-2. Rerun the latest workflow; inspect install, typecheck, lint, tests and build.
-3. Verify Pages deployment and unauthenticated access to all five routes.
+1. Publish the locally validated static output to `gh-pages`.
+2. Set Pages to Deploy from a branch → gh-pages → / (root).
+3. Verify the internal Pages deployment, manifest and all five public routes. If the account restriction persists, the owner must resolve it.
 4. Repeat the updated no-live, home-navigation, keyboard and refresh scenarios in the browser.
 5. Obtain and reconcile the official starter shell and brand pack.
 6. Update `SUBMISSION.md` with the verified URL and fresh screenshots; obtain owner approval before submission.

@@ -6,3 +6,5 @@ dist/
 .openai/
 .sites-runtime/
 *.tar.gz
+
+.pages/

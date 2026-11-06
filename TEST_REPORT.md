@@ -76,3 +76,8 @@ Behavioral coverage: decimal returns; independent singles; selection removal; qu
 - Moved Pages configuration into the deploy job so hosting setup is separate from code validation.
 
 The updated browser scenarios are pending because the current preview could not be reached. Prior browser evidence above applies to the previous build. No new screenshot or screen-reader conformance claim is made.
+
+
+## Branch publishing change
+
+The owner requested Deploy from a branch. The custom Actions workflow is removed. `pnpm pages:prepare` validates and builds locally, then prepares `.pages/` with `.nojekyll` and a source-commit/SHA-256 manifest. Publish only this static output at the root of `gh-pages`. GitHub's own Pages deployment status must still be verified; branch mode is not claimed to resolve account-level restrictions.

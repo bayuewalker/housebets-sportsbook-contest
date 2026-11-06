@@ -1,6 +1,6 @@
 # HOUSE//LIVE — Submission Draft
 
-**Status: not submitted; not yet submission-ready.** Public GitHub Pages deployment and official starter/brand-pack verification are outstanding. Hosted execution is blocked at account level; the Pages source is configured.
+**Status: not submitted; not yet submission-ready.** Public GitHub Pages deployment and official starter/brand-pack verification are outstanding. The owner selected branch-based Pages publishing; final hosting verification remains pending.
 
 ## 1. Public prototype URL
 
@@ -20,7 +20,7 @@ HOUSE//LIVE makes Housebets the home of every sporting moment. A familiar navy-a
 
 ## 4. Tools, templates and AI disclosure
 
-Designed and implemented with AI assistance from OpenAI ChatGPT/Codex. Frontend: TypeScript, Vite, HTML and custom CSS. Quality checks: TypeScript, ESLint, Node test runner and browser-based manual interaction tests. Fonts: Manrope and DM Sans via Google Fonts. Interface SVG icons, club monograms and decorative backgrounds are original code-based assets. No third-party sportsbook template or UI kit was used in the application. A standard environment toolchain was used for local builds; it does not contribute application UI. GitHub Actions and GitHub Pages are the intended validation and hosting services.
+Designed and implemented with AI assistance from OpenAI ChatGPT/Codex. Frontend: TypeScript, Vite, HTML and custom CSS. Quality checks: TypeScript, ESLint, Node test runner and browser-based manual interaction tests. Fonts: Manrope and DM Sans via Google Fonts. Interface SVG icons, club monograms and decorative backgrounds are original code-based assets. No third-party sportsbook template or UI kit was used in the application. A standard environment toolchain was used for local builds; it does not contribute application UI. Local validation and GitHub Pages branch publishing are used; there is no custom Actions deployment workflow.
 
 The implementation used the official brief screenshots supplied by the owner. The official starter archive and brand pack were not accessible during development. The current Housebets wordmark/wave and team shields are provisional and must be reconciled before final submission.
 
