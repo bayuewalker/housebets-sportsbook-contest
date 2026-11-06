@@ -1,6 +1,6 @@
 # HOUSE//LIVE — Submission Draft
 
-**Status: not submitted; not yet submission-ready.** Public GitHub Pages deployment and official starter/brand-pack verification are outstanding.
+**Status: not submitted; not yet submission-ready.** Public GitHub Pages deployment and official starter/brand-pack verification are outstanding. Hosted execution is blocked at account level; the Pages source is configured.
 
 ## 1. Public prototype URL
 
@@ -28,6 +28,8 @@ The implementation used the official brief screenshots supplied by the owner. Th
 
 - `docs/screenshots/desktop-match-1440.jpg` — Match Center, 1440px QA frame (toolbar included).
 - `docs/screenshots/mobile-betslip-390.jpg` — interactive betslip, 390×844px frame.
+
+The existing images predate the 2026-11-06 live-market correction. Refresh screenshots after the final browser pass before submitting.
 
 ## 6. QA report
 

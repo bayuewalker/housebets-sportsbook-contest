@@ -5,7 +5,7 @@ A five-page, frontend-only Housebets sportsbook concept built around fast match 
 **Owner:** bayuewalker  
 **Repository:** `bayuewalker/housebets-sportsbook-contest`  
 **Hosting target:** GitHub Pages  
-**Status:** Implemented and locally tested. Source is published on `main`; public deployment is pending. The first GitHub Actions job failed before any steps ran, and its log was unavailable. No contest entry has been submitted.
+**Status:** Implemented and locally tested. Source is published on `main`; public deployment is pending. Hosted runs are blocked by an account-level runner restriction; the owner has selected GitHub Actions as the Pages source. No contest entry has been submitted.
 
 ## Run
 
@@ -44,6 +44,7 @@ Price and suspension actions target the first selected market, or Arsenal's matc
 ## Architecture
 
 - `src/data.ts`: typed sample fixtures, markets and outcomes.
+- `src/session.ts`: validates persisted demo balance, favorites and bet history.
 - `src/engine.ts`: isolated state transitions, validation, decimal calculations and simulated transactions.
 - `src/main.ts`: hash routing, shell, views, event delegation and accessible modal interactions.
 - `src/icons.ts`: original inline SVG interface icons.
@@ -72,4 +73,4 @@ The supplied screenshots establish the navy/aqua direction and top-bar / left-na
 
 Statistics widgets, match trackers, promotions, boosts, free bets, multis, bet builders, outrights, specials and AI search are intentionally absent.
 
-See `DESIGN_SYSTEM.md`, `TEST_REPORT.md`, `PROJECT_STATE.md` and `SUBMISSION.md` for the remaining handoff material. AI assistance is explicitly disclosed in the submission draft.
+See `JUDGE_GUIDE.md` for a short review walkthrough and `DESIGN_SYSTEM.md`, `TEST_REPORT.md`, `PROJECT_STATE.md` and `SUBMISSION.md` for the remaining handoff material. AI assistance is explicitly disclosed in the submission draft.

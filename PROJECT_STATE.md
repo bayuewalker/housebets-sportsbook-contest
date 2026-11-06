@@ -4,7 +4,7 @@ Updated: 2026-11-06 (Asia/Jakarta)
 
 ## Current outcome
 
-All five linked views and the single-bet interaction engine are implemented. Local typecheck, lint, 17 engine tests and production build passed on 2026-11-05. Desktop and mobile browser scenarios passed. The relative-path production build and final mobile stake-focus regression passed; desktop and mobile screenshots are saved.
+All five linked views and the single-bet interaction engine are implemented. Local typecheck, lint, 21 behavioral tests and production build passed on 2026-11-06. Desktop and mobile browser scenarios passed. The relative-path production build and final mobile stake-focus regression passed; desktop and mobile screenshots are saved.
 
 ## Milestones
 
@@ -25,11 +25,13 @@ All five linked views and the single-bet interaction engine are implemented. Loc
 
 ## Access and deployment blockers
 
-The owner created the public GitHub repository. The connector confirms admin and push access. The initial source push succeeded. Workflow run `42079919726` failed in the validate job before any steps executed; the jobs API returned an empty steps list and the log endpoint returned BlobNotFound. The root cause is unconfirmed. GitHub Pages enablement and deployment remain unverified. The connector does not expose Pages administration; browser sign-in previously timed out.
+The owner created the public GitHub repository and selected GitHub Actions as the Pages publishing source (confirmed in the supplied settings screenshot). Source is published; the latest inspected hosted run `42080493828` still failed before application checks ran. The owner-supplied annotation establishes an account-level runner restriction. Owner action is required to restore hosted execution. No public deployment is claimed.
 
-Vercel project creation returned `402 resource_creation_blocked` for WMOS-WARP. The owner subsequently selected GitHub only. An empty alternative-host project was provisioned during the earlier fallback attempt, but no source was pushed and no version was published. Do not continue that deployment path.
+The terminal environment recovered. A further quality pass corrected live markets whose outcomes were already decided, consistent no-live labels, home-navigation filters, persistent-session validation and keyboard navigation in My Bets. The exact esbuild build-script approval is now recorded in `pnpm-workspace.yaml`, preventing a separate dependency-installation failure.
 
-The execution environment became unavailable during deployment investigation, stopping local commands and browser access. Source, tests, workflow, documentation and screenshots are safely stored in GitHub; no public deployment is claimed.
+Local browser access is currently unavailable. Earlier desktop/mobile screenshots remain reference evidence, not screenshots of this final patch. Repeat the affected UI scenarios after browser or public-host access is restored.
+
+GitHub remains the source of truth and hosting target. Do not switch hosting providers without the owner's direction.
 
 ## Scope decision
 
@@ -37,12 +39,12 @@ The latest official screenshots override the earlier request for match statistic
 
 ## Next execution steps
 
-1. Source/screenshot package prepared; owner-created GitHub repository is accessible.
-2. Inspect the annotation on Actions run `42079919726` and resolve the runner-level failure before retrying.
-3. Push the reviewed source and configure Pages through GitHub Actions.
-4. Verify unauthenticated access to all five hash routes and representative betting states.
-5. Replace provisional branding using the official starter assets when available.
-6. Update `SUBMISSION.md` with the verified URL; wait for owner approval before any contest submission.
+1. Owner resolves the GitHub account-level runner restriction.
+2. Rerun the latest workflow; inspect install, typecheck, lint, tests and build.
+3. Verify Pages deployment and unauthenticated access to all five routes.
+4. Repeat the updated no-live, home-navigation, keyboard and refresh scenarios in the browser.
+5. Obtain and reconcile the official starter shell and brand pack.
+6. Update `SUBMISSION.md` with the verified URL and fresh screenshots; obtain owner approval before submission.
 
 ## Deadline
 

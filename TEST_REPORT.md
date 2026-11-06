@@ -12,9 +12,10 @@ Local testing used Node.js 24, TypeScript 5.9.3, Vite 8.0.13, ESLint 9.39.4 and 
 | --- | --- |
 | TypeScript | PASS |
 | ESLint | PASS |
-| Node behavioral tests | 17 passed, 0 failed |
+| Node behavioral tests | 21 passed, 0 failed |
 | Vite production build | PASS |
-| Hosted GitHub Actions | BLOCKED — run 42079919726 failed before any steps executed; root cause unconfirmed |
+| Clean-directory frozen-lockfile install | PASS — isolated directory, pnpm 11.25.0; cached packages, esbuild postinstall executed |
+| Hosted GitHub Actions | BLOCKED — account-level runner restriction confirmed by owner screenshot; latest inspected run 42080493828 failed |
 | Public Pages URL | NOT DEPLOYED |
 
 Behavioral coverage: decimal returns; independent singles; selection removal; quote-change blocking; repeat quote acceptance; suspension/reopening; disabled suspended markets; failure without balance/history mutation; successful retry; invalid stakes and precision; valid boundaries; aggregate balance limits; idempotent cash out; settlement crediting; search dimensions; required leagues/categories; invalid selections; final transaction revalidation.
@@ -59,5 +60,19 @@ Behavioral coverage: decimal returns; independent singles; selection removal; qu
 - No successful public deployment or hosted validation is claimed. The first workflow failed before executing steps (empty steps API; missing log blob). Browser/terminal environment then became unavailable. Safari/Firefox and physical-device keyboard tests remain unperformed.
 - No full screen-reader audit or WCAG conformance claim is made.
 - The official starter shell and brand pack have not been inspected; brand compliance remains provisional.
-- Normal registry installation was restricted in the execution environment; local checks used matching package versions from the provided toolchain cache. A clean install must pass in GitHub Actions.
+- Dependency installation now succeeds with the committed exact-version esbuild build-script approval. Hosted installation remains unverified until the account restriction is resolved.
 - Google Fonts requires an external request; system fonts provide a functional fallback.
+
+
+## 2026-11-06 quality pass
+
+- Corrected Arsenal's active total-goal lines to 3.5 and 4.5 at a 2–1 score. Replaced the already-decided both-teams-to-score market with odd/even total goals.
+- Applied the no-live state to the hero, fixture cards, Match Center and betslip labels.
+- Cleared the stale football filter when navigating back to Sports Home.
+- Added complete session-schema validation; malformed/null/duplicate history restores the safe sample session.
+- Added roving tab focus and Arrow/Home/End keyboard navigation to My Bets.
+- Added four tests for refresh persistence, corrupt storage, malformed history and undecided live markets.
+- Added explicit approval for esbuild 0.28.0 only. Clean installation and local checks are recorded separately from hosted CI.
+- Moved Pages configuration into the deploy job so hosting setup is separate from code validation.
+
+The updated browser scenarios are pending because the current preview could not be reached. Prior browser evidence above applies to the previous build. No new screenshot or screen-reader conformance claim is made.
