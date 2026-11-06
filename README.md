@@ -52,6 +52,7 @@ Price and suspension actions target the first selected market, or Arsenal's matc
 - `tests/engine.test.ts`: behavioral tests for stake, quote, suspension, transaction, settlement and search invariants.
 - `qa.html`: development-only 1440px / 390px viewport harness; not included in the production build.
 - `scripts/prepare-pages.mjs`: prepares `.pages/` with the static build, `.nojekyll` and a source-commit/checksum manifest.
+- `scripts/verify-pages.mjs`: verifies the public manifest and asset checksums against the current `gh-pages` commit, without credentials.
 
 There is no server, authentication, account connection, betting API or real-money transaction. Google Fonts is the only external presentation dependency; system font fallbacks remain available.
 
@@ -61,7 +62,8 @@ The owner selected **Deploy from a branch**. There is no custom Actions workflow
 
 1. Set repository **Settings → Pages → Source → Deploy from a branch**.
 2. Select **gh-pages** and **/ (root)**, then Save.
-3. Verify the URL displayed by GitHub after deployment finishes, without signing in.
+3. Run `pnpm pages:verify` after deployment finishes. It checks the public manifest and served asset checksums against the publishing branch without authentication. A missing page, stale release or mismatched asset exits with failure. GitHub API rate limits and network failures are reported explicitly.
+4. Complete browser interaction QA on all five routes; asset verification alone does not establish UI correctness.
 
 `main` contains source and documentation; `gh-pages` contains only the compiled static site. `.nojekyll` skips Jekyll processing. Relative assets and hash routing support the repository subpath.
 

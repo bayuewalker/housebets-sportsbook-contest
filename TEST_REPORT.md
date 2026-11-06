@@ -81,3 +81,12 @@ The updated browser scenarios are pending because the current preview could not 
 ## Branch publishing change
 
 The owner requested Deploy from a branch. The custom Actions workflow is removed. `pnpm pages:prepare` validates and builds locally, then prepares `.pages/` with `.nojekyll` and a source-commit/SHA-256 manifest. Publish only this static output at the root of `gh-pages`. GitHub's own Pages deployment status must still be verified; branch mode is not claimed to resolve account-level restrictions.
+
+
+## 2026-11-07 publication verification (WIB)
+
+- Added `pnpm pages:verify`, a credential-free check that pins the current publishing commit, compares the hosted manifest, and verifies SHA-256 checksums of public assets. `.nojekyll` is a publishing marker, not a required public response.
+- `node --check scripts/verify-pages.mjs`: PASS.
+- Live verification: expected failure, HTTP 404 for the public `build-info.json`. No successful hosted release is claimed.
+- Public repository API: no deployment records or new Pages run; the latest visible old custom run is `42134155517`. The cause of the absent branch deployment remains unconfirmed.
+- No application behavior or generated release files changed in this follow-up. Earlier 21-test, lint and build results remain the evidence for the published source release; no additional browser QA or screenshots are claimed.
