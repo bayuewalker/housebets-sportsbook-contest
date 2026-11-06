@@ -33,13 +33,17 @@ Local browser access is currently unavailable. Earlier desktop/mobile screenshot
 
 GitHub remains the source of truth and hosting target. Do not switch hosting providers without the owner's direction.
 
+## Branch release verification
+
+`pnpm pages:prepare` passed lint, all 21 tests, TypeScript and production build. The branch contains only `index.html`, JavaScript/CSS assets, `favicon.svg`, `.nojekyll` and `build-info.json`. Custom deployment workflows are removed from main. Pages settings could not be changed through the connector; browser settings access requires sign-in. The owner needs to select Deploy from a branch → gh-pages → / (root) and Save. Publication remains unverified until the hosted manifest matches the release.
+
 ## Scope decision
 
 The latest official screenshots override the earlier request for match statistics: stats widgets and match trackers are excluded. No excluded feature has been implemented.
 
 ## Next execution steps
 
-1. Publish the locally validated static output to `gh-pages`.
+1. Static output is published to `gh-pages` at `faac5ea087c172ffb7b39e285366f36abe5c50ea` from source `e62bab273940f32d02aebc894db44c4f5888e822`. All six remote files were verified byte-for-byte against the local release.
 2. Set Pages to Deploy from a branch → gh-pages → / (root).
 3. Verify the internal Pages deployment, manifest and all five public routes. If the account restriction persists, the owner must resolve it.
 4. Repeat the updated no-live, home-navigation, keyboard and refresh scenarios in the browser.
