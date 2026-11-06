@@ -1,10 +1,12 @@
 # HOUSE//LIVE — Submission Draft
 
-**Status: not submitted; not yet submission-ready.** Public GitHub Pages deployment and official starter/brand-pack verification are outstanding. The owner selected branch-based Pages publishing; final hosting verification remains pending.
+**Status: not submitted; awaiting final responsive QA, official asset reconciliation and owner approval.** Public GitHub Pages deployment is verified using `gh-pages` / (root).
 
 ## 1. Public prototype URL
 
-Pending a successful GitHub Pages deployment. Do not submit a guessed URL or an internal preview URL.
+https://bayuewalker.github.io/housebets-sportsbook-contest/
+
+Verified without login on 7 November 2026 (WIB). Public manifest and four served assets match source `e62bab273940f32d02aebc894db44c4f5888e822`.
 
 ## 2. Five pages
 
@@ -29,11 +31,13 @@ The implementation used the official brief screenshots supplied by the owner. Th
 - `docs/screenshots/desktop-match-1440.jpg` — Match Center, 1440px QA frame (toolbar included).
 - `docs/screenshots/mobile-betslip-390.jpg` — interactive betslip, 390×844px frame.
 
-The existing images predate the 2026-11-06 live-market correction. Refresh screenshots after the final browser pass before submitting.
+- `docs/screenshots/public-match-desktop.jpg` — current public release, desktop browser viewport 1363×936; captured 7 November 2026 (WIB).
+
+The earlier 1440px and 390px images predate the live-market correction. Refresh those exact-width screenshots before submitting.
 
 ## 6. QA report
 
-See `TEST_REPORT.md`. Final public-host verification remains required.
+See `TEST_REPORT.md`. Public desktop smoke tests and release verification passed; repeat exact-width 1440px / 390px coverage before final submission.
 
 ## Owner confirmations to review before sending
 

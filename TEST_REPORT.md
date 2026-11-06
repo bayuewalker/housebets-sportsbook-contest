@@ -16,7 +16,7 @@ Local testing used Node.js 24, TypeScript 5.9.3, Vite 8.0.13, ESLint 9.39.4 and 
 | Vite production build | PASS |
 | Clean-directory frozen-lockfile install | PASS — isolated directory, pnpm 11.25.0; cached packages, esbuild postinstall executed |
 | Hosted GitHub Actions | BLOCKED — account-level runner restriction confirmed by owner screenshot; latest inspected run 42080493828 failed |
-| Public Pages URL | NOT DEPLOYED |
+| Public Pages URL | PASS on 2026-11-07 (WIB): live without login; manifest and four served assets match publishing release |
 
 Behavioral coverage: decimal returns; independent singles; selection removal; quote-change blocking; repeat quote acceptance; suspension/reopening; disabled suspended markets; failure without balance/history mutation; successful retry; invalid stakes and precision; valid boundaries; aggregate balance limits; idempotent cash out; settlement crediting; search dimensions; required leagues/categories; invalid selections; final transaction revalidation.
 
@@ -90,3 +90,27 @@ The owner requested Deploy from a branch. The custom Actions workflow is removed
 - Live verification: expected failure, HTTP 404 for the public `build-info.json`. No successful hosted release is claimed.
 - Public repository API: no deployment records or new Pages run; the latest visible old custom run is `42134155517`. The cause of the absent branch deployment remains unconfirmed.
 - No application behavior or generated release files changed in this follow-up. Earlier 21-test, lint and build results remain the evidence for the published source release; no additional browser QA or screenshots are claimed.
+
+
+## 2026-11-07 public deployment and desktop QA (WIB)
+
+Deployment blocker resolved: the owner changed Pages from `main` / (root), which served uncompiled source HTML, to `gh-pages` / (root). `pnpm pages:verify` passed against source `e62bab273940f32d02aebc894db44c4f5888e822` and publishing commit `ad56245f919656cec22707e6c256bcc19cffe8f8`. This section supersedes earlier publication blockers; it does not claim that the earlier custom CI runs passed.
+
+Public browser viewport: 1363×936 CSS pixels, document client/scroll width 1348px. Exact-width 1440px / 390px and physical-device tests were not repeated in this pass.
+
+| Public scenario | Observed result |
+| --- | --- |
+| Five linked views | PASS — Sports Home, Live, Football, Match Center, combined Betslip + My Bets |
+| Stake and quote acceptance | PASS — 25 × 1.48 = 37; changed 1.60 blocked placement until acceptance; then return 40 |
+| Suspension and reopen | PASS — selection preserved; odds and placement disabled; reopen restored controls |
+| Failure and retry | PASS — failure kept balance 1,000; retry created one 25-USDT single and balance 975 |
+| Cash out | PASS — confirmation returned 23; balance 998; record appeared in Settled |
+| History keyboard navigation | PASS — ArrowRight moved from Settled to Cash Out and updated content/focus |
+| Refresh persistence | PASS — balance 998 persisted; quote scenarios reset as designed |
+| Football and home navigation | PASS — all five leagues present; LaLiga filter isolated its fixture; Sports Home restored All sports |
+| Player search and empty state | PASS — Bukayo matched Premier League fixture; unknown text showed zero results and Clear filters |
+| No-live fallback | PASS — Live showed Starting Soon; Match Center displayed dashes, upcoming time and pre-match labels |
+| Corrected live goals markets | PASS — Popular line 3.5, Goals line 4.5 and Next goal visible |
+| Reset | PASS — explicit reset confirmation restored sample history and balance 1,000 |
+
+Screenshot: `docs/screenshots/public-match-desktop.jpg`. Browser-extension metadata errors appeared in the captured console log; they are not reported as application errors. This was a focused smoke test, not a claim that every control or browser was retested.
