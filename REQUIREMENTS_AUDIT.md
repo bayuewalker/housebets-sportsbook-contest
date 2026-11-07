@@ -10,7 +10,7 @@ The implemented product covers the five required views, single-bet workflow, dem
 
 The three official brief screenshots supplied by the owner are the authoritative checklist. They explicitly exclude statistics widgets and match trackers; the earlier expanded request for match statistics does not override that exclusion. The match scoreboard and clock are retained.
 
-Audited application source: deployed commit `e62bab273940f32d02aebc894db44c4f5888e822`. Publishing branch: `gh-pages`, commit `ad56245f919656cec22707e6c256bcc19cffe8f8`. Documentation checkout at audit start: `0da8d1c1f2ba09be29c3e7d28ac4669fd28d3728`. This audit makes no application changes.
+Original audited application source: deployed commit `e62bab273940f32d02aebc894db44c4f5888e822`. Publishing branch at that point: `gh-pages`, commit `ad56245f919656cec22707e6c256bcc19cffe8f8`. The 7 November follow-up adds one small UX fix: arming a simulated placement failure now closes the scenario panel. Until a new `gh-pages` release is verified, public-browser evidence below applies to the previous deployed source.
 
 Evidence levels:
 
@@ -38,7 +38,7 @@ Evidence levels:
 | Football: Premier League, Champions League, LaLiga, Serie A, Bundesliga | Verified | Fixture data, automated league assertion and public page inspection |
 | Football: match-result odds on every row | Verified | Each of the six football fixtures uses its three-outcome result market |
 | Match: live Arsenal v Brighton, score and clock | Verified | Public Match Center, 2–1 sample score, running clock and competition |
-| Match: Popular, Goals, Halves, Handicaps, Goalscorers, Corners & Cards | Implemented | All six category controls and corresponding markets present; category coverage test; Popular/Goals exercised in latest public pass, remaining categories need final control sweep |
+| Match: Popular, Goals, Halves, Handicaps, Goalscorers, Corners & Cards | Verified | All six categories were clicked on the public Match Center on 7 November and their two or three corresponding market groups rendered |
 | Match: odds movement | Verified | Demo movement changes quote and direction indicators; acceptance tests and public flow |
 | Match: suspended markets | Verified | Pre-suspended cards market; scenario suspend/reopen; disabled odds and retained selection |
 | Betslip and My Bets share one page | Verified | `/bets` contains both sections; rail and mobile panel supplement that page |
@@ -50,8 +50,8 @@ Evidence levels:
 | Suspended selection handling | Verified | Selection retained; placement blocked until reopen or removal |
 | Successful/failed placement | Verified | Failure leaves balance/history untouched; successful retry debits once and displays receipt |
 | My Bets: Open, Settled, Cash Out | Verified | Public open/settled records, confirmation modal, 23-USDT cash-out credit and keyboard tab navigation |
-| Discreet scenario controls | Implemented | Odds, suspension, failure, settlement, no-live, loading and reset controls; core states publicly exercised; loading requires final browser check |
-| Loading and empty states | Implemented | Two-second loading control; search/filter/history empty states; public search and no-live empty cases verified |
+| Discreet scenario controls | Partial | Odds, suspension, failure, settlement, no-live, loading and reset controls are implemented. Public browser exercised all except scenario-settle and reset on this pass; those remain in the final sweep |
+| Loading and empty states | Verified | Public browser observed visible loading feedback, restoration after two seconds, and no-live Starting Soon fallback; prior public empty search/history checks also recorded |
 | Desktop at 1440px | Partial | 5 November iframe check passed; final-release exact-width regression interrupted by preview access failure |
 | Mobile at 390px | Partial | 5 November 390×844 iframe check passed; final-release exact-width regression remains incomplete |
 | Persistent mobile bottom betslip bar and interactive panel | Partial | Fixed bar, safe-area padding and native dialog implemented; earlier mobile placement/focus checks passed; final-release check outstanding |
@@ -67,21 +67,22 @@ Evidence levels:
 
 ## Checks rerun during this audit
 
-- `pnpm test`: **21 passed, 0 failed**.
+- `pnpm install --frozen-lockfile`: **passed**, including supply-chain verification (193 lockfile entries).
+- `pnpm test`: **21 passed, 0 failed** (independently rerun on 7 November).
 - `pnpm lint`: **passed**.
 - `pnpm build`: **passed**, including `tsc --noEmit`.
-- Build output names remain `index-BoatZmCh.js` and `index-CnKcR-9N.css`, matching the deployed application assets.
+- After the one-line UX fix, the production build outputs `index-C7vl3_Zk.js` and `index-CnKcR-9N.css`; the new JS asset must be published to `gh-pages` before this revision is considered live.
 - Source inspection confirms responsive breakpoints at 1250px, 1050px and 760px, reduced-motion support, visible focus indicators, mobile safe-area padding and bottom-sheet sizing. These checks do not replace a browser layout test.
 
 ## Acceptance gaps, ordered by consequence
 
 1. **Official shell and brand pack.** The brief explicitly asks for the provided site shell. The custom wordmark/wave is not a verified replacement. Obtain the official starter ZIP or direct asset link, integrate it, and compare desktop/phone shell behavior. This affects the 15-point Housebets-alignment category and the tie-breaker; no numeric score is claimed.
 2. **Final responsive regression.** Repeat all five routes at 1440px and 390px, exercise mobile stake editing, changed/suspended/failed states, bottom-sheet navigation and placement, and capture fresh screenshots. The earlier evidence remains valid for its recorded build only.
-3. **Remaining control sweep.** Exercise all six market-category tabs, all scenario controls including loading and settlement, every sport/competition filter, remove/clear actions and modal close/back behavior on the final release. The core paths passed, but “every control tested” is not established.
+3. **Remaining control sweep.** Six market categories, odds acceptance, suspend/reopen, failure/retry, cash-out, loading and no-live were exercised publicly on 7 November. Still exercise scenario-settle/reset, every sport/competition filter, remove/clear actions and modal close/back behavior on the **new** release. “Every control tested” is not yet established.
 
 ## Browser verification limit
 
-During this audit the supported preview initially opened successfully. After a runtime interruption the preview service was stopped; restarting it returned a running URL, but the subsequent browser action was rejected by browser security policy. No alternate browser surface, raw protocol access or network workaround was used. The final exact-width checks remain unverified, rather than being marked passed from CSS alone.
+The earlier supported preview was interrupted. On 7 November, a local Chromium launch failed with a browser process security-policy restriction, while the cloud browser could open the public GitHub Pages site but could not reach the local preview address. This cloud session permitted public desktop interaction checks, not control of the exact viewport size. The final 1440px/390px checks remain unverified, rather than being marked passed from CSS alone.
 
 ## Submission decision
 
