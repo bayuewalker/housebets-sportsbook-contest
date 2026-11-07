@@ -119,3 +119,13 @@ Screenshot: `docs/screenshots/public-match-desktop.jpg`. Browser-extension metad
 ## 2026-11-07 specification audit
 
 Reran 21 behavioral tests, ESLint and production build (including TypeScript): all passed. Compared source to every requirement in the owner-supplied official screenshots; see `REQUIREMENTS_AUDIT.md`. Application files were unchanged. Final 390px/1440px browser regression could not be completed after the supported preview runtime was interrupted and a browser security-policy rejection prevented further inspection. Earlier desktop/mobile evidence is retained with its original scope; no new exact-width pass or screenshot is claimed.
+
+
+## 2026-11-07 public control sweep and usability fix
+
+- Reinstalled with `pnpm install --frozen-lockfile`: passed; supply-chain lockfile verification covered 193 entries. Reran the 21 behavioral tests, ESLint and TypeScript/Vite build after the usability fix: all passed.
+- On the public desktop release, clicked all six Match Center category tabs. Each rendered its intended markets, including the goals, halves, handicaps, goalscorers and corners/cards groups.
+- Repeated moved-odds acceptance, suspension/reopen, failed placement/retry, cash-out confirmation, Loading and No Live states. The failed placement left the sample balance at 1,000 USDT; the successful retry of a 10-USDT single reduced it to 990 USDT; cashing that bet out at 9.20 USDT restored 999.20 USDT.
+- Found and fixed a UX snag in source: arming Fail next placement now closes the Demo controls dialog, consistent with the other scenario buttons. The published browser run preceded this code change; the final release must be republished and rechecked.
+- The cloud browser could inspect the hosted desktop site, but not set the exact 1440px/390px viewports or reach the local preview. Local Chromium startup was blocked by the browser process security policy. These exact-width passes remain open; no new responsive screenshot was captured.
+- Final sweep still needed on the new release: scenario-settle/reset, every sport and competition filter, remove/clear selections, and modal dismissal/back navigation. No physical-device, multi-browser or accessibility-conformance claim is made.

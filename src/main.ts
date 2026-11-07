@@ -90,7 +90,7 @@ case 'demo':closePanels();demoOpen=true;break;
 case 'close':closePanels();break;
 case 'move':moveOdds(state);closePanels();toast('Odds moved. Selected prices need your acceptance.');break;
 case 'suspend':toggleSuspension(state);closePanels();toast('Market availability updated.');break;
-case 'fail':state.failNext=!state.failNext;toast(state.failNext?'Next valid placement will fail.':'Placement failure disarmed.');break;
+case 'fail':state.failNext=!state.failNext;closePanels();toast(state.failNext?'Next valid placement will fail.':'Placement failure disarmed.');break;
 case 'settle':toast(settle(state)?'Open bet settled as won. Demo return credited.':'No open bets to settle.');closePanels();historyTab='Settled';go('/bets');break;
 case 'no-live':state.noLive=!state.noLive;closePanels();clearFilters();go('/live');break;
 case 'loading':closePanels();clearFilters();go('/live');loading=true;setTimeout(()=>{loading=false;render();},2000);break;

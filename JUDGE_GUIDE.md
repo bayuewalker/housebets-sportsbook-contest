@@ -1,6 +1,6 @@
 # HOUSE//LIVE review walkthrough
 
-All data and transactions are simulated. No login, deposit or account is needed. The public deployment is still pending; do not use an internal preview URL as the contest entry.
+All data and transactions are simulated. No login, deposit or account is needed. The public prototype is live at https://bayuewalker.github.io/housebets-sportsbook-contest/ without sign-in. This URL points to the latest verified published release; after any new source change, rebuild and republish `gh-pages` before calling it the updated release.
 
 ## A two-minute product tour
 
@@ -18,7 +18,7 @@ The desktop sidebar's Demo controls button and the mobile sliders button open th
 | --- | --- |
 | Move odds | Current price changes; placement stays disabled until Accept new odds is pressed. A 25 USDT stake at 1.60 returns 40.00 USDT. |
 | Suspend / reopen | Suspended odds are disabled. Existing picks and stakes remain, but placement is blocked. Toggle again to reopen. |
-| Fail next placement | The next valid placement fails with an explanation, without changing balance or history. Retry succeeds. |
+| Fail next placement | Arming this closes the scenario panel so the next valid placement can be tested immediately. The placement fails with an explanation, without changing balance or history. Retry succeeds. |
 | Settle an open bet | The first open bet moves to Won and its return is credited once. |
 | No live matches | Live shows Starting Soon; former live fixtures have upcoming labels and no live scoreboard. |
 | Loading state | The fixture list shows a two-second loading state, then returns. |

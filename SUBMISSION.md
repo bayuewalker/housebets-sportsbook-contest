@@ -6,7 +6,7 @@
 
 https://bayuewalker.github.io/housebets-sportsbook-contest/
 
-Verified without login on 7 November 2026 (WIB). Public manifest and four served assets match source `e62bab273940f32d02aebc894db44c4f5888e822`.
+Verified without login on 7 November 2026 (WIB). A source-commit manifest in `gh-pages` records the exact published revision and checksums; rerun `pnpm pages:verify` after each deployment, including the latest usability update.
 
 ## 2. Five pages
 
