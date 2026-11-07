@@ -10,7 +10,7 @@ The implemented product covers the five required views, single-bet workflow, dem
 
 The three official brief screenshots supplied by the owner are the authoritative checklist. They explicitly exclude statistics widgets and match trackers; the earlier expanded request for match statistics does not override that exclusion. The match scoreboard and clock are retained.
 
-Original audited application source: deployed commit `e62bab273940f32d02aebc894db44c4f5888e822`. Publishing branch at that point: `gh-pages`, commit `ad56245f919656cec22707e6c256bcc19cffe8f8`. The 7 November follow-up adds one small UX fix: arming a simulated placement failure now closes the scenario panel. Until a new `gh-pages` release is verified, public-browser evidence below applies to the previous deployed source.
+Current verified executable source: `694b3ad47b8efade6b4fedd89bd69221d60a7e73`. Publishing branch: `gh-pages`, release commit `00de1670c55929ee5917fa08f06d32d40ff5e794`. `pnpm pages:verify` passed against the live site, matching all four public assets. This release includes the 7 November usability fix that closes the scenario dialog when a failed placement is armed. Later documentation-only edits do not change this executable release.
 
 Evidence levels:
 
@@ -50,15 +50,15 @@ Evidence levels:
 | Suspended selection handling | Verified | Selection retained; placement blocked until reopen or removal |
 | Successful/failed placement | Verified | Failure leaves balance/history untouched; successful retry debits once and displays receipt |
 | My Bets: Open, Settled, Cash Out | Verified | Public open/settled records, confirmation modal, 23-USDT cash-out credit and keyboard tab navigation |
-| Discreet scenario controls | Partial | Odds, suspension, failure, settlement, no-live, loading and reset controls are implemented. Public browser exercised all except scenario-settle and reset on this pass; those remain in the final sweep |
+| Discreet scenario controls | Verified | Public desktop browser exercised odds, suspension/reopen, arming failure with auto-close, settlement and return credit, no-live, loading and confirmed reset to 1,000 USDT |
 | Loading and empty states | Verified | Public browser observed visible loading feedback, restoration after two seconds, and no-live Starting Soon fallback; prior public empty search/history checks also recorded |
-| Desktop at 1440px | Partial | 5 November iframe check passed; final-release exact-width regression interrupted by preview access failure |
+| Desktop at 1440px | Partial | 5 November iframe check passed; latest release passed public desktop QA at ~1363px, but exact 1440px regression remains incomplete |
 | Mobile at 390px | Partial | 5 November 390×844 iframe check passed; final-release exact-width regression remains incomplete |
 | Persistent mobile bottom betslip bar and interactive panel | Partial | Fixed bar, safe-area padding and native dialog implemented; earlier mobile placement/focus checks passed; final-release check outstanding |
 | Top bar, left navigation, side panel | Partial | Required structure present and visible on desktop; exact official-shell preservation cannot be established without starter files |
 | Housebets brand identity | Unverified | Navy/aqua direction matches supplied references; wordmark/wave and team monograms are provisional, not official brand-pack assets |
 | Frontend only, sample data, no player accounts or real money | Verified | In-memory/localStorage demo; no account, payment, betting or backend integration |
-| Public URL without login | Verified | Public page and release checksum verification; branch publishing configured correctly |
+| Public URL without login | Verified | New release `00de167` published without login; manifest and four served assets matched by checksum |
 | No multis/accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, trackers or AI search | Verified | Source/interaction review found none of the excluded features |
 | Big Idea of 80–800 characters | Verified | Submission draft is 504 characters |
 | Tools/templates disclosure including AI assistance | Verified | Submission draft names ChatGPT/Codex, TypeScript, Vite, fonts, original UI assets and provisional branding |
@@ -71,18 +71,19 @@ Evidence levels:
 - `pnpm test`: **21 passed, 0 failed** (independently rerun on 7 November).
 - `pnpm lint`: **passed**.
 - `pnpm build`: **passed**, including `tsc --noEmit`.
-- After the one-line UX fix, the production build outputs `index-C7vl3_Zk.js` and `index-CnKcR-9N.css`; the new JS asset must be published to `gh-pages` before this revision is considered live.
+- Latest published production build uses `index-C7vl3_Zk.js` and `index-CnKcR-9N.css`. Hosted checksums and source commit are verified.
+- Public desktop control sweep on the new release: **pass** for all sports (6 football, 1 tennis, 1 basketball, 1 esports, 9 total fixtures), all eight competitions (2 Premier League fixtures, one in each other league), settle/reset, auto-closing failure control, remove/clear picks, and close/Escape for the scenario modal.
 - Source inspection confirms responsive breakpoints at 1250px, 1050px and 760px, reduced-motion support, visible focus indicators, mobile safe-area padding and bottom-sheet sizing. These checks do not replace a browser layout test.
 
 ## Acceptance gaps, ordered by consequence
 
 1. **Official shell and brand pack.** The brief explicitly asks for the provided site shell. The custom wordmark/wave is not a verified replacement. Obtain the official starter ZIP or direct asset link, integrate it, and compare desktop/phone shell behavior. This affects the 15-point Housebets-alignment category and the tie-breaker; no numeric score is claimed.
 2. **Final responsive regression.** Repeat all five routes at 1440px and 390px, exercise mobile stake editing, changed/suspended/failed states, bottom-sheet navigation and placement, and capture fresh screenshots. The earlier evidence remains valid for its recorded build only.
-3. **Remaining control sweep.** Six market categories, odds acceptance, suspend/reopen, failure/retry, cash-out, loading and no-live were exercised publicly on 7 November. Still exercise scenario-settle/reset, every sport/competition filter, remove/clear actions and modal close/back behavior on the **new** release. “Every control tested” is not yet established.
+3. **Mobile and cross-device interaction regression.** The public desktop sweep now covers all six market categories, scenario controls, eight competition filters, sport filters, remove/clear actions and dialog dismissal. On the final 390px pass, recheck mobile bottom-sheet focus, modal back/dismiss, stake editing, changed/suspended/failed states and receipt. “Every control tested on both device sizes” is not yet established.
 
 ## Browser verification limit
 
-The earlier supported preview was interrupted. On 7 November, a local Chromium launch failed with a browser process security-policy restriction, while the cloud browser could open the public GitHub Pages site but could not reach the local preview address. This cloud session permitted public desktop interaction checks, not control of the exact viewport size. The final 1440px/390px checks remain unverified, rather than being marked passed from CSS alone.
+The earlier supported preview was interrupted. On 7 November, a local Chromium launch failed with a browser process security-policy restriction, while the cloud browser could open the public GitHub Pages site but could not reach the local preview address or set the exact viewport size. An auxiliary data-URL QA harness was also explicitly blocked by browser policy and was not retried or bypassed. The final 1440px/390px checks remain unverified, rather than being marked passed from CSS alone.
 
 ## Submission decision
 
