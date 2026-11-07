@@ -37,7 +37,7 @@ The earlier 1440px and 390px images predate the live-market correction. Refresh 
 
 ## 6. QA report
 
-See `TEST_REPORT.md`. Public desktop smoke tests and release verification passed; repeat exact-width 1440px / 390px coverage before final submission.
+See `TEST_REPORT.md` and the requirement-by-requirement sign-off in `REQUIREMENTS_AUDIT.md`. Public desktop smoke tests and release verification passed; repeat exact-width 1440px / 390px coverage before final submission.
 
 ## Owner confirmations to review before sending
 

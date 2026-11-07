@@ -4,7 +4,7 @@ Updated: 2026-11-07 (Asia/Jakarta)
 
 ## Current outcome
 
-All five linked views and the single-bet interaction engine are implemented. Local typecheck, lint, 21 behavioral tests and production build passed on 2026-11-06. Browser scenarios and saved screenshots cover the earlier 2026-11-05 build. A subsequent public desktop regression pass on 7 November is recorded below; exact-width responsive checks still need refreshing.
+All five linked views and the single-bet interaction engine are implemented. Local typecheck, lint, 21 behavioral tests and production build were rerun and passed on 2026-11-07. Browser scenarios and saved screenshots cover the earlier 2026-11-05 build. A subsequent public desktop regression pass on 7 November is recorded below; exact-width responsive checks still need refreshing.
 
 ## Milestones
 
@@ -39,6 +39,10 @@ GitHub remains the source of truth and hosting target. Do not switch hosting pro
 ## Scope decision
 
 The latest official screenshots override the earlier request for match statistics: stats widgets and match trackers are excluded. No excluded feature has been implemented.
+
+## Requirements audit
+
+See `REQUIREMENTS_AUDIT.md` for the complete screenshot-derived matrix. The audit confirms core functional coverage and records unresolved official-shell/brand compliance, final exact-width responsive checks and the remaining control sweep. The supported preview was interrupted; a subsequent browser action was blocked by browser security policy. No full-compliance sign-off is claimed.
 
 ## Next execution steps
 

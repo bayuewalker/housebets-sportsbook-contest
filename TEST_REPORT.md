@@ -114,3 +114,8 @@ Public browser viewport: 1363×936 CSS pixels, document client/scroll width 1348
 | Reset | PASS — explicit reset confirmation restored sample history and balance 1,000 |
 
 Screenshot: `docs/screenshots/public-match-desktop.jpg`. Browser-extension metadata errors appeared in the captured console log; they are not reported as application errors. This was a focused smoke test, not a claim that every control or browser was retested.
+
+
+## 2026-11-07 specification audit
+
+Reran 21 behavioral tests, ESLint and production build (including TypeScript): all passed. Compared source to every requirement in the owner-supplied official screenshots; see `REQUIREMENTS_AUDIT.md`. Application files were unchanged. Final 390px/1440px browser regression could not be completed after the supported preview runtime was interrupted and a browser security-policy rejection prevented further inspection. Earlier desktop/mobile evidence is retained with its original scope; no new exact-width pass or screenshot is claimed.
