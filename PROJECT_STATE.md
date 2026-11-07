@@ -30,9 +30,11 @@ The public prototype is live at https://bayuewalker.github.io/housebets-sportsbo
 
 `pnpm pages:verify` passed on 7 November 2026 (WIB): the hosted manifest and all four public assets match source `e62bab273940f32d02aebc894db44c4f5888e822`, publishing commit `ad56245f919656cec22707e6c256bcc19cffe8f8`.
 
+The subsequent release verification also **passed**: current executable source `694b3ad47b8efade6b4fedd89bd69221d60a7e73` and `gh-pages` commit `00de1670c55929ee5917fa08f06d32d40ff5e794`, four matching public assets. The fix is now live.
+
 Public browser tests passed for all five routes, search and empty results, league filtering, home filter reset, odds-change acceptance, suspended/reopened selections, failed placement with unchanged balance, successful retry, cash-out settlement, keyboard history tabs, refresh persistence, no-live fallback and reset. The updated 3.5/4.5 goals markets were inspected. Desktop evidence is saved in `docs/screenshots/public-match-desktop.jpg`.
 
-A second public desktop sweep on 7 November exercised all six Match Center market tabs, odds acceptance, failure/retry, suspension/reopen, cash-out, loading and no-live fallback. Source was then adjusted to close the Demo controls dialog when Fail next placement is armed. This source revision requires the normal branch-based publishing and post-publish verification; it does not by itself constitute final responsive or brand compliance.
+A second public desktop sweep on 7 November exercised all six Match Center market tabs, odds acceptance, failure/retry, suspension/reopen, cash-out, loading and no-live fallback. Source was then adjusted to close the Demo controls dialog when Fail next placement is armed. The fix was published and verified. A follow-up browser pass on the new release confirmed auto-close, settlement, reset, all sport and competition filters, pick removal, Clear all, and close/Escape dialog dismissal. This does not constitute final responsive or brand compliance.
 
 The public browser viewport was 1363×936 CSS pixels (1348px document client width). This does not replace final 1440px and 390px checks. Earlier exact-width evidence remains dated 5 November. Official starter-shell/brand-pack comparison is still outstanding.
 
@@ -48,10 +50,9 @@ See `REQUIREMENTS_AUDIT.md` for the complete screenshot-derived matrix. The audi
 
 ## Next execution steps
 
-1. Publish and verify the latest source revision via `gh-pages` / (root), without a custom Actions workflow.
-2. Repeat final-release responsive QA and screenshots at 1440px and 390px, including the mobile bottom sheet and remaining control sweep.
-3. Obtain and reconcile the official starter shell and brand pack.
-4. Review the complete submission draft with the owner and obtain approval before submitting.
+1. Repeat exact-width responsive QA and screenshots at 1440px and 390px, including mobile bottom-sheet focus, keyboard and state regression.
+2. Obtain and reconcile the official starter shell and brand pack.
+3. Review the complete submission draft with the owner and obtain approval before submitting.
 
 ## Deadline
 
