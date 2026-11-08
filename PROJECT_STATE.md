@@ -1,59 +1,51 @@
 # HOUSE//LIVE Project State
 
-Updated: 2026-11-07 (Asia/Jakarta)
+Updated: 2026-11-08
 
 ## Current outcome
 
-All five linked views and the single-bet interaction engine are implemented. Local typecheck, lint, 21 behavioral tests and production build were rerun and passed on 2026-11-07. Browser scenarios and saved screenshots cover the earlier 2026-11-05 build. A subsequent public desktop regression pass on 7 November is recorded below; exact-width responsive checks still need refreshing.
+**SUBMISSION READY — awaiting owner approval.** All five linked pages, the single-bet engine and every required state are implemented. They pass 29 behavioural tests and 164 browser checks at exactly 1440px and 390px. Nothing has been submitted to the contest.
 
 ## Milestones
 
-- [x] Read the supplied brief and official screenshots; identify exclusions.
-- [x] Define architecture, tokens, routes and sample data.
-- [x] Implement Sports Home, Live and Football.
-- [x] Implement Match Center with six market groups.
-- [x] Implement combined Betslip + My Bets and mobile bottom sheet.
-- [x] Implement changed odds, suspension/reopening, failure/retry, settlement and cash out.
-- [x] Add behavioral tests and local browser QA.
-- [x] Prepare relative asset paths and local validation for branch-based Pages.
-- [x] Write project, design, QA and submission documentation.
-- [ ] Obtain and compare the official starter shell and brand pack.
-- [x] Access `bayuewalker/housebets-sportsbook-contest` (public, owner-created).
-- [x] Push source and verify remote commit `30e912573a90ed9496fa1a037e123b6d30625ead`.
-- [x] Publish the validated static release to `gh-pages`.
-- [x] Verify branch-based Pages publication and the public URL.
-- [ ] Owner review and authorization to submit.
+- [x] Read the brief and official screenshots; identify exclusions.
+- [x] Implement Sports Home, Live, Football, Match Center and combined Betslip + My Bets.
+- [x] Implement changed odds, suspension, failure/retry, settlement, cash out, loading and no-live states.
+- [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (7 November).
+- [x] Finishing pass (8 November): Housebets-style shell and brand mark, phone bottom navigation, 11px text floor, receipts, retry, simulated live price feed, focus handling, and exact-width browser QA with screenshots.
+- [x] Correct contest rules and asset provenance in the docs.
+- [ ] Merge the finishing pass to `main`, republish `gh-pages` and verify the public site.
+- [ ] Owner review, approval and submission (owner only).
 
-## Published release and remaining verification
+## Release record
 
-The public prototype is live at https://bayuewalker.github.io/housebets-sportsbook-contest/ without login. The owner's first Pages screenshot showed `main` selected; that served uncompiled source HTML. The owner then switched to `gh-pages` / (root), confirmed by the second screenshot. The deployment blocker is resolved. No PAT or custom Actions workflow was needed.
+| Release | Source (`main`) | `gh-pages` | Verification |
+| --- | --- | --- | --- |
+| 7 November | `694b3ad47b8efade6b4fedd89bd69221d60a7e73` | `00de1670c55929ee5917fa08f06d32d40ff5e794` | `pnpm pages:verify` pass; public desktop sweep |
+| 8 November finishing pass | Recorded after merge | Recorded after publish | `pnpm pages:verify` and `QA_URL=… pnpm qa:browser` |
 
-`pnpm pages:verify` passed on 7 November 2026 (WIB): the hosted manifest and all four public assets match source `e62bab273940f32d02aebc894db44c4f5888e822`, publishing commit `ad56245f919656cec22707e6c256bcc19cffe8f8`.
+Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, copy `.pages/` to the `gh-pages` root (removing obsolete hashed assets), commit and push without force, then run `pnpm pages:verify`. No custom Actions deployment, and no secrets or tokens in the repository.
 
-The subsequent release verification also **passed**: current executable source `694b3ad47b8efade6b4fedd89bd69221d60a7e73` and `gh-pages` commit `00de1670c55929ee5917fa08f06d32d40ff5e794`, four matching public assets. The fix is now live.
+## Contest facts
 
-Public browser tests passed for all five routes, search and empty results, league filtering, home filter reset, odds-change acceptance, suspended/reopened selections, failed placement with unchanged balance, successful retry, cash-out settlement, keyboard history tabs, refresh persistence, no-live fallback and reset. The updated 3.5/4.5 goals markets were inspected. Desktop evidence is saved in `docs/screenshots/public-match-desktop.jpg`.
+- Deadline: **14 November 2026, 18:00 UTC** (15 November 2026, 01:00 WIB).
+- Free entry with no deposit or wagering. At most 3 submissions in any rolling 24 hours. One account per person. Residents of the US, France and the Netherlands are excluded.
+- Original work. AI tools and public libraries are allowed if disclosed. Entries may be shared publicly under the entrant's alias.
+- Prize paid in USDT with no wagering. Results about 7 days after closing. Winners transfer code and design rights; non-winners keep their work.
+- Tie-breakers: the Match page, then "Feels like Housebets".
+- The contest page mentions starter files, but no downloadable ZIP or brand pack was located. This is not a blocker: the entry uses original assets and says so.
 
-A second public desktop sweep on 7 November exercised all six Match Center market tabs, odds acceptance, failure/retry, suspension/reopen, cash-out, loading and no-live fallback. Source was then adjusted to close the Demo controls dialog when Fail next placement is armed. The fix was published and verified. A follow-up browser pass on the new release confirmed auto-close, settlement, reset, all sport and competition filters, pick removal, Clear all, and close/Escape dialog dismissal. This does not constitute final responsive or brand compliance.
+## Branch notes
 
-The public browser viewport was 1363×936 CSS pixels (1348px document client width). This does not replace final 1440px and 390px checks. Earlier exact-width evidence remains dated 5 November. Official starter-shell/brand-pack comparison is still outstanding.
+- `codex/contest-finishing` (commit `9cf8ce7`, 8 November) holds a separate, unmerged attempt at shell and mobile refinements with no open PR. The finishing pass on `cursor/contest-finishing-a1e1` was built independently from `main` and covers the same areas. The owner should decide whether to delete that branch; nothing from it was merged.
+- `fix/contest-qa-finalization` and `docs/record-release-verification` were merged earlier through PRs #1 and #2.
 
-GitHub remains the source of truth and hosting target. Do not switch hosting providers without the owner's direction.
+## Open risks
 
-## Scope decision
+- Brand fidelity: without official assets, "Feels like Housebets" rests on the original interpretation.
+- Not tested on physical devices, Safari/Firefox or with a screen reader.
+- Google Fonts needs network access; system fonts take over if it fails.
 
-The latest official screenshots override the earlier request for match statistics: stats widgets and match trackers are excluded. No excluded feature has been implemented.
+## Next step
 
-## Requirements audit
-
-See `REQUIREMENTS_AUDIT.md` for the complete screenshot-derived matrix. The audit confirms core functional coverage and records unresolved official-shell/brand compliance, final exact-width responsive checks and the remaining control sweep. The supported preview was interrupted; a subsequent browser action was blocked by browser security policy. No full-compliance sign-off is claimed.
-
-## Next execution steps
-
-1. Repeat exact-width responsive QA and screenshots at 1440px and 390px, including mobile bottom-sheet focus, keyboard and state regression.
-2. Obtain and reconcile the official starter shell and brand pack.
-3. Review the complete submission draft with the owner and obtain approval before submitting.
-
-## Deadline
-
-Official screenshot: 14 November 2026, 18:00 UTC = 15 November 2026, 01:00 WIB. No contest entry has been sent. The contest permits three submissions per day. The owner must review the winning-entry rights transfer before submission.
+The owner reviews the live site and `SUBMISSION.md`, chooses whether to submit, and personally ticks the contest confirmations, including the IP transfer for winners.

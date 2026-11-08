@@ -2,48 +2,64 @@
 
 ## Product idea
 
-The sports command center: familiar Housebets structure, a match-focused content area, and an always-reachable betslip. The interaction hierarchy is event → market → price → stake → reviewed confirmation.
+The sports command center: a familiar Housebets shell, a match-focused content area and an always-reachable betslip. The interaction order is event → market → price → stake → reviewed confirmation → receipt.
 
-## Tokens
+## Brand
 
-| Role | Value | Usage |
+- **Mark:** an original rounded-square H whose two uprights are joined by a wave (`brandMark()` in `src/icons.ts`, also `public/favicon.svg`). The wordmark is "Housebets" in Manrope 800 with an aqua H.
+- **Provenance:** drawn for this entry to evoke the public Housebets navy/aqua identity. No official logo file, starter pack or brand pack was available, so none is used. Club shields and league tiles are generic two-tone CSS shapes with text monograms; no real crests or league logos.
+- **Shell:** a top bar with the mark, Casino/Sports switch, demo badge, wallet balance in USDT, Deposit and profile; a left navigation; a right betslip rail. On phones, Menu / Sports / Casino / Chat / Search sit in a bottom navigation below the persistent betslip bar. Casino, Chat, Deposit and profile are informational, never transactional.
+
+## Tokens (`src/style.css :root`)
+
+| Role | Token | Value |
 | --- | --- | --- |
-| Canvas | `#071218` | Page background |
-| Surface | `#0C1C25` | Shell and panels |
-| Raised surface | `#122833` | Cards and controls |
-| Divider | `#20343D` | Panel boundaries |
-| Primary text | `#ECF3F5` | Headlines and values |
-| Secondary text | `#8EA7B2` | Supporting labels |
-| Primary action | `#B4F3ED` | Selected odds and placement |
-| Live accent | `#54D9CE` | Live indicators and active navigation |
-| Warning | `#EDC77C` | Changed odds and suspended selections |
-| Error | `#FF9CAA` | Validation and failed placements |
+| Page background | `--bg` | `#050c11` |
+| Shell (top bar, sidebar) | `--shell` | `#08131a` |
+| Surfaces | `--surface`, `--surface-2` | `#0b1920`, `#0f2029` |
+| Raised controls | `--raised`, `--raised-2` | `#132833`, `#1a3441` |
+| Primary / secondary / muted text | `--text`, `--text-2`, `--muted` | `#eef5f7`, `#b4c6ce`, `#8aa0aa` |
+| Brand aqua (selected odds, primary action) | `--cyan`, `--cyan-2`, `--cyan-ink` | `#16e6f2`, `#6cf2f8`, `#022429` |
+| Live | `--live` | `#ff4d67` |
+| Changed odds / suspended warning | `--amber` | `#f6c35c` |
+| Price up / down | `--up`, `--down` | `#34d399`, `#fb7185` |
+| Danger / success | `--danger`, `--success` | `#ff8f9c`, `#3fe0a2` |
 
-Manrope is used for headings; DM Sans for interface text. Both use system sans-serif fallbacks. Prices, balances and clocks use tabular numerals. Radii range from 4px controls to 12px feature cards. Spacing uses predominantly 4/8px increments.
+Typography: Manrope for display (headings, scores, team names), DM Sans for interface text, both with system fallbacks. Prices, balances and clocks use tabular numerals. **Readable text is 11px or larger**; the only smaller glyphs are decorative, `aria-hidden` league monograms (10px) that always sit beside the full league name, and the up/down arrow beside a price. Phone inputs (search, select, stake) are 16px so iOS does not zoom.
 
-## Responsive shell
+## Layout
 
-- Desktop 1440px: 204px left navigation, fluid content, 310px persistent betslip rail.
-- At 1050px and below: rail becomes the persistent bottom betslip and modal sheet.
-- At 760px and below: left navigation becomes a drawer; market and sport navigation scroll horizontally; fixture rows reflow without horizontal page overflow.
-- Mobile target: 390px. Safe-area bottom padding protects the betslip on devices with a home indicator.
+| Width | Sidebar | Betslip | Notes |
+| --- | --- | --- | --- |
+| ≥1600px | 240px | 360px rail | |
+| 1281–1599px (1440 target) | 224px | 340px rail | |
+| 1051–1280px | 200px | 304px rail | Bets page goes to one column |
+| 761–1050px | 200px | Fixed bottom bar + sheet | |
+| ≤760px (390 target) | Drawer | Bar above bottom nav + sheet | 58px header; bottom nav `62px + safe-area inset`; 70px slip bar |
+| ≤359px | Drawer | Bar + sheet | Wordmark hidden, mark only |
 
-## Component behavior
+`viewport-fit=cover` enables `env(safe-area-inset-*)`. Sheets are sized with `dvh` so they fit above an on-screen keyboard. Content gets bottom padding equal to the slip bar plus bottom nav, so nothing is hidden behind them.
+
+## Components and states
 
 | Component | Normal | Selected / changed | Unavailable |
 | --- | --- | --- | --- |
-| Odds button | Navy, readable outcome and decimal value | Aqua selection; directional arrow and changed price | Lock icon, disabled button, explicit suspended label |
-| Selection | Market, event, accepted odds, stake, individual return | Amber old/new comparison; acceptance button | Selection remains saved, placement disabled |
-| Placement | Reviewable sum of stakes and individual returns | Loading state prevents repeat click; receipt after success | Explicit failure; no debit; retry preserves choices |
-| Cash out | Quote visible on eligible open bets | Confirmation dialog before settlement | Closed records cannot cash out twice |
-| Following | Outline star with accessible label | Filled tint; reversible follow/unfollow | Empty state explains how to add teams |
+| Odds button | Navy tile, outcome name and decimal price | Solid aqua with a check; green/red border, arrow and brief flash when the price moves | Dashed border, lock icon, disabled |
+| Market group | Title, outcome count, odds grid | — | "Suspended" chip and explanation; picks kept |
+| Selection card | Live/single tag, outcome, market, fixture link, stake with quick stakes, return | Amber "Odds changed 1.48 → 1.60" with acceptance | Suspended note; placement paused |
+| Slip summary | Total stake, potential return (sum of singles), "Place single bet · X USDT" | Amber banner and "Accept new odds" | Suspended banner with "Remove"; disabled place button with reason |
+| Placement | Busy state blocks repeat clicks | Success notice with one receipt row per single and a My Bets link | "Bet not placed" with reason and "Try again"; no debit |
+| Bet card | Status, fixture, outcome, odds, stake, return, reference | Cash-out button with offer | Settled won/lost/cashed |
+| Fixture row | Status/time, teams with shields, score, star, result odds, more-markets link | Search reason chip ("Player · Bukayo Saka") | — |
+| Loading / empty | Skeleton rows; empty search with clear; Starting soon when nothing is live | | |
+
+Motion: odds flash, live dot pulse and sheet transitions are all disabled under `prefers-reduced-motion`.
 
 ## Accessibility
 
-Native buttons, links, inputs, selects and dialogs; labelled stake inputs; visible focus rings; pressed/selected state announcements; textual status alongside color; live-region receipts and failures; keyboard skip link; reduced-motion support. Native dialogs trap focus and support Escape. Search can be focused with `/` when not editing another field.
-
-Desktop follows the density of the supplied wireframe. Mobile increases stake fields and actions, and keeps betting state reachable from every page. Actual iOS/Android keyboard behavior and comprehensive assistive-technology testing remain release checks.
-
-## Assets and alignment
-
-All interface SVG icons, backgrounds and club monograms are original code-based assets. No template, stock photo, official team crest or official Housebets logo file is bundled. The Housebets wordmark and wave are provisional interpretations of the screenshots. Official starter shell/brand-pack reconciliation is a required final milestone, especially because brand alignment is a contest tie-breaker.
+- Native buttons, links, inputs, selects and `<dialog>` elements; a skip link; visible focus rings.
+- `aria-pressed` on odds, filters and quick stakes. `aria-invalid` and `aria-describedby` on stake errors. Status and alert regions for receipts and failures. Text always accompanies colour.
+- Focus survives re-renders: the focused control is restored, dialogs move focus inside, and Escape or close returns it to the opener. Route changes focus the page title without a visible box.
+- My Bets tabs use Arrow/Home/End. `/` focuses search; Escape clears it.
+- Interactive targets are at least 24px (most 40px+), and text links have 32px hit areas.
+- Not claimed: a full screen-reader audit or WCAG conformance.

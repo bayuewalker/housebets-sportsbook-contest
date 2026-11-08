@@ -1,35 +1,38 @@
 # HOUSE//LIVE review walkthrough
 
-All data and transactions are simulated. No login, deposit or account is needed. The public prototype is live at https://bayuewalker.github.io/housebets-sportsbook-contest/ without sign-in. This URL points to the latest verified published release; after any new source change, rebuild and republish `gh-pages` before calling it the updated release.
+https://bayuewalker.github.io/housebets-sportsbook-contest/ — no login, deposit or account needed. All data, prices and transactions are simulated in your browser.
 
-## A two-minute product tour
+## A two-minute tour
 
-1. **Sports Home:** search for Arsenal, Bukayo, Premier League or a market. Clear search; follow a competition and open Following. Explore a sport and return home.
-2. **Live:** filter sport and competition. Open Demo controls and choose No live matches to see the Starting Soon fallback. Restore live matches before continuing.
-3. **Football:** visit each of the five competition tabs. Follow a team or league; open a fixture from its match row.
-4. **Match Center:** open Arsenal v Brighton. Browse all six market categories. Select Arsenal at 1.48 and enter a stake of 25 USDT: potential return is 37.00 USDT.
-5. **Betslip + My Bets:** review the single bet, place it and inspect the confirmation and open history. Confirm Cash out and find the result in Settled. On mobile, use the persistent bottom bar to open the interactive betslip.
+1. **Sports Home:** the main event (Arsenal v Brighton, live) leads, followed by Live now, Starting soon and Top competitions. Search for `Bukayo`, `LaLiga` or `corners`; each result says why it matched. Tap ☆ on a competition, then open **Following**.
+2. **Live:** every in-play match, with ticking clocks. Filter by sport or competition; the counts show what is live.
+3. **Football:** switch between Premier League, Champions League, LaLiga, Serie A and Bundesliga. Every row has match-result odds.
+4. **Match Center:** open Arsenal v Brighton. Watch the prices: one on-screen price moves every few seconds with a green or red marker. Browse the six categories; Corners & Cards contains a suspended market. Tap **Arsenal** and enter 25 USDT.
+5. **Betslip + My Bets:** place the single bet and read the receipt. Open My Bets, cash out with confirmation, and find it under Settled. On a phone, the betslip bar sits above the bottom navigation on every page and opens a bottom sheet.
+
+The live feed never changes a price that is already in your slip. Use the scenario panel to test that flow.
 
 ## Judge-controlled edge states
 
-The desktop sidebar's Demo controls button and the mobile sliders button open the same scenario panel. Price and suspension controls target the first selection, or Arsenal's match-result market when the slip is empty.
+Open **Demo controls**: in the desktop sidebar, from the sliders button beside the phone search, or from the phone Menu. Price and suspension scenarios target the first selection, or Arsenal's match result when the slip is empty.
 
 | Scenario | Expected result |
 | --- | --- |
-| Move odds | Current price changes; placement stays disabled until Accept new odds is pressed. A 25 USDT stake at 1.60 returns 40.00 USDT. |
-| Suspend / reopen | Suspended odds are disabled. Existing picks and stakes remain, but placement is blocked. Toggle again to reopen. |
-| Fail next placement | Arming this closes the scenario panel so the next valid placement can be tested immediately. The placement fails with an explanation, without changing balance or history. Retry succeeds. |
-| Settle an open bet | The first open bet moves to Won and its return is credited once. |
-| No live matches | Live shows Starting Soon; former live fixtures have upcoming labels and no live scoreboard. |
-| Loading state | The fixture list shows a two-second loading state, then returns. |
-| Reset demo | A confirmation restores sample history, favorites and 1,000 USDT. |
+| Move odds | The slip shows "Odds changed" and blocks placement until you press **Accept new odds**. 25 USDT at 1.60 returns 40.00 USDT. |
+| Suspend / reopen | Odds lock. Your pick and stake stay, the slip explains placement is paused and offers **Remove**. Toggle again to reopen. |
+| Fail next placement | The panel closes. The next placement shows "Bet not placed" with **Try again**; balance and history are unchanged. Retry succeeds once. |
+| Settle an open bet | The first open bet becomes Won and its return is credited once. |
+| No live matches | Live shows Starting soon; former live fixtures show kick-off times. |
+| Live price feed | Pause or resume background price movement. |
+| Loading state | Skeleton rows for two seconds, then fixtures return. |
+| Reset demo | After confirmation, the sample history, favourites and 1,000 USDT are restored. |
 
-## Additional checks
+## Worth checking
 
-- Multiple selections remain independent singles with separate stakes and receipts; odds are never multiplied.
-- Invalid or unaffordable stakes block placement. Removing a pick recalculates totals.
-- Refresh preserves placed bets, favorites and demo balance. Unplaced selections and scenario overrides reset.
-- My Bets tabs support Left/Right arrows, Home and End. Search has a `/` shortcut; dialogs support Escape.
-- Verify at 1440px desktop and 390px phone width. Check keyboard focus, bottom-bar visibility, scroll overflow and close/reopen behavior.
+- Several picks remain separate singles, each with its own stake and receipt line. Odds are never multiplied.
+- Invalid or unaffordable stakes block placement with a reason.
+- Casino, Chat, Deposit and the profile are informational panels; nothing outside the sportsbook transacts.
+- Keyboard: `/` focuses search and Escape clears it. Dialogs close with Escape and return focus. My Bets tabs use the arrow keys.
+- Refresh keeps placed bets, favourites and balance. Unplaced picks and scenarios reset.
 
-AI assistance and asset provenance are disclosed in `SUBMISSION.md`. The owner must approve the contest entry; this guide is not a submission confirmation.
+AI assistance and asset provenance are disclosed in `SUBMISSION.md`.
