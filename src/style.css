@@ -94,7 +94,7 @@ button>.icon,a>.icon{pointer-events:none}
 .sidebar-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:8px 12px}
 .league-nav{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:6px 12px;border-radius:10px;font-size:14px;color:var(--text-2);text-align:left}
 .league-nav.chosen{color:#fff;background:var(--surface-2)}
-.league-glyph{display:inline-grid;place-items:center;width:28px;height:28px;flex:none;border-radius:8px;font-family:var(--display);font-size:10px;font-weight:800;letter-spacing:-.02em;color:#fff;background:linear-gradient(145deg,color-mix(in srgb,var(--league,#35505a) 90%,#fff),color-mix(in srgb,var(--league,#35505a) 72%,#000));box-shadow:inset 0 0 0 1px #ffffff2b,0 2px 6px #0003}
+.league-glyph{display:inline-grid;place-items:center;width:28px;height:28px;flex:none;border-radius:8px;font-family:var(--display);font-size:11px;font-weight:800;letter-spacing:-.02em;color:#fff;background:linear-gradient(145deg,color-mix(in srgb,var(--league,#35505a) 90%,#fff),color-mix(in srgb,var(--league,#35505a) 72%,#000));box-shadow:inset 0 0 0 1px #ffffff2b,0 2px 6px #0003}
 .sidebar-bottom{margin-top:auto;padding:24px 12px 4px}
 .edition{font-size:15px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}
 .edition span{color:var(--cyan);margin:0 1px}
@@ -213,7 +213,7 @@ main:focus{outline:none}
 @keyframes pulse{50%{box-shadow:0 0 0 6px #ff4d6700}}
 .fixture-group{border:1px solid var(--line-2);border-radius:14px;overflow:hidden;margin-bottom:12px;background:var(--surface)}
 .group-heading{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
-.group-heading .league-glyph{width:24px;height:24px;font-size:9px;border-radius:7px}
+.group-heading .league-glyph{width:24px;height:24px;font-size:10px;border-radius:7px}
 .group-heading h3{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700}
 .group-heading h3>span{color:var(--muted);font-weight:500}
 .group-count{margin-left:auto;font-size:12px;color:var(--muted)}
@@ -645,7 +645,7 @@ main:focus{outline:none}
   .breadcrumbs{margin-bottom:12px}
   .scoreboard-top{padding:12px 14px 0}
   .scoreboard-league{font-size:13px;gap:8px}
-  .scoreboard-league .league-glyph{width:24px;height:24px;font-size:9px}
+  .scoreboard-league .league-glyph{width:24px;height:24px;font-size:10px}
   .scoreboard-teams{gap:6px;padding:18px 10px 18px}
   .scoreboard-team .club-badge.large{--size:56px}
   .scoreboard-team .club-badge.large span{font-size:17px}
