@@ -28,15 +28,30 @@ export function acceptChanges(s:State):void { for(const p of s.selections){const
 export function totalStake(s:State):number { return round(s.selections.reduce((n,p)=>n+(Number.isFinite(stakeValue(p.stake))?stakeValue(p.stake):0),0)); }
 export function totalReturn(s:State):number { return round(s.selections.reduce((n,p)=>n+(Number.isFinite(stakeValue(p.stake))?round(stakeValue(p.stake)*p.acceptedOdds):0),0)); }
 export function placementError(s:State):string|undefined { if(!s.selections.length)return 'Add a selection first.'; for(const p of s.selections){const e=selectionError(s,p);if(e)return e;} if(totalStake(s)>s.balance)return 'Not enough demo balance. Reduce your stakes.'; }
-export function placeBets(s:State,now=new Date()):{ok:boolean;message:string} {
+export function placeBets(s:State,now=new Date()):{ok:boolean;message:string;bets?:Bet[]} {
  const error=placementError(s);if(error)return {ok:false,message:error};
  if(s.failNext){s.failNext=false;return {ok:false,message:'Bet not placed. Connection interrupted. Your demo balance is unchanged. Try again.'};}
  const amount=totalStake(s),count=s.selections.length;
  const bets:Bet[]=s.selections.map((p,i)=>{const r=resolve(s,p)!;const stake=stakeValue(p.stake);return {id:`HL-${now.getTime()}-${i}`,fixtureId:r.fixture.id,fixture:`${r.fixture.home} v ${r.fixture.away}`,market:r.market.name,outcome:r.outcome.label,odds:p.acceptedOdds,stake,return:round(stake*p.acceptedOdds),status:'open',createdAt:`Demo · ${now.toISOString().slice(11,16)} UTC`,cashOffer:round(stake*.92)};});
- s.balance=round(s.balance-amount);s.bets.unshift(...bets);s.selections=[];s.revision++;return {ok:true,message:`${count} single bet${count===1?'':'s'} placed. ${money(amount)} USDT from your demo balance.`};
+ s.balance=round(s.balance-amount);s.bets.unshift(...bets);s.selections=[];s.revision++;return {ok:true,message:`${count} single bet${count===1?'':'s'} placed. ${money(amount)} USDT from your demo balance.`,bets};
 }
 export function cashOut(s:State,id:string):boolean { const b=s.bets.find(b=>b.id===id); if(!b||b.status!=='open')return false;b.status='cashed';b.return=b.cashOffer;s.balance=round(s.balance+b.cashOffer);s.revision++;return true; }
 export function settle(s:State):boolean { const b=s.bets.find(b=>b.status==='open');if(!b)return false;b.status='won';s.balance=round(s.balance+b.return);s.revision++;return true; }
 export function moveOdds(s:State):void { const p=s.selections[0]; const r=p?resolve(s,p):undefined; const market=r?.market??s.fixtures[0].markets[0];for(const [i,o] of market.outcomes.entries()){o.previous=o.odds;o.odds=round(Math.max(1.05,o.odds+(i===0?.12:-.08)));} s.revision++; }
 export function toggleSuspension(s:State):void {const r=s.selections[0]?resolve(s,s.selections[0]):undefined;const m=r?.market??s.fixtures[0].markets[0];m.suspended=!m.suspended;s.revision++;}
 export function searchFixtures(fixtures:Fixture[],query:string):Fixture[] {const q=query.trim().toLocaleLowerCase();return fixtures.filter(f=>[f.home,f.away,f.league,f.sport,...f.players,...f.markets.map(m=>m.name)].some(v=>v.toLocaleLowerCase().includes(q)));}
+export function searchReason(f:Fixture,query:string):string {const q=query.trim().toLocaleLowerCase();if(!q)return '';const has=(v:string)=>v.toLocaleLowerCase().includes(q);if(has(f.home)||has(f.away))return 'Team';const player=f.players.find(has);if(player)return `Player · ${player}`;if(has(f.league))return 'Competition';if(has(f.sport))return 'Sport';const market=f.markets.find(m=>has(m.name));return market?`Market · ${market.name}`:'';}
+export function removeSuspended(s:State):number {const before=s.selections.length;s.selections=s.selections.filter(p=>{const r=resolve(s,p);return r&&!r.market.suspended;});s.revision++;return before-s.selections.length;}
+/** Simulated live price feed: nudges one unselected in-play price, so a pick never changes behind the player's back without the explicit acceptance flow. */
+export function driftOdds(s:State,rng:()=>number=Math.random,eligible:(fixtureId:string,marketId:string)=>boolean=()=>true):{fixtureId:string;marketId:string;outcomeId:string;cleared:string[]}|undefined {
+ if(s.noLive)return;
+ const picked=new Set(s.selections.map(p=>`${p.fixtureId}:${p.marketId}:${p.outcomeId}`));
+ const candidates=s.fixtures.filter(f=>f.live).flatMap(f=>f.markets.filter(m=>!m.suspended&&eligible(f.id,m.id)).flatMap(m=>m.outcomes.filter(o=>!picked.has(`${f.id}:${m.id}:${o.id}`)).map(o=>({f,m,o}))));
+ if(!candidates.length)return;
+ const cleared:string[]=[];
+ for(const f of s.fixtures)for(const m of f.markets)for(const o of m.outcomes){const key=`${f.id}:${m.id}:${o.id}`;if(o.previous!==undefined&&!picked.has(key)){delete o.previous;cleared.push(key);}}
+ const {f,m,o}=candidates[Math.min(candidates.length-1,Math.floor(rng()*candidates.length))];
+ const step=round(.02+Math.floor(rng()*4)*.02);const up=rng()<.5||o.odds-step<1.01;
+ o.previous=o.odds;o.odds=round(up?o.odds+step:o.odds-step);s.revision++;
+ return {fixtureId:f.id,marketId:m.id,outcomeId:o.id,cleared};
+}
