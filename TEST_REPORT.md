@@ -50,11 +50,14 @@ Screenshots from the passing run are in `docs/screenshots/` (34 files: five page
 - "2 matchs" pluralisation; "Bet not placed" repeated in the failure message; the inline star in the Football banner broke its line on phones; the "Betslip & My Bets" nav label wrapped once a count appeared (now "My Bets" with an open-bet count).
 - QA-script issues: URL navigation kept the Following filter between tests (QA now navigates by links like a player); a selector matched the hidden rail copy of the notice on phones.
 
+### Public release
+
+Source `22fc71610434c3ef4c2cb7fc435ec3dec0a7d8c4` was published as `gh-pages` `fb0c377f75b2ccc8354fa1e26d8281e5700351d4`. Before publishing, the release build passed `pnpm pages:prepare` (lint, 29 tests, build) and `pnpm qa:browser` 164/164. After publishing, `pnpm pages:verify` passed with all 4 public assets matching, and `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` passed 164/164 against the live site at 1440px and 390px.
+
 ### Limits
 
 - Headless Chrome with device emulation, not physical iOS/Android hardware. The real on-screen keyboard was not exercised; inputs are 16px and sheets use `dvh` to cope with it.
 - Safari and Firefox not tested. No full screen-reader audit or WCAG conformance claim.
-- The public-site run is recorded in `PROJECT_STATE.md` after each publish.
 
 ## Earlier history (5–7 November 2026)
 

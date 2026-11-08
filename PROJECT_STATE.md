@@ -14,7 +14,7 @@ Updated: 2026-11-08
 - [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (7 November).
 - [x] Finishing pass (8 November): Housebets-style shell and brand mark, phone bottom navigation, 11px text floor, receipts, retry, simulated live price feed, focus handling, and exact-width browser QA with screenshots.
 - [x] Correct contest rules and asset provenance in the docs.
-- [ ] Merge the finishing pass to `main`, republish `gh-pages` and verify the public site.
+- [x] Merge the finishing pass to `main`, republish `gh-pages` and verify the public site.
 - [ ] Owner review, approval and submission (owner only).
 
 ## Release record
@@ -22,7 +22,9 @@ Updated: 2026-11-08
 | Release | Source (`main`) | `gh-pages` | Verification |
 | --- | --- | --- | --- |
 | 7 November | `694b3ad47b8efade6b4fedd89bd69221d60a7e73` | `00de1670c55929ee5917fa08f06d32d40ff5e794` | `pnpm pages:verify` pass; public desktop sweep |
-| 8 November finishing pass | Recorded after merge | Recorded after publish | `pnpm pages:verify` and `QA_URL=… pnpm qa:browser` |
+| 8 November finishing pass ([PR #3](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/3)) | `22fc71610434c3ef4c2cb7fc435ec3dec0a7d8c4` | `fb0c377f75b2ccc8354fa1e26d8281e5700351d4` | `pnpm pages:verify` pass (4 public assets); `QA_URL=… pnpm qa:browser` 164/164 against the public site |
+
+Later documentation-only commits on `main` do not change the published app.
 
 Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, copy `.pages/` to the `gh-pages` root (removing obsolete hashed assets), commit and push without force, then run `pnpm pages:verify`. No custom Actions deployment, and no secrets or tokens in the repository.
 
