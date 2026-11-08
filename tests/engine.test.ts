@@ -19,3 +19,21 @@ test('search covers teams, players, competition and markets',()=>{const s=initia
 test('required leagues and six market groups exist',()=>{const s=initialState();for(const l of ['Premier League','Champions League','LaLiga','Serie A','Bundesliga'])assert.ok(s.fixtures.some(f=>f.league===l));assert.equal(new Set(s.fixtures[0].markets.map(m=>m.category)).size,6);});
 test('empty and unknown selections cannot transact',()=>{const s=initialState();assert.equal(placeBets(s).ok,false);toggleSelection(s,'missing','result','result-0');assert.equal(s.selections.length,0);s.selections.push({fixtureId:'missing',marketId:'x',outcomeId:'y',acceptedOdds:2,stake:'10'});assert.equal(placeBets(s).ok,false);assert.equal(s.balance,1000);});
 test('transaction revalidation catches a suspension after initial review',()=>{const s=picked();assert.equal(placementError(s),undefined);toggleSuspension(s);assert.equal(placeBets(s).ok,false);assert.equal(s.balance,1000);});
+
+test('accepting another pick never silently accepts a suspended changed selection',()=>{
+ const s=picked();moveOdds(s);toggleSuspension(s);
+ toggleSelection(s,'liv-mun','result','result-0');
+ acceptChanges(s);
+ assert.equal(s.selections[0].acceptedOdds,1.48);
+ toggleSuspension(s);
+ assert.match(placementError(s)!,/Odds changed/);
+ acceptChanges(s);
+ assert.equal(placementError(s),undefined);
+});
+test('repeated placement after a success cannot duplicate the debit or receipt',()=>{
+ const s=picked();s.selections[0].stake='25';
+ const first=placeBets(s);const count=s.bets.length;
+ assert.equal(first.ok,true);assert.equal(s.balance,975);
+ assert.equal(placeBets(s).ok,false);
+ assert.equal(s.balance,975);assert.equal(s.bets.length,count);
+});

@@ -1,0 +1,192 @@
+/* Contest finishing: readable density, original identity and mobile shell. */
+:root { --muted: #a0b7c1; --mobile-nav: 62px; }
+body { line-height: 1.45; }
+body.panel-open { overflow: hidden; }
+main { min-width: 0; }
+small { font-size: 12px; }
+.icon-button { width: 40px; height: 40px; }
+.brand { gap: 5px; white-space: nowrap; }
+.brand-name { color: #f0f6f6 !important; }
+.brand-name b { color: #67e8df; }
+.brand .brand-wave { width: 44px; height: 38px; margin: 0; padding: 0; transform: none; color: #6fc9cf; }
+.profile-button { border: 1px solid #294650; background: #142d37; color: #bfe5e6; }
+.wallet { min-height: 44px; }
+.demo-badge { letter-spacing: .7px; }
+.topbar-center { letter-spacing: 1.5px; }
+.sidebar-intro, .sidebar-label { letter-spacing: 1px; line-height: 1.6; }
+.sidebar-intro { margin-bottom: 16px; }
+.nav-link, .league-nav { min-height: 44px; font-size: 13px; }
+.sidebar-bottom small, .sidebar-bottom p { line-height: 1.7; }
+.search-box { min-width: 0; height: 46px; }
+.search-box input { font-size: 14px; min-width: 0; }
+.search-box input::-webkit-search-cancel-button { display: none; }
+.clear-search { margin-right: -6px; }
+.page-heading p, .modal>p, .dialog-intro { font-size: 14px; line-height: 1.7; }
+.eyebrow { letter-spacing: 1.3px; }
+.sport-tab, .league-tabs button, .market-tabs button { min-height: 44px; }
+.segmented button, .filter-follow, .select-label select { min-height: 44px; }
+.odds, .odds.compact { min-height: 56px; }
+.odds.compact .odds-name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.odds strong, .odds.compact strong { font-size: 15px; }
+.odds.selected { box-shadow: inset 0 0 0 1px #d5fffa; }
+.odds.suspended .odds-name { color: #a4b5be; }
+.row-match b, .card-match b { font-size: 13px; white-space: normal; }
+.fixture-row { grid-template-columns: 65px minmax(120px,1fr) 40px minmax(220px,1fr) 38px; gap: 8px; }
+.row-time .live-label { letter-spacing: 0; }
+.row-time .live-label .fixture-clock { margin-left: 0; white-space: normal; }
+.club-badge, .row-match .club-badge { width: 30px; height: 34px; transform: none; border-radius: 5px 5px 13px 13px; background: linear-gradient(135deg,#ffffff20 0 35%,transparent 36%),linear-gradient(160deg,var(--club),color-mix(in srgb,var(--club),#06131b 60%)); }
+.club-badge span, .row-match .club-badge span { font-size: 9px; transform: none; letter-spacing: 0; }
+.club-badge.large { background: linear-gradient(135deg,#ffffff20 0 35%,transparent 36%),linear-gradient(160deg,var(--club),color-mix(in srgb,var(--club),#06131b 60%)); }
+.club-badge.large span { font-size: 22px; }
+.league-glyph { border-radius: 50%; background: #163642; color: #b6dfdf; font-weight: 700; flex: none; }
+.competition-grid { flex-wrap: wrap; gap: 8px; }
+.competition-grid button { flex: 1 1 30%; min-height: 62px; }
+.hero-bottom { flex-wrap: wrap; }
+.hero-bottom .odds-grid { min-width: 0; }
+.hero-bottom>span { width: 100%; }
+.hero-body { gap: 20px; }
+.hero-copy p, .hero-link { font-size: 13px; }
+.hero-score>span { letter-spacing: .6px; }
+.scoreboard-score>span { letter-spacing: .8px; }
+.scoreboard-bottom { flex-wrap: wrap; }
+.match-context { line-height: 1.7; }
+.market-group { border-color: #2a4650; }
+.market-note p { font-size: 13px; color: #a4bac5; }
+.market-heading { gap: 10px; }
+.market-heading h3 { font-size: 15px; }
+.bet-reference { color: #a1bbc7; overflow-wrap: anywhere; }
+.quick-stakes button { min-height: 40px; }
+.stake-input input { font-size: 18px; min-height: 46px; }
+.stake-input input:focus { outline-offset: -2px; }
+.button, .cash-button { min-height: 44px; }
+.pick-fixture { line-height: 1.6; }
+.slip-summary>p, .demo-disclosure, .rail-footnote { line-height: 1.7; }
+.slip-toolbar { flex-wrap: wrap; gap: 8px; }
+.slip-toolbar button { min-height: 36px; }
+.slip-header { gap: 10px; }
+.single-badge { letter-spacing: .6px; }
+.selection-top { gap: 6px; }
+.selection-top>span { letter-spacing: .4px; }
+.bet-values { flex-wrap: wrap; }
+.history-tabs button { min-height: 44px; }
+.notice { align-items: flex-start; }
+.notice p { line-height: 1.6; }
+.modal { overscroll-behavior: contain; padding-top: 38px; }
+.modal-close { top: 8px; right: 8px; }
+.modal .eyebrow { padding-right: 28px; }
+.demo-grid span, .demo-footer>span { color: #aec5ce; line-height: 1.6; }
+.mobile-navigation { display: none; }
+@media (min-width: 1051px) and (max-width: 1250px) {
+  .fixture-row { grid-template-columns: 60px minmax(0,1fr) 40px; }
+  .fixture-row .odds-grid { grid-column: 1 / 3; }
+  .fixture-row .more-markets { min-height: 56px; }
+  .hero-body { flex-wrap: wrap; }
+  .hero-fixture { flex: 1 1 100%; }
+  .header-actions { gap: 10px; }
+}
+@media (max-width: 1050px) {
+  main { padding-bottom: 110px; }
+  .mobile-slip-bar strong { font-size: 14px; }
+  .mobile-slip-bar small { font-size: 12px; }
+  .bar-ticket>b { min-width: 18px; height: 18px; font-size: 12px; }
+}
+@media (max-width: 760px) {
+  :root { --header: 68px; }
+  .topbar { padding: 0 12px; gap: 6px; }
+  .brand { font-size: 21px; gap: 2px; }
+  .brand .brand-wave { width: 31px; height: 32px; }
+  .brand-wrap, .header-actions { gap: 6px; }
+  .mobile-menu, .header-actions>.demo-badge { display: none; }
+  .wallet { padding: 8px; gap: 5px; }
+  .wallet strong { font-size: 12px; }
+  .wallet>span { font-size: 12px; }
+  .wallet>.icon:first-child { display: none; }
+  .profile-button { width: 36px; height: 44px; }
+  main { padding: 20px 16px calc(166px + env(safe-area-inset-bottom)); }
+  .search-box input { font-size: 16px; }
+  .search-row { margin-bottom: 24px; }
+  .mobile-demo { width: 44px; height: 46px; }
+  .sport-tabs, .league-tabs, .market-tabs { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
+  .page-heading h1 { font-size: 27px; }
+  .page-heading .eyebrow { font-size: 12px; }
+  .page-heading p { font-size: 14px; }
+  .hero { padding: 16px 14px 0; }
+  .hero-top { gap: 8px; flex-wrap: wrap; }
+  .hero-copy h2 { font-size: 36px; line-height: 1.13; }
+  .hero-fixture { gap: 14px; }
+  .hero-team { min-width: 0; }
+  .hero-score>strong { font-size: 49px; }
+  .hero-score>strong>span { margin: 0 10px; }
+  .hero-bottom .odds.compact, .fixture-card .odds.compact { flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 5px; }
+  .hero-bottom .odds-name, .fixture-card .odds-name { font-size: 12px; }
+  .hero-bottom .odds.compact strong, .fixture-card .odds.compact strong { font-size: 15px; }
+  .hero-bottom .odds-grid { flex: 1 1 100%; }
+  .all-markets { min-height: 40px; display: flex; align-items: center; }
+  .section-heading { flex-wrap: wrap; gap: 10px; }
+  .section-heading>span { max-width: none; font-size: 12px; }
+  .competition-grid { flex-wrap: nowrap; margin-right: -16px; padding-right: 16px; }
+  .competition-grid button { flex: 0 0 170px; }
+  .filter-row { display: grid; grid-template-columns: minmax(0,1fr) auto; }
+  .select-label { grid-row: 2; grid-column: 1 / -1; }
+  .select-label select { font-size: 14px; }
+  .filter-follow { padding: 8px; }
+  .fixture-row { grid-template-columns: 60px minmax(0,1fr) 44px; padding: 12px; gap: 6px; }
+  .fixture-row>.follow { width: 44px; height: 44px; }
+  .fixture-row .odds-grid { grid-column: 1 / -1; }
+  .fixture-row .more-markets { grid-column: 1 / -1; min-height: 32px; margin: 0; justify-content: flex-end; }
+  .row-match>span { gap: 7px; }
+  .row-match b { font-size: 13px; }
+  .fixture-row .odds-name { font-size: 12px; }
+  .fixture-row .odds strong { font-size: 15px; }
+  .group-heading h3 { font-size: 13px; }
+  .group-heading h3>span { display: block; font-size: 12px; }
+  .scoreboard-top { flex-wrap: wrap; gap: 10px; }
+  .scoreboard-top>span:first-child { font-size: 13px; }
+  .scoreboard-teams { padding: 20px 10px; }
+  .scoreboard-score { max-width: 120px; }
+  .scoreboard-score strong { font-size: 46px; }
+  .scoreboard-score strong>span { margin: 0 7px; }
+  .scoreboard-score>span { white-space: normal; text-align: center; font-size: 12px; letter-spacing: .5px; }
+  .scoreboard-team h1, .scoreboard-team h2 { font-size: 16px; overflow-wrap: anywhere; }
+  .scoreboard-bottom { gap: 6px; }
+  .scoreboard-bottom>span:last-child { font-size: 12px; }
+  .market-group { padding: 14px 12px; }
+  .market-group .odds { padding: 12px 8px; min-height: 76px; }
+  .market-group .odds-name { font-size: 12px; }
+  .market-group .odds strong { font-size: 16px; }
+  .match-context { font-size: 13px; }
+  .next-match>a { font-size: 13px; }
+  .bets-slip, .history { padding: 14px; }
+  .bet-card { padding: 14px; }
+  .selection-card { padding: 13px; }
+  .selection-top>span { font-size: 12px; }
+  .pick-name>strong { font-size: 16px; }
+  .quick-stakes button { min-height: 44px; }
+  .stake-input input { scroll-margin-block: 70px; }
+  .slip-toolbar, .slip-toolbar button { font-size: 12px; }
+  .slip-summary .total-return { flex-wrap: wrap; gap: 8px; }
+  .slip-summary .total-return b { font-size: 22px; }
+  .slip-modal { padding: 48px 16px max(24px,env(safe-area-inset-bottom)); max-height: 91dvh; }
+  .modal:not(.slip-modal):not(.menu-modal) { padding-top: 42px; }
+  .demo-grid { grid-template-columns: 1fr 1fr; }
+  .demo-grid b { font-size: 13px; }
+  .demo-grid span { font-size: 12px; }
+  .mobile-navigation { display: grid; grid-template-columns: repeat(5,1fr); position: fixed; z-index: 26; bottom: 0; left: 0; right: 0; height: calc(var(--mobile-nav) + env(safe-area-inset-bottom)); padding: 0 8px env(safe-area-inset-bottom); border-top: 1px solid #25414c; background: #0b1e28; }
+  .mobile-navigation>a, .mobile-navigation>button { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px; font-size: 12px; color: #aac0c9; min-width: 0; }
+  .mobile-navigation [aria-current="page"] { color: #b4f3ed; background: #133039; box-shadow: inset 0 2px #91e5df; }
+  .mobile-navigation .icon { width: 20px; height: 20px; }
+  .mobile-slip-bar { bottom: calc(var(--mobile-nav) + env(safe-area-inset-bottom)); padding: 8px 12px; }
+  .mobile-slip-bar>button { min-height: 55px; padding: 9px 13px; }
+  .toast { bottom: calc(145px + env(safe-area-inset-bottom)); font-size: 13px; }
+}
+@media (max-width: 360px) {
+  .brand { font-size: 19px; }
+  .brand .brand-wave { width: 25px; }
+  .wallet>span { display: none; }
+  .hero-fixture { gap: 8px; }
+  .hero-score>strong { font-size: 42px; }
+  .demo-grid { grid-template-columns: 1fr; }
+}
+
+.wallet-demo-label { display: none; }
+@media (max-width: 760px) { .wallet { display: flex; flex-direction: column; justify-content: center; gap: 0; min-width: 98px; } .wallet-demo-label { display: inline; } }
