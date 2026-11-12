@@ -60,8 +60,9 @@ function notice(): string {
         <b>Bet placed</b>
         <p>${esc(n.message)}</p>
         ${n.bets?.length ? `<ul class="receipt">${n.bets.map(b => `<li>
-          <span><strong>${esc(b.outcome)}</strong><small>${esc(b.market)} · ${esc(b.fixture)}</small></span>
-          <span><b>${b.odds.toFixed(2)}</b><small>${money(b.stake)} → ${money(b.return)}</small></span>
+          <span><strong>${esc(b.outcome)}</strong><b>${b.odds.toFixed(2)}</b></span>
+          <small>${esc(b.market)} · ${esc(b.fixture)}</small>
+          <span><small>Stake ${money(b.stake)}</small><small>Returns ${money(b.return)} USDT</small></span>
         </li>`).join('')}</ul>` : ''}
         <button data-action="view-open" class="text-btn">View in My bets ${icon('arrow')}</button>
       </div>${dismiss}</div>`;
@@ -108,8 +109,8 @@ export function slip(scope: SlipScope): string {
   }
   const placeLabel = ui.busy
     ? '<span class="spinner" aria-hidden="true"></span>Placing…'
-    : !stake
-      ? 'Enter a stake'
+    : s.selections.some(p => p.stake === '')
+      ? n === 1 ? 'Enter a stake' : 'Enter a stake for each pick'
       : `Place ${n === 1 ? 'bet' : `${n} bets`} · ${money(stake)} USDT`;
   return `<div class="slip" data-scope="${scope}">
     <div class="slip-body">

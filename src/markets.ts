@@ -213,7 +213,7 @@ export function footballMarkets(s: FootballState): Market[] {
   const totalRate = (lh + la) * remaining;
   add('scorer', live ? 'Next goalscorer' : 'First goalscorer', 'Goalscorers', [...names.map(n => n[0]), 'No goalscorer'], [...names.map(n => (n[1] / totalRate) * (1 - noGoal)), noGoal], 'list');
   add('anytime', 'Anytime goalscorer', 'Goalscorers', names.map(n => n[0]), names.map(n => 1 - Math.exp(-n[1])), 'list');
-  const brace = names.map(n => [n[0], 1 - Math.exp(-n[1]) * (1 + n[1])] as const).filter(n => n[1] > 0.012);
+  const brace = names.map(n => [n[0], 1 - Math.exp(-n[1]) * (1 + n[1])] as const).filter(n => n[1] > 0.005);
   if (brace.length) add('brace', 'To score 2 or more', 'Goalscorers', brace.map(n => n[0]), brace.map(n => n[1]), 'list');
   add('last', 'Last goalscorer', 'Goalscorers', [...names.map(n => n[0]), 'No goalscorer'], [...names.map(n => (n[1] / totalRate) * (1 - noGoal)), noGoal], 'list');
 

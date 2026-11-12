@@ -124,7 +124,7 @@ table { border-collapse: collapse; width: 100%; }
 .odds .move.up { color: var(--up); }
 .odds .move.down { color: var(--down); }
 .odds.selected { background: var(--accent); border-color: var(--accent); }
-.odds.selected .odds-label { color: rgba(6, 40, 44, .72); }
+.odds.selected .odds-label, .odds.selected.full .odds-label { color: rgba(6, 40, 44, .75); }
 .odds.selected .odds-price, .odds.selected .move { color: var(--accent-ink); }
 .odds.suspended { opacity: .5; background: var(--card); }
 .odds.full { min-height: 52px; }
@@ -512,9 +512,9 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
 .notice-body p { color: var(--text-2); font-size: 13px; }
 .notice .icon-btn { margin: -8px -8px 0 0; }
 .receipt { display: grid; gap: 6px; }
-.receipt li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--card); font-size: 12.5px; }
-.receipt span { display: grid; min-width: 0; }
-.receipt span:last-child { text-align: right; }
+.receipt li { display: grid; gap: 2px; padding: 8px 10px; border-radius: 10px; background: var(--card); font-size: 12.5px; }
+.receipt li > span { display: flex; justify-content: space-between; gap: 8px; }
+.receipt b { color: var(--price); }
 .receipt small { color: var(--muted); }
 
 .panel-bets { display: grid; gap: 8px; padding: 12px; }
@@ -593,7 +593,7 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
 .bet-copy { display: grid; min-width: 0; }
 .bet-copy small { color: var(--muted); font-size: 12px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bet-detail td { padding: 0 12px 14px 54px; }
-.bet-detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px 16px; padding: 12px; border-radius: 12px; background: var(--card-2); }
+.bet-detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px 16px; padding: 12px; border-radius: 12px; background: var(--card-2); }
 .bet-detail-grid dt { color: var(--muted); font-size: 11.5px; font-weight: 600; }
 .bet-detail-grid dd { font-weight: 700; }
 .bet-detail-grid a { color: var(--brand); }
@@ -799,7 +799,7 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .bet-row td { padding: 0; }
   .bet-row td.placed { grid-column: 1 / 3; display: flex; align-items: center; }
   .bet-row td.result { grid-column: 3; grid-row: 1; justify-self: end; }
-  .bet-row td.bet-cell { grid-column: 1 / -1; }
+  .bet-row td.bet-cell { grid-column: 1 / -1; display: flex; }
   .bet-row td.num { text-align: left; }
   .bet-row td.num::before { content: attr(data-label); display: block; color: var(--muted); font-size: 11px; font-weight: 600; }
   .bet.won .bet-row td:first-child { box-shadow: none; }
