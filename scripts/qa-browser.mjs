@@ -169,7 +169,9 @@ try {
     check(tag, 'invalid stake explains the limits', /1 to 1,000/.test(await s.locator('.input-error').innerText()));
     await tap(`${mobile ? 'dialog' : '.side-panel'} [data-action="stake"][data-value="10"]`);
     s = slip();
-    check(tag, 'stake chip sets 10 USDT and return 12.20', (await s.locator('[data-stake]').inputValue()) === '10' && /12\.20/.test(await s.locator('.slip-totals .returns').innerText()));
+    const pickOdds = Number((await s.locator('.pick-odds').innerText()).match(/(\d+\.\d{2})\s*$/)[1]);
+    check(tag, 'stake chip sets 10 USDT and returns stake × odds', (await s.locator('[data-stake]').inputValue()) === '10'
+      && number(await s.locator('.slip-totals .returns').innerText()) === Math.round(pickOdds * 1000) / 100);
     if (mobile) {
       const footer = await page.locator('dialog .slip-footer').boundingBox();
       const place = await page.locator('dialog [data-action="place"]').boundingBox();
