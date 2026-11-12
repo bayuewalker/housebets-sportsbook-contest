@@ -40,6 +40,7 @@ test('picks are independent singles, never multiplied together', () => {
   const open = s.bets.filter(b => b.status === 'open').length;
   assert.equal(placeBets(s).ok, true);
   assert.equal(s.bets.filter(b => b.status === 'open').length, open + 2);
+  assert.deepEqual(s.bets.slice(0, 2).map(b => b.id), ['HB-1050', 'HB-1049']);
   assert.equal(s.balance, 980);
 });
 

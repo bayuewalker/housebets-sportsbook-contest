@@ -165,11 +165,12 @@ export function placeBets(s: State, now = new Date()): { ok: boolean; message: s
   }
   const amount = totalStake(s);
   const count = s.selections.length;
+  const lastId = Math.max(0, ...s.bets.map(b => Number(b.id.replace(/^HB-/, '')) || 0));
   const bets: Bet[] = s.selections.map((p, i) => {
     const r = resolve(s, p)!;
     const stake = stakeValue(p.stake);
     return {
-      id: `HB-${now.getTime()}-${i}`,
+      id: `HB-${lastId + 1 + i}`,
       fixtureId: r.fixture.id,
       sport: r.fixture.sport,
       fixture: `${r.fixture.home} v ${r.fixture.away}`,
@@ -184,7 +185,7 @@ export function placeBets(s: State, now = new Date()): { ok: boolean; message: s
     };
   });
   s.balance = round(s.balance - amount);
-  s.bets.unshift(...bets);
+  s.bets.unshift(...[...bets].reverse());
   s.selections = [];
   s.revision++;
   return { ok: true, message: `${count} single bet${count === 1 ? '' : 's'} placed. ${money(amount)} USDT from your demo balance.`, bets };
