@@ -222,7 +222,7 @@
   </aside>`}function It(){return`<div class="search" role="search">
     ${R(`search`)}
     <input id="global-search" data-focus="search" type="search" enterkeyhint="search" autocomplete="off"
-      placeholder="Search teams, players, competitions or markets" aria-label="Search teams, players, competitions or markets" value="${N(V.query)}">
+      placeholder="Search teams, players, leagues or markets" aria-label="Search teams, players, competitions or markets" value="${N(V.query)}">
     ${V.query?`<button type="button" class="icon-btn" data-action="clear-search" aria-label="Clear search">${R(`close`)}</button>`:`<kbd aria-hidden="true">/</kbd>`}
   </div>`}function Lt(){let e=W(),t=U().fixtures,n=e===`match`?We().sport===`Football`?`football`:`home`:e,r=(e,t,n,r,i,a=!1)=>`<a class="sport-tab ${r?`active`:``}" href="${e}" ${r?`aria-current="page"`:``}>
       ${R(n)}<span>${N(t)}</span>${i===void 0?``:`<b class="${a?`live`:``}">${i}</b>`}
@@ -337,7 +337,7 @@
   </article>`}function Zt(e,t,n={}){if(!t.length)return``;let r=v[e],i=n.limit?t.slice(0,n.limit):t,a=t[0].sport;return`<section class="league" aria-label="${N(e)}">
     <header class="league-head">
       ${Y(e)}
-      <h3><span class="league-country">${N(r?.country??m(a))}</span><span class="sep" aria-hidden="true">·</span>${N(e)}</h3>
+      <h3><span class="league-country">${N(r?.country??m(a))}</span><span class="sep" aria-hidden="true">·</span><span class="league-name">${N(e)}</span></h3>
       <span class="league-count">${P(t.length,a===`Football`?`match`:`event`)}</span>
       ${st(`league:${e}`,e)}
     </header>
