@@ -46,10 +46,10 @@ Typography: Manrope for display (headings, scores, team names), DM Sans for inte
 | --- | --- | --- | --- |
 | Odds button | Navy tile, outcome name and decimal price | Solid aqua with a check; green/red border, arrow and brief flash when the price moves | Dashed border, lock icon, disabled |
 | Market group | Title, outcome count, odds grid | — | "Suspended" chip and explanation; picks kept |
-| Selection card | Live/single tag, outcome, market, fixture link, stake with quick stakes, return | Amber "Odds changed 1.48 → 1.60" with acceptance | Suspended note; placement paused |
-| Slip summary | Total stake, potential return (sum of singles), "Place single bet · X USDT" | Amber banner and "Accept new odds" | Suspended banner with "Remove"; disabled place button with reason |
+| Selection card | Live/single tag, outcome, market, fixture link, stake with quick stakes, return | Current price marked "new"; old → new warning; revised return preview | Suspended note; placement paused |
+| Slip summary | Total stake, potential return (sum of singles), "Place single bet · X USDT" | Amber banner, return-after-acceptance total and "Accept new odds" | Suspended banner with "Remove"; disabled place button with reason |
 | Placement | Busy state blocks repeat clicks | Success notice with one receipt row per single and a My Bets link | "Bet not placed" with reason and "Try again"; no debit |
-| Bet card | Status, fixture, outcome, odds, stake, return, reference | Cash-out button with offer | Settled won/lost/cashed |
+| Bet card | Status, fixture, outcome, odds, stake, return, reference | Separate Cash Out offer view and confirmation | Settled won/lost/cashed |
 | Fixture row | Status/time, teams with shields, score, star, result odds, more-markets link | Search reason chip ("Player · Bukayo Saka") | — |
 | Loading / empty | Skeleton rows; empty search with clear; Starting soon when nothing is live | | |
 
