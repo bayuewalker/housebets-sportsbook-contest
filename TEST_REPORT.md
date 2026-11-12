@@ -6,6 +6,26 @@ Frontend-only prototype. Data flow: UI action → in-memory state transition →
 
 Tooling: Node.js 24, pnpm 11.25.0, TypeScript, Vite 8, ESLint, the Node test runner via tsx, and Playwright Core 1.56.1 driving the system Google Chrome in headless mode.
 
+## 2026-11-12 stability sweep
+
+Goal: confirm everything works smoothly with no errors, beyond the scripted happy paths.
+
+- **Bug found and fixed: a tap could be lost while prices moved.** Each live tick rebuilt the odds button that had just moved, and also the one that moved on the previous tick. A press that straddled a tick, most likely on the price that had just flashed, never produced a click. Holding a press across a real tick on the public site failed 6/6 times at both widths before the fix and passed 6/6 after it. Buttons are now patched in place, and presses always land on the button itself. `qa:browser` gained a regression check at both widths (now **178 checks**).
+- **New `pnpm qa:stress` (28 checks, 14 per width):**
+  - every category on all 9 Match Centers without overflow
+  - browser back and forward
+  - 20 rapid taps on one price
+  - two singles from one market
+  - rapid category switching
+  - typing a stake across live price ticks (value and focus kept)
+  - double-clicking Place debits exactly once
+  - resizing through every breakpoint
+  - corrupt saved session recovery
+  - idle feed with keyboard tabbing
+  - no console or page errors
+  - no failed or 4xx/5xx requests
+- Repeated public runs of `qa:browser`: 17 of 18 passed 176/176. The first run reported 2 failures that never recurred in 17 sequential and parallel reruns; its output was truncated, so the check names are unknown.
+
 ## 2026-11-12 final contest pass
 
 The official contest page was reread against the live product, with priority given to the 20-point Match page (first tie-break), the 20-point Betslip + My Bets page, and the 15-point Housebets feel (second tie-break). Suggestions that conflict with the brief—especially live statistics, trackers and other explicitly excluded widgets—were rejected.
@@ -28,7 +48,8 @@ Changes verified in this pass:
 | `pnpm lint` | PASS |
 | `pnpm test` | **29 passed, 0 failed** (25 engine, 4 session) |
 | `pnpm build` | PASS |
-| `pnpm qa:browser` against the local build | **176/176 passed** on the 12 November final pass |
+| `pnpm qa:browser` against the local build | **178/178 passed** after the 12 November stability fix |
+| `pnpm qa:stress` against the local build | **28/28 passed** |
 
 New behavioural tests: a suspended changed selection is never silently accepted; repeat placement never double-debits; one receipt per single with correct returns and unique IDs; search match reasons; removing suspended picks keeps open picks and stakes; the live feed never moves a selected price (200 iterations), clears stale markers, stops when nothing is live, and can be limited to on-screen prices.
 
@@ -42,7 +63,7 @@ Each viewport starts from a fresh session: desktop 1440×1000, and phone 390×84
 | Sports Home | Sport filter counts 6/1/1/1/9; search by player (with reason chip), team, competition and market; empty search guidance; clear button keeps focus; Escape clears; follow, Following filter and unfollow |
 | Live | 4 in-play fixtures with clocks; Football filter 2; LaLiga filter 1 |
 | Football | League tabs show 2/1/1/1/1 rows, each with 3 result odds |
-| Match Center | Clock advances; six categories; cards market locked; the live feed moves an on-screen price within 7.6s |
+| Match Center | Clock advances; six categories; cards market locked; the live feed moves an on-screen price within 7.6s; a press held across a price refresh still selects it |
 | Betslip | Tap to select; phone bar count; stake 25 and 50 returns computed against the live price; 0.5 rejected with message; focus kept while typing; phone stake input ≥16px |
 | States | Odds changed → blocked → accept; suspend → pick kept, placement paused, Match Center odds disabled → reopen; arm failure (dialog closes) → failed, balance unchanged → retry → 975.00 with one receipt row; loading skeleton → resolves; no live → Starting soon; reset → 1,000.00 |
 | My Bets | Exactly one new open bet; Arrow-key tabs; cash out 23.00 → 998.00 → Settled; settlement → 1,045.50; receipt unchanged after later cash out; reload keeps balance and history |

@@ -27,6 +27,8 @@ pnpm dev
 
 `pnpm qa:browser` tests the existing `dist/` build, so run `pnpm build` first. It serves `dist/`, drives a local Chrome (Playwright Core) through every page and state at 1440×1000 and 390×844, and exits non-zero on any failed check. Set `QA_SCREENSHOTS=docs/screenshots` to refresh the screenshots, `QA_URL=<site>` to test a deployed site, and `CHROME_PATH` if Chrome is not in a standard location.
 
+`pnpm qa:stress` uses the same setup for robustness at both widths. It opens every category on all nine Match Centers and tests rapid taps, double-clicking Place, typing a stake during live price ticks, back/forward navigation, resizing, corrupt saved data, console errors and failed requests.
+
 ## Pages
 
 | Page | Hash route | Main interactions |
@@ -57,6 +59,7 @@ The live price feed moves one on-screen, unselected live price every few seconds
 - `src/style.css`: design tokens, responsive layout and component styles.
 - `tests/engine.test.ts`: behavioral tests for stake, quote, suspension, transaction, receipt, settlement, search and live-feed invariants.
 - `scripts/qa-browser.mjs`: exact-width browser QA and screenshot capture.
+- `scripts/qa-stress.mjs`: stress and error sweep across every Match Center at both widths.
 - `qa.html`: development-only 1440px / 390px viewport harness; not included in the production build.
 - `scripts/prepare-pages.mjs`: prepares `.pages/` with the static build, `.nojekyll` and a source-commit/checksum manifest.
 - `scripts/verify-pages.mjs`: verifies the public manifest and asset checksums against the current `gh-pages` commit, without credentials.
@@ -70,7 +73,7 @@ The owner selected **Deploy from a branch**. There is no custom Actions workflow
 1. Set repository **Settings → Pages → Source → Deploy from a branch**.
 2. Select **gh-pages** and **/ (root)**, then Save.
 3. Run `pnpm pages:verify` after deployment finishes. It checks the public manifest and served asset checksums against the publishing branch without authentication. A missing page, stale release or mismatched asset exits with failure. GitHub API rate limits and network failures are reported explicitly.
-4. Run `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser`; asset verification alone does not establish UI correctness.
+4. Run `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` and `pnpm qa:stress` with the same `QA_URL`; asset verification alone does not establish UI correctness.
 
 `main` contains source and documentation; `gh-pages` contains only the compiled static site. `.nojekyll` skips Jekyll processing. Relative assets and hash routing support the repository subpath.
 

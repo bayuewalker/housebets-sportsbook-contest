@@ -4,7 +4,7 @@ Updated: 2026-11-12
 
 ## Current outcome
 
-**SUBMISSION READY — awaiting owner approval.** All five linked pages, the single-bet engine and every required state are implemented. They pass 29 behavioural tests and 176 browser checks at exactly 1440px and 390px. Nothing has been submitted to the contest.
+**SUBMISSION READY — awaiting owner approval.** All five linked pages, the single-bet engine and every required state are implemented. They pass 29 behavioural tests, 178 browser checks and a 28-check stress sweep at exactly 1440px and 390px. Nothing has been submitted to the contest.
 
 ## Milestones
 
