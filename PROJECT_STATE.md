@@ -4,14 +4,14 @@ Updated: 2026-11-12
 
 ## Current outcome
 
-**Redesign ready for owner review** on branch `cursor/housebets-redesign-a1e1`. It passes 35 unit tests, 158 browser checks at exactly 1440px and 390px, and a 52-check stress and responsive sweep from 320px to 1920px. It is not merged, the public site still shows the previous release, and nothing has been submitted to the contest.
+**Redesign ready for owner review** on branch `cursor/housebets-redesign-a1e1`. It passes 35 unit tests, 159 browser checks at exactly 1440px and 390px, and a 52-check stress and responsive sweep from 320px to 1920px. It is not merged, the public site still shows the previous release, and nothing has been submitted to the contest.
 
 ## Milestones
 
 - [x] Read the brief and official screenshots; identify exclusions.
 - [x] Implement the five linked pages, the single-bet engine and every required state (5–8 November, working name HOUSE//LIVE).
 - [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (releases below).
-- [x] Redesign (12 November): fictional players; Poisson-priced markets (94 on Arsenal v Brighton, at least 60 pre-match and 40 live); 42 fixtures with 13 live; Housebets shell with the official wordmark and mark, Figtree and Red Hat Display, icon rail, Weekly Prize, VIP crown and Bet slip / My bets / Chat panel; dense home; pinned phone slip footer; empty stake with chips; My bets table with filters and cash-out history; odds arrows, local time zone, modular `src/ui/`, 44px phone targets.
+- [x] Redesign (12 November): fictional players; Poisson-priced markets (100 on Arsenal v Brighton, at least 60 pre-match and 40 live); 42 fixtures with 13 live; Housebets shell with the official wordmark and mark, Figtree and Red Hat Display, icon rail, Weekly Prize, VIP crown and Bet slip / My bets / Chat panel; dense home; pinned phone slip footer; empty stake with chips; My bets table with filters and cash-out history; odds arrows, local time zone, modular `src/ui/`, 44px phone targets.
 - [x] Rewrite browser and stress QA for the redesign; refresh screenshots; `TOOLS.md`; Big idea draft.
 - [x] Align the top bar, left rail and side panel with the brand pack in `brand/` (official wordmark and mark).
 - [ ] Owner review and merge of the redesign PR.

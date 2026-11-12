@@ -18,7 +18,7 @@ The redesign replaced the shell, data, match page, slip and My bets, and split `
 | `pnpm lint` | PASS |
 | `pnpm test` | **35 passed, 0 failed** |
 | `pnpm build` | PASS (JS 110 KB, CSS 54 KB, four self-hosted font files) |
-| `pnpm qa:browser` against the local build | **158/158 passed** at 1440×1000 and 390×844 |
+| `pnpm qa:browser` against the local build | **159/159 passed** at 1440×1000 and 390×844 |
 | `pnpm qa:stress` against the local build | **52/52 passed** (both widths plus nine extra viewports) |
 
 These ran against the local build only. The public site still serves the previous release until the owner merges and publishes this branch.
@@ -33,7 +33,7 @@ Each width starts from a fresh session: desktop 1440×1000, and phone 390×844 w
 
 | Area | What is checked |
 | --- | --- |
-| Shell and Home | Official Housebets wordmark and no old branding; no marketing copy; Figtree and Red Hat Display load; VIP crown and wallet; Weekly Prize (compact trophy and amount on phones), icon rail with Live 13 and panel tabs Bet slip / My bets / Chat (desktop); bottom navigation and slip bar (phone); sport tabs Home, Live 13, Soccer; three Favourites chips; section order Your matches, Featured, Live now, Starting soon; Your matches leads with Arsenal, then live favourite competitions; five top competitions on one row; "View all 13" and "+N markets" counts match their targets; search for "Over 2.5" and "Both teams to score" names the market; times in the viewer's time zone |
+| Shell and Home | Official Housebets wordmark and no old branding; no marketing copy; Figtree and Red Hat Display load; VIP crown and wallet; Weekly Prize (compact trophy and amount on phones), icon rail with Live 13 and panel tabs Bet slip / My bets / Chat (desktop); bottom navigation and slip bar (phone); sport tabs Home, Live 13, Soccer; three Favourites chips; section order Your matches, Featured, Live now, Starting soon; Your matches leads with Arsenal, then live favourite competitions; five top competitions on one row with each name on one line; "View all 13" is accurate and "+N" is the markets beyond the one shown on the row; search for "Over 2.5" and "Both teams to score" names the market; times in the viewer's time zone |
 | Live | 13 live events; 6 football; an HT match and an inline suspended row; a flag on every league header; competition chips under the sport chips; Premier League chip count matches the rows; Tennis filter shows 2; Tennis plus Premier League shows an empty state |
 | Soccer | Today & live header and chip share one count; All = 29; five leagues with 3–10 matches; market dropdown switches rows to Over/Under and BTTS; LaLiga chip filters |
 | Match | Breadcrumb Soccer › England › Premier League › ARS–BHA with a back button and menu; 90–110 markets; Players, Minutes and Corners & cards; at least 9 goalscorer markets; no narrow orphan card; suspended markets present; goalscorer table with fictional names and Next / Anytime / 2+; every odds button has an `aria-label`; Goals tab, market search for "corner", single and collapse-all collapse; compact sticky score bar on phone scroll; live prices move with ▲/▼ arrows |

@@ -258,8 +258,23 @@ export function footballMarkets(s: FootballState): Market[] {
   playerProp('sot', 'Shots on target', mu => 1 - Math.exp(-Math.max(mu * 3.4, 0.35 * remaining)));
   playerProp('sot2', '2+ shots on target', mu => atLeast(Math.max(mu * 2.4, 0.2 * remaining), 2));
   playerProp('shots', 'Player shots', mu => 1 - Math.exp(-Math.max(mu * 5, 0.7 * remaining)));
+  playerProp('sot-out', 'Shots outside the box', mu => 1 - Math.exp(-Math.max(mu * 1.8, 0.28 * remaining)));
+  playerProp('shots-off', 'Shots off target', mu => 1 - Math.exp(-Math.max(mu * 2.8, 0.4 * remaining)));
   playerProp('booked', 'To be booked', (_mu, i) => 1 - Math.exp(-(0.16 + (11 - i) * 0.012) * (0.35 + remaining)));
   playerProp('assist', 'To assist', mu => 1 - Math.exp(-mu * 0.72));
+  playerProp('fouls', 'Fouls committed', (_mu, i) => 1 - Math.exp(-(0.42 + (i % 6) * 0.05) * (0.45 + remaining)));
+  playerProp('offsides', 'Offsides', mu => 1 - Math.exp(-Math.max(mu * 1.3, 0.22 * remaining)));
+  playerProp('tackles', 'Tackles', (_mu, i) => 1 - Math.exp(-(0.5 + (i % 5) * 0.06) * (0.4 + remaining)));
+  const cardWeight = names.map((_n, i) => 0.7 + ((names.length - i) % 7) * 0.15);
+  const cardTotal = cardWeight.reduce((sum, weight) => sum + weight, 0);
+  const cardChance = Math.min(0.82, 0.5 + 0.35 * remaining);
+  const cardRows = names
+    .map((n, i) => [n[0], (cardWeight[i] / cardTotal) * cardChance] as const)
+    .filter(row => row[1] >= 0.02);
+  if (cardRows.length >= 2) {
+    const used = cardRows.reduce((sum, row) => sum + row[1], 0);
+    add('card-first', 'To be carded first', 'Players', [...cardRows.map(row => row[0]), 'No card'], [...cardRows.map(row => row[1]), Math.max(0.02, 1 - used)], 'list');
+  }
 
   // Minutes. Past windows are closed; what is left is the open part of the current window onwards.
   const nowMin = live ? Math.min(s.minute, 89) : 0;
@@ -379,14 +394,14 @@ export function footballMarkets(s: FootballState): Market[] {
   ];
   const margins = marginRows.filter(row => row[1] >= 0.025);
   if (margins.length >= 3) add('margin', 'Winning margin', 'Goals', margins.map(row => row[0]), margins.map(row => row[1]), 'list');
-  const multiRows: Array<[string, number]> = [
+  const rangeRows: Array<[string, number]> = [
     ['0–1', final((h, a) => h + a <= 1)],
     ['2–3', final((h, a) => h + a >= 2 && h + a <= 3)],
     ['4–6', final((h, a) => h + a >= 4 && h + a <= 6)],
     ['7+', final((h, a) => h + a >= 7)],
   ];
-  const multiBands = multiRows.filter(row => row[1] >= 0.025);
-  if (multiBands.length >= 2) add('multi', 'Multigoals', 'Goals', multiBands.map(row => row[0]), multiBands.map(row => row[1]), 'list');
+  const goalRange = rangeRows.filter(row => row[1] >= 0.025);
+  if (goalRange.length >= 2) add('goal-range', 'Total goals range', 'Goals', goalRange.map(row => row[0]), goalRange.map(row => row[1]), 'list');
   for (const hcp of [-2.5, -2, 2, 2.5]) {
     const win = final((h, a) => diff(h, a) + hcp > 0);
     const lose = final((h, a) => diff(h, a) + hcp < 0);

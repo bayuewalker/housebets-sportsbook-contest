@@ -193,9 +193,13 @@ test('football market depth matches the contest bar', () => {
   for (const name of ['goalscorer', 'anytime', 'last', '2 or more', 'hat-trick', 'header', 'outside the box', 'both halves']) {
     assert.ok(scorers.some(m => m.name.toLocaleLowerCase().includes(name)), name);
   }
+  assert.ok(ars.markets.some(m => m.id === 'goal-range' && m.name === 'Total goals range'));
   assert.ok(ars.markets.some(m => m.category === 'Players' && /shots on target/i.test(m.name)));
   assert.ok(ars.markets.some(m => m.category === 'Players' && /booked/i.test(m.name)));
   assert.ok(ars.markets.some(m => m.category === 'Players' && /assist/i.test(m.name)));
+  for (const name of ['Shots outside the box', 'Shots off target', 'Fouls committed', 'Offsides', 'Tackles', 'To be carded first']) {
+    assert.ok(ars.markets.some(m => m.category === 'Players' && m.name === name), name);
+  }
   assert.ok(ars.markets.some(m => m.category === 'Minutes' && /Goal \d+–\d+/.test(m.name)));
   assert.ok(ars.markets.some(m => m.name === 'Next goal time' || m.name === 'First goal time'));
   assert.ok(ars.markets.some(m => m.suspended));
@@ -206,7 +210,8 @@ test('football market depth matches the contest bar', () => {
     assert.ok(f.markets.filter(m => m.category === 'Goalscorers').length >= 9, `${f.id} scorers`);
     assert.equal(new Set(f.markets.map(m => m.id)).size, f.markets.length, f.id);
     for (const m of f.markets) {
-      assert.doesNotMatch(m.name, /special|outright|boost|bet builder|accumulator/i, m.name);
+      assert.doesNotMatch(m.name, /special|outright|boost|bet builder|accumulator|\bmulti/i, m.name);
+      assert.doesNotMatch(m.id, /^multi$|multis/i, m.id);
       for (const o of m.outcomes) assert.ok(o.odds >= 1.02 && o.odds <= 151, `${f.id} ${m.id} ${o.odds}`);
     }
   }

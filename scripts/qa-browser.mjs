@@ -100,14 +100,21 @@ try {
     if (!mobile) {
       const compRows = await page.locator('.competitions button').evaluateAll(els => new Set(els.map(el => Math.round(el.getBoundingClientRect().top))).size);
       check(tag, 'top competitions sit on one row', await page.locator('.competitions button').count() === 5 && compRows === 1, String(compRows));
+      const wrappedNames = await page.locator('.competitions button b').evaluateAll(els => els
+        .filter(el => el.getClientRects().length > 1 || el.scrollWidth > el.clientWidth + 1)
+        .map(el => el.textContent));
+      check(tag, 'competition names stay on one line', wrappedNames.length === 0, wrappedNames.join(', '));
     }
     check(tag, 'top competitions label the full schedule', /8 scheduled/.test(await page.locator('.competitions').innerText()));
     check(tag, 'Live now "View all 13" is accurate', (await page.locator('a.view-all[href="#/live"]').innerText()).includes('View all 13'));
-    const moreLabel = await page.locator('.event-row .more').first().getAttribute('aria-label');
+    const more = page.locator('.event-row .more').first();
+    const moreLabel = await more.getAttribute('aria-label');
     const moreCount = Number(moreLabel.match(/View all (\d+) markets/)?.[1]);
-    await page.locator('.event-row .more').first().click();
+    const moreVisible = number(await more.innerText());
+    await more.click();
     await page.waitForSelector('.market-tabs');
-    check(tag, '"+N markets" matches the match page total', moreCount === number(await page.locator('.market-tabs [data-category="All"] b').innerText()), `${moreCount}`);
+    const pageTotal = number(await page.locator('.market-tabs [data-category="All"] b').innerText());
+    check(tag, '"+N" counts the markets beyond the one on the row', moreCount === pageTotal && moreVisible === pageTotal - 1, `+${moreVisible} of ${moreCount}/${pageTotal}`);
     await visit('/sports');
     check(tag, 'times use the viewer time zone, not UTC', !/Times shown in UTC/.test(await page.locator('main').innerText()) && /Times in your time zone/.test(await page.locator('.site-footer').innerText()));
     check(tag, 'home has no horizontal overflow', await overflow() <= 0);

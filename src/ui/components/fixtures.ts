@@ -40,7 +40,7 @@ export function eventRow(f: Fixture, options: RowOptions = {}): string {
       ${reason ? `<em class="match-reason">${esc(reason)}</em>` : ''}
     </a>
     <div class="event-odds cols-${columns}">${odds}</div>
-    <a class="more" href="#/match/${f.id}" aria-label="View all ${f.markets.length} markets for ${esc(f.home)} v ${esc(f.away)}">+${f.markets.length}${icon('chevron')}</a>
+    <a class="more" href="#/match/${f.id}" aria-label="View all ${f.markets.length} markets for ${esc(f.home)} v ${esc(f.away)}">+${f.markets.length - (m ? 1 : 0)}${icon('chevron')}</a>
   </article>`;
 }
 

@@ -20,9 +20,9 @@ Served from `gh-pages` / (root) with no login. The public site shows the redesig
 | Match | `#/match/ars-bha` (every one of the 42 sample fixtures has a match page) |
 | Bet slip & My bets | `#/bets` (one shared page; the same slip and history live in the desktop side panel and the phone bottom sheet) |
 
-## 3. Big idea (768 characters)
+## 3. Big idea (787 characters)
 
-Housebets Sports feels like the Housebets you already know: the same top bar with Weekly Prize and VIP crown, the slim icon rail, and one side panel where Bet slip, My bets and Chat sit together, so you never leave the lobby to bet. Lists are dense and calm: every live event with score and clock, and five football leagues with match-result odds on each row. Arsenal v Brighton opens on a live scoreboard and 94 markets across Popular, Goals, Halves, Handicaps, Goalscorers and Corners & cards, all searchable and collapsible. Prices flash as they move and suspended lines lock in place. The slip stays honest: singles only, stakes in USDT, an empty stake until you choose, changed odds wait for your OK, and every bet ends in a receipt you can find again in My bets.
+Housebets Sports feels like the Housebets you already know: the same top bar with Weekly Prize and VIP crown, the slim icon rail, and one side panel where Bet slip, My bets and Chat sit together, so you never leave the lobby to bet. Lists are dense and calm: every live event with score and clock, and five football leagues with match-result odds on each row. Arsenal v Brighton opens on a live scoreboard and 100 markets across Popular, Goals, Halves, Handicaps, Goalscorers, Corners & cards, Players and Minutes, all searchable and collapsible. Prices flash as they move and suspended lines lock in place. The slip stays honest: singles only, stakes in USDT, an empty stake until you choose, changed odds wait for your OK, and every bet ends in a receipt you can find again in My bets.
 
 ## 4. Tools, models and assets (entry note)
 
@@ -53,7 +53,7 @@ Captured by `QA_SCREENSHOTS=docs/screenshots pnpm qa:browser` with headless Chro
 ## 6. QA summary
 
 - 35 unit tests, TypeScript, ESLint and the production build pass.
-- `pnpm qa:browser`: 158/158 checks at 1440px and 390px (all five pages, data density, market depth, competition filter, search, collapse, sticky phone score bar, live price arrows, every slip state, a selected suspended price, USDT on one line, the My bets table and filters, cash out, tap-target size, focus and console errors).
+- `pnpm qa:browser`: 159/159 checks at 1440px and 390px (all five pages, data density, market depth, competition filter, search, collapse, sticky phone score bar, live price arrows, every slip state, a selected suspended price, USDT on one line, the My bets table and filters, cash out, tap-target size, focus and console errors).
 - `pnpm qa:stress`: 52/52 checks (all 42 match pages and every market tab at both widths, taps during live price ticks, double placement, history navigation, resizing, reload and corrupt-storage recovery, and nine extra viewports from 320px to 1920px).
 - Details and limits: `TEST_REPORT.md`. Requirement-by-requirement status: `REQUIREMENTS_AUDIT.md`.
 
