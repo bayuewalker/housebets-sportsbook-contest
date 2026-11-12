@@ -70,7 +70,7 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 - `pnpm qa:browser`: 178/178 checks passed (local build, headless Chrome, 1440×1000 and 390×844).
 - `pnpm qa:stress`: 36/36 checks passed (every Match Center and category, rapid and held taps, double placement, live-tick typing, history, resizing, corrupt storage, no errors or failed requests, and all five pages without overflow or truncated team names at 320, 360, 768, 1051, 1180, 1280 and 1920px plus 844×390 landscape).
 
-Public release `b26c52f` → `gh-pages` `38b9a59`: `pnpm pages:verify` passed, and `pnpm qa:browser` passed 176/176 against the live URL.
+Current public release `2bea9c5` → `gh-pages` `3a3eb35`. `pnpm pages:verify` passed. Against the live URL, `pnpm qa:browser` passed 178/178, `pnpm qa:stress` passed 36/36, and the 26-viewport responsive audit reported 0 findings.
 
 ## Findings fixed in this pass
 
