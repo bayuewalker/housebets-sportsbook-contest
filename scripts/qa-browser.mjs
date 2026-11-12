@@ -77,6 +77,7 @@ try {
       check(tag, 'right panel tabs: Bet slip | My bets | Chat', (await page.locator('.side-panel [role="tab"]').allInnerTexts()).map(t => t.replace(/\d+/g, '').trim()).join('|') === 'Bet slip|My bets|Chat');
     } else {
       check(tag, 'bottom navigation and slip bar visible', await page.locator('.bottom-nav').isVisible() && await page.locator('.slip-bar').isVisible());
+      check(tag, '390px header keeps the full Housebets wordmark', await page.locator('.topbar .brand-logo:not(.is-mark)').isVisible());
       const prize = await page.locator('.prize-compact').boundingBox();
       const vip = await page.locator('.topbar .vip').boundingBox();
       check(tag, 'compact Weekly Prize sits beside the VIP crown', await page.locator('.prize-compact').isVisible()
@@ -85,6 +86,10 @@ try {
     }
     check(tag, 'sport tabs under search start Home, Live 13, Soccer', /^Home\s*Live\s*13\s*Soccer/.test((await page.locator('.sport-tabs').innerText()).replace(/\n/g, ' ')));
     check(tag, 'favourites chips listed', await page.locator('.fav-chips .chip').count() === 3);
+    if (mobile) {
+      const rowHeight = await page.locator('#your-matches .event-row').first().evaluate(row => row.getBoundingClientRect().height);
+      check(tag, 'mobile event cards stay dense', rowHeight <= 145, `${Math.round(rowHeight)}px`);
+    }
     const sections = await page.locator('.home-section .section-head h2').allInnerTexts();
     check(tag, 'dense home: Your matches, Featured, Live now, Starting soon', ['Your matches', 'Featured', 'Live now', 'Starting soon'].every((s, i) => sections[i]?.includes(s)), sections.join(' / '));
     if (await page.locator('#your-matches [data-action="toggle-mine"]').count()) await tap('#your-matches [data-action="toggle-mine"]');
