@@ -315,6 +315,7 @@ main:focus{outline:none}
 .market-tabs button>span{font-size:12px;font-weight:700;color:var(--muted)}
 .market-tabs button.active{color:var(--cyan-ink);background:var(--cyan);border-color:var(--cyan)}
 .market-tabs button.active>span{color:#03404a}
+.match-tabs-sticky{position:sticky;top:var(--header);z-index:12;margin:-8px 0 -6px;padding:8px 0;background:linear-gradient(180deg,#050c11 72%,#050c11e8);backdrop-filter:blur(14px)}
 .market-group{padding:16px;margin-bottom:12px;border-radius:14px;background:var(--surface);border:1px solid var(--line-2)}
 .market-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .market-heading h3{font-size:15px}
@@ -360,10 +361,12 @@ main:focus{outline:none}
 .selection-top>span{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .selection-top .live-dot{width:7px;height:7px}
 .selection-top .icon{width:14px}
-.selection-top .icon-button{width:32px;height:32px}
+.selection-top .icon-button{width:40px;height:40px;margin:-4px -4px -4px 0}
 .pick-name{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 0 2px}
 .pick-name>strong{font-size:16px;font-weight:700}
 .pick-name>b{font-family:var(--display);font-size:18px;font-weight:800;color:var(--cyan);font-variant-numeric:tabular-nums}
+.pick-name>b.changed-price{display:flex;align-items:baseline;gap:5px;color:var(--amber)}
+.pick-name>b.changed-price small{font:700 11px 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
 .pick-market{display:block;font-size:13px;color:var(--text-2)}
 .pick-fixture{display:inline-flex;align-items:center;gap:2px;margin:4px 0 12px;font-size:13px;color:var(--muted)}
 .pick-fixture:hover{color:var(--cyan)}
@@ -383,6 +386,8 @@ main:focus{outline:none}
 .quick-stakes button.active{color:var(--cyan);border-color:#16e6f266;background:#16e6f214}
 .selection-return{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;color:var(--text-2)}
 .selection-return strong{font-size:15px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+.selection-return.review-return span,.summary-line.review-return>span{color:var(--amber)}
+.selection-return.review-return strong,.summary-line.review-return>b{color:#ffe0a1}
 .selection-return small,.summary-line small{font-size:12px;font-weight:600;color:var(--muted)}
 .input-error,.placement-hint{display:flex;gap:6px;align-items:flex-start;margin:10px 0 0;font-size:13px;line-height:1.45;color:var(--danger)}
 .input-error .icon,.placement-hint .icon{width:15px;height:15px;margin-top:1px}
@@ -452,11 +457,13 @@ main:focus{outline:none}
 .bet-card{padding:14px;margin:10px 0;border-radius:13px;background:var(--surface-2);border:1px solid var(--line-3)}
 .bet-card.won{border-color:#3fe0a24d}
 .bet-card.lost{opacity:.85}
+.bet-card.cashout-card{border-color:#f6c35c52;background:linear-gradient(145deg,#0f2029,#161f24)}
 .bet-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .bet-status{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;color:var(--cyan-2);background:#16e6f21f}
 .bet-status.won{color:#7ff0c6;background:#3fe0a224}
 .bet-status.lost{color:#ffb3bd;background:#ff8f9c1f}
 .bet-status.cashed{color:#ffd88a;background:#f6c35c1f}
+.cashout-card .bet-status{color:#ffd88a;background:#f6c35c1f}
 .bet-card-top small{font-size:12px;color:var(--muted)}
 .bet-card>a{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--text-2)}
 .bet-card>a:hover{color:var(--cyan)}

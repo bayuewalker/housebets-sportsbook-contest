@@ -111,6 +111,7 @@ try {
 
     // Match Center
     await visit('/match/ars-bha');
+    check(tag, 'Match Center keeps Football active in navigation', await page.locator('.nav-link[href="#/football"].active, .page-tabs a[href="#/football"].active').count() >= 1);
     const clockBefore = await page.locator('.scoreboard-top .fixture-clock').innerText();
     await sleep(1200);
     check(tag, 'Match clock advances', clockBefore !== await page.locator('.scoreboard-top .fixture-clock').innerText());
@@ -120,6 +121,11 @@ try {
     }
     check(tag, 'pre-suspended cards market is locked', await page.locator('.market-paused .odds:disabled').count() === 2);
     await page.locator('.market-tabs [data-category="Popular"]').click();
+    await page.locator('.match-tabs-sticky').evaluate(el => { el.scrollIntoView(); window.scrollBy(0, 240); });
+    await sleep(100);
+    const sticky = await page.locator('.match-tabs-sticky').evaluate(el => ({ top: el.getBoundingClientRect().top, position: getComputedStyle(el).position, viewport: innerHeight }));
+    check(tag, 'market categories stay visible while scrolling', sticky.position === 'sticky' && sticky.top >= (mobile ? 57 : 63) && sticky.top < sticky.viewport, `${sticky.top}px`);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await sleep(7600);
     check(tag, 'live price feed moves odds', await page.locator('.odds.up, .odds.down').count() >= 1);
     await demo('feed');
@@ -148,6 +154,10 @@ try {
     await demo('move');
     slip = await openSlip();
     check(tag, 'changed odds alert blocks placement', await slip.locator('.slip-alert.warning').count() === 1 && await slip.locator('.place-button').isDisabled());
+    const changedLabel = slip.locator('.pick-name .changed-price small', { hasText: 'new' });
+    const removeBox = await slip.locator('.remove-selection').boundingBox();
+    check(tag, 'changed odds card labels the live price as new', await changedLabel.count() === 1 && parseFloat(await changedLabel.evaluate(el => getComputedStyle(el).fontSize)) >= 11 && !!removeBox && removeBox.width >= 40 && removeBox.height >= 40);
+    check(tag, 'changed odds preview the return after acceptance', await slip.locator('.selection-return.review-return', { hasText: 'Return after acceptance' }).count() === 1 && await slip.locator('.summary-line.review-return', { hasText: 'Return after acceptance' }).count() === 1);
     await shot('state-odds-changed');
     await slip.locator('[data-action="accept"]').click();
     const moved = await pickOdds();
@@ -188,7 +198,9 @@ try {
     await page.locator('#history-Open').focus();
     await page.keyboard.press('ArrowRight');
     check(tag, 'history tabs support arrow keys', await page.evaluate(() => document.activeElement?.id === 'history-Settled'));
+    check(tag, 'Settled history includes a realistic lost single', await page.locator('#history-panel .bet-status.lost').count() === 1);
     await page.locator('#history-Cash-Out').click();
+    check(tag, 'Cash Out is a distinct offer view', await page.locator('#history-panel.cashout-panel .cashout-card .bet-status', { hasText: 'Cash out available' }).count() >= 1 && await page.locator('#history-panel .bet-values', { hasText: 'Offer' }).count() >= 1);
     await page.locator('#history-panel .cash-button').first().click();
     await page.waitForSelector('dialog[open]');
     await shot('cash-out-confirm');
