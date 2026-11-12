@@ -486,8 +486,8 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
 .input-error { display: flex; align-items: center; gap: 6px; color: var(--down); font-size: 12px; font-weight: 600; }
 .input-error .icon { width: 15px; height: 15px; }
 .slip-totals { display: grid; gap: 6px; }
-.slip-totals div { display: flex; justify-content: space-between; gap: 12px; color: var(--text-2); }
-.slip-totals dd { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.slip-totals div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; color: var(--text-2); }
+.slip-totals dd { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .slip-totals small { color: var(--muted); font-size: 11px; }
 .slip-totals .returns dd { color: var(--accent); font-size: 17px; }
 .slip-hint { display: flex; align-items: center; gap: 6px; color: var(--amber); font-size: 12.5px; }
