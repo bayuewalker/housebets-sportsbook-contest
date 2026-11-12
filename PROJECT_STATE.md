@@ -1,22 +1,22 @@
-# HOUSE//LIVE Project State
+# Housebets Sports — Project State
 
 Updated: 2026-11-12
 
 ## Current outcome
 
-**SUBMISSION READY — awaiting owner approval.** All five linked pages, the single-bet engine and every required state are implemented. They pass 29 behavioural tests, 178 browser checks at exactly 1440px and 390px, and a 36-check stress and responsive sweep from 320px to 1920px. Nothing has been submitted to the contest.
+**Redesign ready for owner review** on branch `cursor/housebets-redesign-a1e1`. It passes 35 unit tests, 159 browser checks at exactly 1440px and 390px, and a 52-check stress and responsive sweep from 320px to 1920px. It is not merged, the public site still shows the previous release, and nothing has been submitted to the contest.
 
 ## Milestones
 
 - [x] Read the brief and official screenshots; identify exclusions.
-- [x] Implement Sports Home, Live, Football, Match Center and combined Betslip + My Bets.
-- [x] Implement changed odds, suspension, failure/retry, settlement, cash out, loading and no-live states.
-- [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (7 November).
-- [x] Finishing pass (8 November): Housebets-style shell and brand mark, phone bottom navigation, 11px text floor, receipts, retry, simulated live price feed, focus handling, and exact-width browser QA with screenshots.
-- [x] Final contest audit (12 November): reread the live scorecard; kept stats/trackers out of scope; strengthened Match navigation and sticky categories, changed-odds return review, Cash Out differentiation and touch targets.
-- [x] Correct contest rules and asset provenance in the docs.
-- [x] Merge the finishing pass to `main`, republish `gh-pages` and verify the public site.
-- [ ] Owner review, approval and submission (owner only).
+- [x] Implement the five linked pages, the single-bet engine and every required state (5–8 November, working name HOUSE//LIVE).
+- [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (releases below).
+- [x] Redesign (12 November): fictional players; Poisson-priced markets (100 on Arsenal v Brighton, at least 60 pre-match and 40 live); 42 fixtures with 13 live; Housebets shell with the official wordmark and mark, Figtree and Red Hat Display, icon rail, Weekly Prize, VIP crown and Bet slip / My bets / Chat panel; dense home; pinned phone slip footer; empty stake with chips; My bets table with filters and cash-out history; odds arrows, local time zone, modular `src/ui/`, 44px phone targets.
+- [x] Rewrite browser and stress QA for the redesign; refresh screenshots; `TOOLS.md`; Big idea draft.
+- [x] Align the top bar, left rail and side panel with the brand pack in `brand/` (official wordmark and mark).
+- [ ] Owner review and merge of the redesign PR.
+- [ ] Publish the merged build to `gh-pages` and re-run `pages:verify` and both QA scripts against the public URL.
+- [ ] Owner approval and submission (owner only).
 
 ## Release record
 
@@ -28,7 +28,7 @@ Updated: 2026-11-12
 | 12 November stability fix ([PR #7](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/7)) | `757d1a5950c19f9af390745b4460c5a3ad1fc8f0` | `b0470f5baa21c08f54f2eb2e7f5c06c4b1ac9235` | `pnpm pages:verify` pass; `qa:browser` 178/178 and `qa:stress` 28/28 against the public site |
 | 12 November responsive fix ([PR #8](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/8)) | `2bea9c501c02b85b43619dad3153f48057ae5fe9` | `3a3eb3566e22f5092d61d6d4e01f5896fde7f0e4` | `pnpm pages:verify` pass; `qa:browser` 178/178, `qa:stress` 36/36 and 26-viewport audit (0 findings) against the public site |
 
-Later documentation-only commits on `main` do not change the published app.
+All releases above are the previous design. Later documentation-only commits on `main` do not change the published app.
 
 Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, copy `.pages/` to the `gh-pages` root (removing obsolete hashed assets), commit and push without force, then run `pnpm pages:verify`. No custom Actions deployment, and no secrets or tokens in the repository.
 
@@ -36,22 +36,16 @@ Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, cop
 
 - Deadline: **14 November 2026, 18:00 UTC** (15 November 2026, 01:00 WIB).
 - Free entry with no deposit or wagering. At most 3 submissions in any rolling 24 hours. One account per person. Residents of the US, France and the Netherlands are excluded.
-- Original work. AI tools and public libraries are allowed if disclosed. Entries may be shared publicly under the entrant's alias.
+- Original work. Public libraries, models and tools are fine if named in the note. Entries may be shared publicly under the entrant's alias.
 - Prize paid in USDT with no wagering. Results about 7 days after closing. Winners transfer code and design rights; non-winners keep their work.
 - Tie-breakers: the Match page, then "Feels like Housebets".
-- The contest page mentions starter files, but no downloadable ZIP or brand pack was located. This is not a blocker: the entry uses original assets and says so.
-
-## Branch notes
-
-- `codex/contest-finishing` (commit `9cf8ce7`, 8 November) holds a separate, unmerged attempt at shell and mobile refinements with no open PR. The finishing pass on `cursor/contest-finishing-a1e1` was built independently from `main` and covers the same areas. The owner should decide whether to delete that branch; nothing from it was merged.
-- `fix/contest-qa-finalization` and `docs/record-release-verification` were merged earlier through PRs #1 and #2.
+- The brand pack is in `brand/` (`logo.svg` wordmark, `mark.svg`). The top bar, left rail and side panel use it.
+- Out of scope: multis, accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, match trackers and AI search. Bet slip and My bets stay on one shared page/panel.
 
 ## Open risks
 
-- Brand fidelity: without official assets, "Feels like Housebets" rests on the original interpretation.
 - Not tested on physical devices, Safari/Firefox or with a screen reader.
-- Google Fonts needs network access; system fonts take over if it fails.
 
 ## Next step
 
-The owner reviews the live site and `SUBMISSION.md`, chooses whether to submit, and personally ticks the contest confirmations, including the IP transfer for winners.
+The owner reviews the redesign PR and screenshots, decides whether to merge and publish, and personally submits and ticks the contest confirmations, including the IP transfer for winners.

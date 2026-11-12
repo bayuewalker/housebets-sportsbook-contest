@@ -1,17 +1,16 @@
-# HOUSE//LIVE
+# Housebets Sports
 
-A five-page, frontend-only Housebets sportsbook concept built around fast match discovery and a transparent single-bet flow.
+A five-page, frontend-only sportsbook design for the [Housebets Sportsbook Design Contest](https://www.housebets.com/contests/sportsbook-design): dense live and pre-match lists, a deep match page, and one shared Bet slip & My bets panel. All data and transactions are simulated in the browser.
 
 **Owner:** bayuewalker  
 **Repository:** `bayuewalker/housebets-sportsbook-contest`  
-**Hosting target:** GitHub Pages  
-**Status:** SUBMISSION READY, awaiting owner approval. All five pages pass automated browser QA at exactly 1440px and 390px. No entry has been submitted.
-
-**Public prototype:** https://bayuewalker.github.io/housebets-sportsbook-contest/
+**Hosting target:** GitHub Pages (`gh-pages` / root)  
+**Public prototype:** https://bayuewalker.github.io/housebets-sportsbook-contest/  
+**Status:** draft for owner review. No entry has been submitted.
 
 ## Run
 
-Use Node.js 24 and pnpm 11.25.0.
+Use Node.js 22+ and pnpm 11.25.0.
 
 ```sh
 corepack enable
@@ -23,72 +22,58 @@ pnpm build
 pnpm dev
 ```
 
-`pnpm dev` serves the compiled `dist/` folder on port 4173. Rebuild after source changes. `pnpm watch` starts Vite with live reload for normal development.
+`pnpm dev` serves the compiled `dist/` folder on port 4173; rebuild after source changes. `pnpm watch` starts Vite with live reload.
 
-`pnpm qa:browser` tests the existing `dist/` build, so run `pnpm build` first. It serves `dist/`, drives a local Chrome (Playwright Core) through every page and state at 1440×1000 and 390×844, and exits non-zero on any failed check. Set `QA_SCREENSHOTS=docs/screenshots` to refresh the screenshots, `QA_URL=<site>` to test a deployed site, and `CHROME_PATH` if Chrome is not in a standard location.
+`pnpm qa:browser` tests the existing `dist/` build, so run `pnpm build` first. It serves `dist/`, drives a local Chrome through every page and slip state at 1440×1000 and 390×844, and exits non-zero on any failed check. Set `QA_SCREENSHOTS=docs/screenshots` to refresh the screenshots, `QA_URL=<site>` to test a deployed site, and `CHROME_PATH` if Chrome is not in a standard location.
 
-`pnpm qa:stress` uses the same setup for robustness at both widths. It opens every category on all nine Match Centers and tests rapid taps, double-clicking Place, typing a stake during live price ticks, back/forward navigation, resizing, corrupt saved data, console errors and failed requests. It then loads all five pages at eight more viewports, from 320px phones and phone landscape through tablet and compact desktop to 1920px, and checks for overflow and truncated team names.
+`pnpm qa:stress` opens all 42 match pages and every market tab at both widths, taps prices while the live feed moves them, double-clicks Place, types stakes during live ticks, navigates back and forward, resizes through every breakpoint, reloads, corrupts saved data, and then loads all five pages at nine more viewports from 320px to 1920px (including phone landscape).
 
 ## Pages
 
-| Page | Hash route | Main interactions |
+| Page | Route | What it does |
 | --- | --- | --- |
-| Sports Home | `#/sports` | Main-event hero, Live now, Starting soon, top competitions, sport filters, search with match reasons, following |
-| Live | `#/live` | Every in-play fixture with ticking clocks, sport/competition filters with live counts, Starting soon fallback |
-| Football | `#/football` | Five required league tabs, match-result odds on every row, follow teams/competitions |
-| Match Center | `#/match/ars-bha` | Scoreboard and period, six sticky market categories, live price movement, changed/suspended states |
-| Betslip + My Bets | `#/bets` | Stakes, quick stakes, explicit odds/return acceptance, placement receipt, retry, distinct open/settled/cash-out views |
+| Home | `#/sports` | Sport tabs under search, Favourites chips, Your matches (favourite team, then favourite competitions, live before upcoming), Featured carousel, Live now, Starting soon, Top competitions; search across teams, players, competitions, markets and outcome names |
+| Live | `#/live` | 13 in-play events across six sports, grouped by sport and league with flags, HT status, inline suspended rows, and sport and competition filters |
+| Soccer | `#/football` | Five leagues (3–10 matches each), league chips, a market dropdown (Match result, Over/Under, Both teams to score) and a Today & live / All toggle. The header count and the Today & live chip count the same fixtures |
+| Match | `#/match/ars-bha` | Back button and breadcrumb, scoreboard, 100 markets on Arsenal v Brighton (every pre-match football fixture has at least 60; every live one at least 40) across Popular, Goals, Halves, Handicaps, Goalscorers, Corners & cards, Players and Minutes, market search, collapsible cards, goalscorer table, suspended markets, live price movement and a compact sticky score bar on phones |
+| Bet slip & My bets | `#/bets` | The slip beside a My bets table (Placed / Bet / Odds / Stake / Returns / Result) with Open/Settled tabs, date and sport filters, expandable rows and cash-out history |
 
-The shell has a Housebets-style top bar (brand mark, Casino/Sports switch, simulated wallet, Deposit and profile), a left navigation and a right betslip rail on desktop. On phones, a bottom navigation (Menu, Sports, Casino, Chat, Search) sits under a persistent betslip bar that opens a bottom sheet. Casino, Chat, Deposit and profile open explanatory panels only; nothing outside the sportsbook is transactional.
+**Shell:** a top bar with the official Housebets wordmark, Weekly Prize countdown (a compact trophy and amount on phones), wallet (USDT), VIP crown and profile; a slim left icon rail; and a right side panel with **Bet slip | My bets | Chat** on desktop. Below 1100px the panel becomes a bottom slip bar and sheet; below 768px a bottom navigation replaces the rail. Casino, Weekly Prize, VIP, profile and Chat are informational previews; nothing outside the sportsbook transacts.
 
-Every sample fixture has a working Match Center. Favorites, settled history and demo balance persist locally. Unplaced selections and live scenario overrides reset on reload.
+Favourites, bet history and the demo balance persist in `localStorage`. Unplaced picks and demo scenarios reset on reload. Times are shown in the viewer's own time zone.
 
-## Demo scenarios
+## Demo controls
 
-Open **Demo controls** in the desktop sidebar, the sliders button beside mobile search, or the phone menu. Scenarios: move odds; suspend/reopen a market; fail the next valid placement; settle an open bet; remove/restore live matches; pause/resume the live price feed; two-second loading state; reset the local demo session.
+Open **Demo controls** from the bottom of the desktop rail or from the phone Menu. Scenarios: move odds, suspend/reopen a market, fail the next placement, settle an open bet, no live events, loading state, pause/resume live prices, and reset the demo session. Price and suspension scenarios target the first selection, or Arsenal's match result when the slip is empty.
 
-The live price feed moves one on-screen, unselected live price every few seconds with an up/down marker. It never changes a price already in the slip; use **Move odds** to test acceptance. Price and suspension scenarios target the first selected market, or Arsenal's match-result market when the slip is empty. Each selection is an independent single bet. Totals are sums, never accumulated odds. Cash out requires a confirmation.
+The live feed moves one on-screen, unselected in-play price every few seconds with a green or red arrow. It never changes a price already in the slip; use **Move odds** to test acceptance. Each pick is an independent single bet; totals are sums, never multiplied odds.
 
 ## Architecture
 
-- `src/data.ts`: typed sample fixtures, markets and outcomes.
-- `src/session.ts`: validates persisted demo balance, favorites and bet history.
-- `src/engine.ts`: isolated state transitions, validation, decimal calculations and simulated transactions.
-- `src/main.ts`: hash routing, shell, views, event delegation and accessible modal interactions.
-- `src/icons.ts`: original inline SVG interface icons and the H + wave brand mark.
-- `src/style.css`: design tokens, responsive layout and component styles.
-- `tests/engine.test.ts`: behavioral tests for stake, quote, suspension, transaction, receipt, settlement, search and live-feed invariants.
-- `scripts/qa-browser.mjs`: exact-width browser QA and screenshot capture.
-- `scripts/qa-stress.mjs`: stress and error sweep across every Match Center at both widths.
-- `qa.html`: development-only 1440px / 390px viewport harness; not included in the production build.
-- `scripts/prepare-pages.mjs`: prepares `.pages/` with the static build, `.nojekyll` and a source-commit/checksum manifest.
-- `scripts/verify-pages.mjs`: verifies the public manifest and asset checksums against the current `gh-pages` commit, without credentials.
+- `src/data.ts`: 42 sample fixtures across six sports with fictional squads, kick-offs relative to the current hour.
+- `src/markets.ts`: Poisson-based football market generator (result, goals, halves, handicaps, goalscorers, corners and cards, player props and minute windows) and two-way markets for other sports.
+- `src/engine.ts`: state transitions, validation, decimal calculations and simulated transactions.
+- `src/session.ts`: validates the persisted balance, favourites and bet history.
+- `src/icons.ts`: original inline SVG icons, plus the official wordmark and mark from `brand/`.
+- `src/ui/state.ts`, `format.ts`, `render.ts`, `events.ts`, `feed.ts`: UI state, formatting, rendering with focus restore, delegated events and the simulated live feed.
+- `src/ui/components/`: shell, fixtures, slip, My bets, side panel, dialogs and shared pieces.
+- `src/ui/pages/`: Home, Live, Soccer, Match and Bet slip & My bets.
+- `src/style.css`: tokens, responsive layout and component styles.
+- `tests/`: unit tests for the engine, market depth, data density and session restore.
+- `scripts/qa-browser.mjs`, `scripts/qa-stress.mjs`: browser QA and screenshot capture.
+- `scripts/prepare-pages.mjs`, `scripts/verify-pages.mjs`: release preparation and public-site verification.
+- `qa.html`: development-only 1440px / 390px viewport harness, not part of the build.
 
-There is no server, authentication, account connection, betting API or real-money transaction. Google Fonts is the only external presentation dependency; system font fallbacks remain available.
+There is no server, authentication, betting API or real-money transaction. The fonts are bundled, so the app makes no third-party requests.
 
-## GitHub Pages setup
+## GitHub Pages
 
-The owner selected **Deploy from a branch**. There is no custom Actions workflow in this repository.
+Publishing is **Deploy from a branch**: `gh-pages` / (root). There is no custom Actions workflow and no token or secret in the repository. `main` contains source and documentation; `gh-pages` contains only the compiled site.
 
-1. Set repository **Settings → Pages → Source → Deploy from a branch**.
-2. Select **gh-pages** and **/ (root)**, then Save.
-3. Run `pnpm pages:verify` after deployment finishes. It checks the public manifest and served asset checksums against the publishing branch without authentication. A missing page, stale release or mismatched asset exits with failure. GitHub API rate limits and network failures are reported explicitly.
-4. Run `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` and `pnpm qa:stress` with the same `QA_URL`; asset verification alone does not establish UI correctness.
+To publish an update, from a clean checkout of the intended `main` commit run `pnpm install --frozen-lockfile` then `pnpm pages:prepare` (lint, tests, build, and `.pages/` with a `build-info.json` tying the output to the source commit). Copy the contents of `.pages/` to the root of `gh-pages`, removing obsolete assets, commit and push without force. Then run `pnpm pages:verify` and the two QA scripts with `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/`.
 
-`main` contains source and documentation; `gh-pages` contains only the compiled static site. `.nojekyll` skips Jekyll processing. Relative assets and hash routing support the repository subpath.
+## Provenance
 
-### Publish an update
+The shell uses the Housebets brand pack in `brand/` (official wordmark and mark, cyan, 8px radii) and follows the contest wireframes. Interface icons, badges and flags are original. Player names are fictional and all data is sample data. Multis, accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, match trackers and AI search are intentionally absent.
 
-From a clean checkout of the intended `main` commit, run `pnpm install --frozen-lockfile` then `pnpm pages:prepare`. This runs lint, all tests, typecheck/build, and produces `.pages/` with `build-info.json` tying the output to the exact source commit and file checksums. Copy all contents of `.pages/` to the root of `gh-pages`, removing obsolete generated assets, then commit and push without force. Do not copy source files or node_modules to the publishing branch. Verify the deployed manifest against the intended source commit.
-
-GitHub still performs an internal Pages deployment for branch publishing. This setting does not guarantee that an account-level service restriction is resolved. See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
-
-## Contest and brand provenance
-
-The implementation follows the owner's brief, the official contest screenshots and the public contest page. The contest page mentions starter files, but no starter ZIP or brand pack was located, so none was used. The Housebets sportsbook is region-restricted; no restriction was bypassed.
-
-The navy/aqua palette and top-bar / left-navigation / betslip structure follow the public Housebets look. The H + wave mark, wordmark styling, club shields and league tiles are original SVG/CSS drawn for this entry; they are not official Housebets, club or league assets.
-
-Statistics widgets, match trackers, promotions, boosts, free bets, multis, bet builders, outrights, specials and AI search are intentionally absent.
-
-See `JUDGE_GUIDE.md` for a short review walkthrough and `DESIGN_SYSTEM.md`, `TEST_REPORT.md`, `PROJECT_STATE.md` and `SUBMISSION.md` for the remaining handoff material. AI assistance is explicitly disclosed in the submission draft.
+Tools, libraries and AI models are listed in `TOOLS.md`. See also `JUDGE_GUIDE.md`, `DESIGN_SYSTEM.md`, `TEST_REPORT.md`, `REQUIREMENTS_AUDIT.md`, `PROJECT_STATE.md` and `SUBMISSION.md`.

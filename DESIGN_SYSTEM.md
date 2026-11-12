@@ -1,67 +1,71 @@
-# HOUSE//LIVE Design System
+# Housebets Sports — Design System
 
 ## Product idea
 
-The sports command center: a familiar Housebets shell, a match-focused content area and an always-reachable betslip. The interaction order is event → market → price → stake → reviewed confirmation → receipt.
+A familiar Housebets shell around dense, readable sports lists and an honest single-bet flow. The interaction order is event → market → price → stake → reviewed confirmation → receipt, and the slip and bet history always share one panel.
 
 ## Brand
 
-- **Mark:** an original rounded-square H whose two uprights are joined by a wave (`brandMark()` in `src/icons.ts`, also `public/favicon.svg`). The wordmark is "Housebets" in Manrope 800 with an aqua H.
-- **Provenance:** drawn for this entry to evoke the public Housebets navy/aqua identity. No official logo file, starter pack or brand pack was available, so none is used. Club shields and league tiles are generic two-tone CSS shapes with text monograms; no real crests or league logos.
-- **Shell:** a top bar with the mark, Casino/Sports switch, demo badge, wallet balance in USDT, Deposit and profile; a left navigation; a right betslip rail. On phones, Menu / Sports / Casino / Chat / Search sit in a bottom navigation below the persistent betslip bar. Casino, Chat, Deposit and profile are informational, never transactional.
+- **Mark and wordmark:** the official Housebets wordmark (`brand/logo.svg`, inlined by `brandLogo()`) and mark (`brand/mark.svg`, also `public/favicon.svg`, inlined by `brandMark()`). The wordmark is the visible logo; the text "Housebets" stays available to assistive tech.
+- **Fonts:** Figtree (interface text) and Red Hat Display (headings, scores, prices in the scoreboard, wordmark), both variable fonts bundled from Fontsource under the SIL Open Font License.
+- **Shell:** top bar with rail toggle, mark, Weekly Prize countdown, wallet pill in USDT, Wallet button, VIP crown, profile and panel toggle; a 72px icon rail (Casino/Sports switch, Home, Live, Soccer, other sports, Favourites, My bets, Demo controls) with tooltips; a right side panel with **Bet slip | My bets | Chat**. On phones, a bottom navigation (Menu, Sports, Casino, Chat, Search) sits under a persistent slip bar.
+- **Provenance:** the top bar, left rail and side panel follow the brand pack in `brand/` (official logo and mark, cyan `#02F7FD`, 8px radii) and the contest wireframes. Interface icons, team badges and flags are original. Team badges are colour blocks with three-letter codes.
 
 ## Tokens (`src/style.css :root`)
 
 | Role | Token | Value |
 | --- | --- | --- |
-| Page background | `--bg` | `#050c11` |
-| Shell (top bar, sidebar) | `--shell` | `#08131a` |
-| Surfaces | `--surface`, `--surface-2` | `#0b1920`, `#0f2029` |
-| Raised controls | `--raised`, `--raised-2` | `#132833`, `#1a3441` |
-| Primary / secondary / muted text | `--text`, `--text-2`, `--muted` | `#eef5f7`, `#b4c6ce`, `#8aa0aa` |
-| Brand aqua (selected odds, primary action) | `--cyan`, `--cyan-2`, `--cyan-ink` | `#16e6f2`, `#6cf2f8`, `#022429` |
+| Page background | `--bg` | `#08151b` |
+| Shell (top bar, rail, panel) | `--shell` | `#0b1a21` |
+| Cards | `--card`, `--card-2`, `--raised` | `#0e1e25`, `#12262e`, `#162d36` |
+| Lines | `--line`, `--line-2` | `#1a2e36`, `#24404a` |
+| Text | `--text`, `--text-2`, `--muted` | `#eef5f6`, `#b6c7cd`, `#869ba3` |
+| Brand cyan (links, active icons) | `--brand` | `#22e2e8` |
+| Primary action / selected price | `--accent`, `--accent-ink` | `#a7f0f1`, `#06282c` |
+| Prices | `--price` | `#5fe3ea` |
 | Live | `--live` | `#ff4d67` |
-| Changed odds / suspended warning | `--amber` | `#f6c35c` |
-| Price up / down | `--up`, `--down` | `#34d399`, `#fb7185` |
-| Danger / success | `--danger`, `--success` | `#ff8f9c`, `#3fe0a2` |
+| Price up / down | `--up`, `--down` | `#3ddc97`, `#ff6b81` |
+| Changed odds / HT / cashed out | `--amber` | `#f6c35c` |
+| Radii | `--radius`, `--r-sm` | 16px, 10px |
+| Shell sizes | `--topbar`, `--rail`, `--panel`, `--nav-h`, `--bar-h` | 64px, 72px, 340px, 64px, 60px |
 
-Typography: Manrope for display (headings, scores, team names), DM Sans for interface text, both with system fallbacks. Prices, balances and clocks use tabular numerals. **Readable text is 11px or larger**; the only smaller glyphs are decorative, `aria-hidden` league monograms (10px) that always sit beside the full league name, and the up/down arrow beside a price. Phone inputs (search, select, stake) are 16px so iOS does not zoom.
+Prices, balances, scores and clocks use tabular numerals. Phone inputs are 16px so iOS does not zoom on focus.
 
 ## Layout
 
-| Width | Sidebar | Betslip | Notes |
+| Width | Rail | Side panel | Notes |
 | --- | --- | --- | --- |
-| ≥1600px | 240px | 360px rail | |
-| 1281–1599px (1440 target) | 224px | 340px rail | |
-| 1051–1280px | 200px | 304px rail | Bets page goes to one column |
-| 761–1050px | 200px | Fixed bottom bar + sheet | |
-| ≤760px (390 target) | Drawer | Bar above bottom nav + sheet | 58px header; bottom nav `62px + safe-area inset`; 70px slip bar |
-| ≤359px | Drawer | Bar + sheet | Wordmark hidden, mark only |
+| ≥1440px | 72px icon rail | 340px | Two-column market grid on the match page |
+| 1280–1439px | Rail | 320px | Narrower odds column in lists |
+| 1100–1279px | Rail | 320px | Markets in one column; compact list columns so full team names fit |
+| 768–1099px | Rail | Hidden; slip bar + bottom sheet | Compact sticky score bar on the match page |
+| ≤899px | Rail | Bar + sheet | Weekly Prize widget hidden |
+| ≤767px (390 target) | Bottom navigation | Bar + sheet | Event rows stack odds under teams; My bets table becomes cards; 44px tap targets |
+| ≤380px | Bottom navigation | Bar + sheet | Wordmark hidden, mark only; tighter goalscorer table |
 
-Fixture rows respond to the width of their own card, not the viewport. That matters because the sidebar and rail can squeeze the content column well below the screen width. Below 620px, a row stacks the odds under the teams, the same layout phones use. Below 340px, it also narrows the time column, lets long team names wrap instead of truncating, and drops the country prefix from the competition heading.
-
-`viewport-fit=cover` enables `env(safe-area-inset-*)`. Sheets are sized with `dvh` so they fit above an on-screen keyboard. Content gets bottom padding equal to the slip bar plus bottom nav, so nothing is hidden behind them.
+`viewport-fit=cover` enables safe-area insets. Content gets bottom padding equal to the slip bar plus bottom navigation, so nothing is hidden behind them.
 
 ## Components and states
 
-| Component | Normal | Selected / changed | Unavailable |
+| Component | Normal | Selected / moving | Unavailable |
 | --- | --- | --- | --- |
-| Odds button | Navy tile, outcome name and decimal price | Solid aqua with a check; green/red border, arrow and brief flash when the price moves | Dashed border, lock icon, disabled |
-| Market group | Title, outcome count, odds grid | — | "Suspended" chip and explanation; picks kept |
-| Selection card | Live/single tag, outcome, market, fixture link, stake with quick stakes, return | Current price marked "new"; old → new warning; revised return preview | Suspended note; placement paused |
-| Slip summary | Total stake, potential return (sum of singles), "Place single bet · X USDT" | Amber banner, return-after-acceptance total and "Accept new odds" | Suspended banner with "Remove"; disabled place button with reason |
-| Placement | Busy state blocks repeat clicks | Success notice with one receipt row per single and a My Bets link | "Bet not placed" with reason and "Try again"; no debit |
-| Bet card | Status, fixture, outcome, odds, stake, return, reference | Separate Cash Out offer view and confirmation | Settled won/lost/cashed |
-| Fixture row | Status/time, teams with shields, score, star, result odds, more-markets link | Search reason chip ("Player · Bukayo Saka") | — |
-| Loading / empty | Skeleton rows; empty search with clear; Starting soon when nothing is live | | |
+| Odds button | Card tile with outcome label and cyan price; full `aria-label` (match, market, outcome, price) | Pale-cyan fill; a green ▲ or red ▼ and a short flash when the price moves | Dashed tile with a lock, disabled |
+| Event row | Status or kick-off, league with flag, teams with badges and score, three prices, "+N" link to the match page | Search reason chip when searching | "Suspended" tag with locked prices; "Market settled" when the line is gone |
+| Market card | Collapsible header with name, body of prices; list layout for correct score; 3×3 table for HT/FT | — | Suspended message; picks already in the slip are kept |
+| Goalscorer table | Player / Next / Anytime / 2+ with a team switch | — | "–" where a price is not offered |
+| Slip pick | Market, outcome, price, match link, stake field (empty, placeholder 0.00), quick stakes 5/10/25/50/100, returns | Old price struck through beside the new one, "Accept odds" | Suspended message; placing paused |
+| Slip footer | Total stake, returns, Place bet · X USDT, pinned to the bottom of the sheet on phones | Accept odds above Place bet | Button label says what is missing ("Enter a stake", "Enter a stake for each pick") |
+| Placement | Busy state blocks repeat clicks | Receipt with one line per single and a My bets link | "Bet not placed" with Try again; no debit |
+| My bets table | Placed / Bet / Odds / Stake / Returns / Result; Open and Settled tabs; date and sport filters | Expanded row with reference, times and cash-out history; won rows highlighted | Empty state per filter |
+| Loading / empty | Skeleton rows; empty search; starting-soon fallback when nothing is live | | |
 
-Motion: odds flash, live dot pulse and sheet transitions are all disabled under `prefers-reduced-motion`.
+Motion: price flashes, the live dot pulse and sheet transitions are disabled under `prefers-reduced-motion`.
 
 ## Accessibility
 
-- Native buttons, links, inputs, selects and `<dialog>` elements; a skip link; visible focus rings.
-- `aria-pressed` on odds, filters and quick stakes. `aria-invalid` and `aria-describedby` on stake errors. Status and alert regions for receipts and failures. Text always accompanies colour.
-- Focus survives re-renders: the focused control is restored, dialogs move focus inside, and Escape or close returns it to the opener. Route changes focus the page title without a visible box.
-- My Bets tabs use Arrow/Home/End. `/` focuses search; Escape clears it.
-- Interactive targets are at least 24px (most 40px+), and text links have 32px hit areas.
+- Native buttons, links, inputs, selects and `<dialog>`; a skip link; visible focus rings.
+- Every odds button has a descriptive `aria-label`. Tabs use `role="tab"` with arrow-key navigation. Collapsible cards use `aria-expanded` and `aria-controls`.
+- Focus survives re-renders, dialogs move focus inside and return it on close, and route changes focus the page title.
+- On phones, primary controls (odds, tabs, chips, quick stakes, navigation, top-bar buttons) are at least 44px tall.
+- `/` focuses search and Escape clears it.
 - Not claimed: a full screen-reader audit or WCAG conformance.

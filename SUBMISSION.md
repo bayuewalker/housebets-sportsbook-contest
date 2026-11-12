@@ -1,6 +1,6 @@
-# HOUSE//LIVE — Submission Pack
+# Housebets Sports — Submission Pack (draft)
 
-**Status: SUBMISSION READY — awaiting owner approval.** Nothing has been submitted. The owner must review the entry and personally tick the contest confirmations, including the intellectual-property transfer for winning entries.
+**Status: draft for owner review.** Nothing has been submitted. The owner must review the entry and personally tick the contest confirmations, including the intellectual-property transfer for winning entries.
 
 Contest: [Housebets Sportsbook Design Contest](https://www.housebets.com/contests/sportsbook-design) · Deadline: **14 November 2026, 18:00 UTC** (15 November 2026, 01:00 WIB).
 
@@ -8,76 +8,75 @@ Contest: [Housebets Sportsbook Design Contest](https://www.housebets.com/contest
 
 https://bayuewalker.github.io/housebets-sportsbook-contest/
 
-Served from `gh-pages` / (root) with no login. Current release: source `2bea9c501c02b85b43619dad3153f48057ae5fe9`, `gh-pages` `3a3eb3566e22f5092d61d6d4e01f5896fde7f0e4`. On 12 November 2026, `pnpm pages:verify` passed and the live URL passed all 178 browser checks and all 36 stress and responsive checks. A 26-viewport responsive audit from 320px to 2560px, including phone landscape, reported no findings.
+Served from `gh-pages` / (root) with no login. The public site shows the redesign only after the owner merges it to `main` and publishes a new `gh-pages` build (see `README.md`). Re-run `pnpm pages:verify` and the browser QA against the public URL after publishing.
 
-## 2. Five pages
+## 2. Five linked pages
 
 | Page | Route |
 | --- | --- |
-| Sports Home | `#/sports` |
+| Home | `#/sports` |
 | Live | `#/live` |
-| Football | `#/football` |
-| Match Center | `#/match/ars-bha` (every fixture has one) |
-| Betslip + My Bets | `#/bets` (one combined page; the betslip is also a persistent desktop rail and a phone bottom bar) |
+| Soccer | `#/football` |
+| Match | `#/match/ars-bha` (every one of the 42 sample fixtures has a match page) |
+| Bet slip & My bets | `#/bets` (one shared page; the same slip and history live in the desktop side panel and the phone bottom sheet) |
 
-## 3. Big Idea (552 characters)
+## 3. Big idea (787 characters)
 
-HOUSE//LIVE makes Housebets the home of every sporting moment. One calm navy-and-aqua shell puts live matches, followed teams and the next kickoff a tap away. The Match Center keeps the score, the clock and moving prices in view, so every decision has context. A persistent betslip makes each single bet transparent: the price you chose, the stake you set and the return you reviewed. Changed odds wait for your acceptance, suspended picks stay safe, a failed placement never costs you, and every bet ends with a clear receipt, on desktop and on phone.
+Housebets Sports feels like the Housebets you already know: the same top bar with Weekly Prize and VIP crown, the slim icon rail, and one side panel where Bet slip, My bets and Chat sit together, so you never leave the lobby to bet. Lists are dense and calm: every live event with score and clock, and five football leagues with match-result odds on each row. Arsenal v Brighton opens on a live scoreboard and 100 markets across Popular, Goals, Halves, Handicaps, Goalscorers, Corners & cards, Players and Minutes, all searchable and collapsible. Prices flash as they move and suspended lines lock in place. The slip stays honest: singles only, stakes in USDT, an empty stake until you choose, changed odds wait for your OK, and every bet ends in a receipt you can find again in My bets.
 
-## 4. Tools, templates and AI disclosure
+## 4. Tools, models and assets (entry note)
 
-- **AI assistance:** designed and implemented with AI coding assistants — OpenAI ChatGPT/Codex for the initial build, and a Cursor Cloud Agent (Anthropic Claude) for the finishing pass (brand shell, states, readability, browser QA and documentation). The owner directed and reviewed the work.
-- **Frontend:** TypeScript, Vite, HTML and hand-written CSS. No UI framework, sportsbook template or UI kit.
-- **Quality tooling (not shipped):** ESLint, the Node.js test runner via tsx, and Playwright Core driving a local Chrome for viewport QA.
-- **Fonts:** Manrope and DM Sans from Google Fonts, with system fallbacks.
-- **Assets:** every icon, the H + wave brand mark, club shields, league tiles and backgrounds are original inline SVG/CSS made for this entry. No photos, official crests, league logos or official Housebets files are bundled.
-- **Starter pack:** the contest page mentions starter files, but no downloadable starter ZIP or brand pack was located. None was used, and the entry does not claim to use official assets. The navy/aqua palette and top bar / left navigation / right betslip structure follow the public Housebets look and the contest brief.
+Full detail with versions and licences is in `TOOLS.md`.
+
+- **Libraries shipped:** Figtree and Red Hat Display variable fonts via Fontsource (`@fontsource-variable/figtree`, `@fontsource-variable/red-hat-display` 5.3.0, SIL OFL 1.1), self-hosted. No UI framework, template or UI kit.
+- **Build and QA tools (not shipped):** TypeScript, Vite, ESLint with typescript-eslint, tsx with the Node.js test runner, Node.js, pnpm, Playwright Core driving headless Google Chrome.
+- **AI agents and models:** OpenAI ChatGPT/Codex for the initial build; a Cursor Cloud Agent running Anthropic Claude (Claude Opus) for the finishing passes and this redesign (data, UI, accessibility, QA and docs). The owner directed and reviewed the work. No AI-generated images.
+- **Assets:** the Housebets brand pack in `brand/` — official wordmark `brand/logo.svg` and mark `brand/mark.svg` (also `public/favicon.svg`). The top bar, left rail and side panel use that logo, the pack cyan and 8px radii. Interface icons, team badges and flags are original inline SVG/CSS. No club or league artwork. Fictional player names; all fixtures, prices and bets are sample data.
 - **Hosting:** GitHub Pages, deploy from branch (`gh-pages` / root). No custom Actions deployment.
 
 ## 5. Screenshots
 
-All captured by `pnpm qa:browser` with headless Chrome at exactly 1440×1000 (desktop) and 390×844 (phone, touch emulation). Files live in `docs/screenshots/`, named `desktop-*.jpg` and `mobile-*.jpg`.
+Captured by `QA_SCREENSHOTS=docs/screenshots pnpm qa:browser` with headless Chrome at exactly 1440×1000 (desktop) and 390×844 (phone, touch emulation, 2× density). Files are in `docs/screenshots/`.
 
 | View | Desktop 1440 | Phone 390 |
 | --- | --- | --- |
-| Sports Home | `desktop-sports-home.jpg` | `mobile-sports-home.jpg` |
+| Home | `desktop-home.jpg` | `mobile-home.jpg` |
 | Live | `desktop-live.jpg` | `mobile-live.jpg` |
-| Football | `desktop-football.jpg` | `mobile-football.jpg` |
-| Match Center | `desktop-match-center.jpg` | `mobile-match-center.jpg` |
-| Betslip + My Bets | `desktop-betslip-my-bets.jpg` | `mobile-betslip-my-bets.jpg` |
-| Stake entry | `desktop-betslip-stake.jpg` | `mobile-betslip-stake.jpg` |
-| Odds changed / suspended / failed / placed | `desktop-state-*.jpg` | `mobile-state-*.jpg` |
-| Loading, no live, empty search | `desktop-state-loading.jpg`, `desktop-state-no-live.jpg`, `desktop-search-empty.jpg` | same names with `mobile-` |
-| Cash out, settled, demo controls | `desktop-cash-out-confirm.jpg`, `desktop-my-bets-settled.jpg`, `desktop-demo-controls.jpg` | same names with `mobile-`, plus `mobile-menu.jpg` |
+| Live, competition filter | `desktop-live-competition.jpg` | `mobile-live-competition.jpg` |
+| Soccer | `desktop-football.jpg` | `mobile-football.jpg` |
+| Match | `desktop-match.jpg` | `mobile-match.jpg` |
+| Slip: empty stake, ready | `desktop-slip-empty-stake.jpg`, `desktop-slip-ready.jpg` | same names with `mobile-` |
+| Slip: odds changed, suspended, failed, placed | `desktop-slip-changed.jpg`, `desktop-slip-suspended.jpg`, `desktop-slip-error.jpg`, `desktop-slip-placed.jpg` | same names with `mobile-` |
+| Selected odds inside a suspended market | `desktop-suspended-selected.jpg` | `mobile-suspended-selected.jpg` |
+| My bets: settled with cash-out history, after cash out | `desktop-bets-settled.jpg`, `desktop-bets.jpg` | same names with `mobile-` |
 
 ## 6. QA summary
 
-- 29 behavioural tests, TypeScript, ESLint and the production build pass after a frozen-lockfile install.
-- 178 automated browser checks pass across 1440px and 390px: every page, filter, search, follow, sticky market categories and active navigation, odds toggle, stake validation, changed-price and revised-return review, suspended/failed/placed states, distinct Cash Out offers, won/lost history, settlement, persistence, dialogs, Escape and focus return, the live price feed (including a tap held across a price refresh), overflow, minimum text size, touch-target size, and the phone betslip bar vs bottom navigation.
+- 35 unit tests, TypeScript, ESLint and the production build pass.
+- `pnpm qa:browser`: 159/159 checks at 1440px and 390px (all five pages, data density, market depth, competition filter, search, collapse, sticky phone score bar, live price arrows, every slip state, a selected suspended price, USDT on one line, the My bets table and filters, cash out, tap-target size, focus and console errors).
+- `pnpm qa:stress`: 52/52 checks (all 42 match pages and every market tab at both widths, taps during live price ticks, double placement, history navigation, resizing, reload and corrupt-storage recovery, and nine extra viewports from 320px to 1920px).
 - Details and limits: `TEST_REPORT.md`. Requirement-by-requirement status: `REQUIREMENTS_AUDIT.md`.
 
 ## 7. Known limitations
 
-- Starter files and brand pack were not located, so brand alignment is an original interpretation, not a pixel match to official assets.
 - Sample data only. The live clock and price feed are simulated in the browser.
-- Not tested on physical iOS/Android devices, Safari or Firefox, or with a full screen-reader audit. The phone keyboard was emulated (16px inputs to avoid iOS zoom, bottom sheet sized to the dynamic viewport).
-- Google Fonts needs a network request; system fonts take over offline.
+- Not tested on physical iOS/Android devices, Safari or Firefox, or with a full screen-reader audit.
 
-## Contest rules (verified by the owner)
+## Contest rules (from the contest page)
 
 - Free to enter; no deposit or wagering required.
 - At most 3 submissions in any rolling 24 hours.
-- Work must be original. AI tools and public libraries are allowed if disclosed (section 4).
+- Original work. Public libraries, models and tools are fine if named in the note (section 4).
 - Housebets may share entries publicly under the entrant's alias.
 - Prizes are paid in USDT with no wagering requirement. Results are expected about 7 days after closing.
 - Winners transfer the code and design rights to Housebets; non-winners keep their work.
-- One account per person. Residents of the United States, France and the Netherlands are excluded.
+- One account per person. Not open to players in the United States, France or the Netherlands.
 
 ## Owner confirmations — do not tick on the owner's behalf
 
-- Singles only; no multis, bet builders, boosts, free bets or promotions.
-- Sample data only; no real accounts or real money.
-- Original work, with tools and AI assistance disclosed.
+- Singles only; no multis, accumulators, bet builder, boosts, free bets, promos, outrights or specials.
+- Sample data only; no real accounts or real money; no real player data.
+- Original work, with tools and AI assistance named.
 - Housebets may share the entry publicly.
 - If the entry wins, the prize is full payment and Housebets receives the code, designs and rights.
 
