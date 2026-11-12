@@ -8,7 +8,7 @@ Contest: [Housebets Sportsbook Design Contest](https://www.housebets.com/contest
 
 https://bayuewalker.github.io/housebets-sportsbook-contest/
 
-Served from `gh-pages` / (root) with no login. Current release: source `b26c52f547839cd6bdef6185c2241cfad768cd26`, `gh-pages` `38b9a5982fc64f5a9fb3155b0eeebb6ae89a8aa7`. `pnpm pages:verify` passed, and all 176 browser checks passed against the live URL on 12 November 2026.
+Served from `gh-pages` / (root) with no login. Current release: source `2bea9c501c02b85b43619dad3153f48057ae5fe9`, `gh-pages` `3a3eb3566e22f5092d61d6d4e01f5896fde7f0e4`. On 12 November 2026, `pnpm pages:verify` passed and the live URL passed all 178 browser checks and all 36 stress and responsive checks. A 26-viewport responsive audit from 320px to 2560px, including phone landscape, reported no findings.
 
 ## 2. Five pages
 

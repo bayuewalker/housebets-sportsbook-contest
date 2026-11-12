@@ -101,7 +101,15 @@ Screenshots from the passing run are in `docs/screenshots/` (34 files: five page
 
 ### Public release
 
-Source `b26c52f547839cd6bdef6185c2241cfad768cd26` was published as `gh-pages` `38b9a5982fc64f5a9fb3155b0eeebb6ae89a8aa7`. Before publishing, the clean merged release passed `pnpm pages:prepare` (lint, 29 tests, build) and `pnpm qa:browser` 176/176. After publishing, `pnpm pages:verify` passed with all 4 public assets matching, and `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` passed 176/176 against the live site at 1440px and 390px.
+Current release: source `2bea9c501c02b85b43619dad3153f48057ae5fe9` ([PR #8](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/8)) was published as `gh-pages` `3a3eb3566e22f5092d61d6d4e01f5896fde7f0e4`. Before publishing, the clean merged tree passed `pnpm pages:prepare` (lint, 29 tests, build), `pnpm qa:browser` 178/178 and `pnpm qa:stress` 36/36. After publishing:
+
+- `pnpm pages:verify` passed with all 4 public assets matching.
+- Against the live URL, `qa:browser` passed 178/178 and `qa:stress` passed 36/36.
+- The 26-viewport responsive audit reported 0 findings.
+
+The intermediate stability release, source `757d1a5950c19f9af390745b4460c5a3ad1fc8f0` ([PR #7](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/7)), was published as `gh-pages` `b0470f5baa21c08f54f2eb2e7f5c06c4b1ac9235`. It passed `pages:verify`, plus `qa:browser` 178/178 and `qa:stress` 28/28 against the live URL.
+
+Earlier release: source `b26c52f547839cd6bdef6185c2241cfad768cd26` was published as `gh-pages` `38b9a5982fc64f5a9fb3155b0eeebb6ae89a8aa7`. Before publishing, the clean merged release passed `pnpm pages:prepare` (lint, 29 tests, build) and `pnpm qa:browser` 176/176. After publishing, `pnpm pages:verify` passed with all 4 public assets matching, and `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` passed 176/176 against the live site at 1440px and 390px.
 
 ### Limits
 
