@@ -77,7 +77,7 @@ export function searchBar(): string {
   return `<div class="search" role="search">
     ${icon('search')}
     <input id="global-search" data-focus="search" type="search" enterkeyhint="search" autocomplete="off"
-      placeholder="Search teams, players, competitions or markets" aria-label="Search teams, players, competitions or markets" value="${esc(ui.query)}">
+      placeholder="Search teams, players, leagues or markets" aria-label="Search teams, players, competitions or markets" value="${esc(ui.query)}">
     ${ui.query ? `<button type="button" class="icon-btn" data-action="clear-search" aria-label="Clear search">${icon('close')}</button>` : '<kbd aria-hidden="true">/</kbd>'}
   </div>`;
 }
