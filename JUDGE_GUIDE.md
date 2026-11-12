@@ -1,38 +1,39 @@
-# HOUSE//LIVE review walkthrough
+# Housebets Sports — review walkthrough
 
-https://bayuewalker.github.io/housebets-sportsbook-contest/ — no login, deposit or account needed. All data, prices and transactions are simulated in your browser.
+https://bayuewalker.github.io/housebets-sportsbook-contest/ — no login, deposit or account needed. All data, prices and transactions are simulated in your browser, and every player name is fictional.
 
 ## A two-minute tour
 
-1. **Sports Home:** the main event (Arsenal v Brighton, live) leads, followed by Live now, Starting soon and Top competitions. Search for `Marlow` (a fictional player), `LaLiga` or `corners`; each result says why it matched. Tap ☆ on a competition, then open **Following**.
-2. **Live:** every in-play match, with ticking clocks. Filter by sport or competition; the counts show what is live.
-3. **Football:** switch between Premier League, Champions League, LaLiga, Serie A and Bundesliga. Every row has match-result odds.
-4. **Match Center:** open Arsenal v Brighton. Watch the prices: one on-screen price moves every few seconds with a green or red marker. Browse the six categories; Corners & Cards contains a suspended market. Tap **Arsenal** and enter 25 USDT.
-5. **Betslip + My Bets:** place the single bet and read the receipt. Open My Bets, cash out with confirmation, and find it under Settled. On a phone, the betslip bar sits above the bottom navigation on every page and opens a bottom sheet.
+1. **Home:** sport tabs sit under the search, with your Favourites as chips. Your matches, a Featured carousel, Live now (View all 13) and Starting soon follow. Search for `Marlow` (a fictional player), `LaLiga` or `corners`; each result says why it matched.
+2. **Live:** 13 in-play events grouped by sport and league, with flags, ticking clocks, an HT match and an inline suspended row. Filter by sport.
+3. **Soccer:** five leagues with 3–10 matches each. Switch the row market between Match result, Over/Under and Both teams to score, and toggle Live & Upcoming / All.
+4. **Match:** open Arsenal v Brighton. The breadcrumb reads Soccer › England › Premier League › ARS–BHA. All markets shows 47 markets across Popular, Goals, Halves, Handicaps, Goalscorers and Corners & Cards. Search the markets, collapse cards, switch the goalscorer table between teams, and watch prices flash green or red. Corners & Cards has suspended markets. On a phone, scroll down and a compact score bar sticks under the top bar.
+5. **Bet slip & My bets:** tap **Arsenal**. The stake starts empty; use a quick-stake chip or type one. Place the single and read the receipt. In My bets, filter by date and sport, expand a row for details, and open Settled to see wins highlighted and cash-out history. Cash out the open Arsenal bet with confirmation.
 
-The live feed never changes a price that is already in your slip. Use the scenario panel to test that flow.
+On phones, the bet slip bar sits above the bottom navigation on every page and opens a sheet with **Accept odds** / **Place bet** pinned to its bottom. Toasts appear above the bar, never over it.
 
-## Judge-controlled edge states
+## Judge-controlled states
 
-Open **Demo controls**: in the desktop sidebar, from the sliders button beside the phone search, or from the phone Menu. Price and suspension scenarios target the first selection, or Arsenal's match result when the slip is empty.
+Open **Demo controls** from the bottom of the desktop rail or from the phone Menu. Price and suspension scenarios target the first selection, or Arsenal's match result when the slip is empty.
 
 | Scenario | Expected result |
 | --- | --- |
-| Move odds | The slip shows "Odds changed" and blocks placement until you press **Accept new odds**. 25 USDT at 1.60 returns 40.00 USDT. |
-| Suspend / reopen | Odds lock. Your pick and stake stay, the slip explains placement is paused and offers **Remove**. Toggle again to reopen. |
-| Fail next placement | The panel closes. The next placement shows "Bet not placed" with **Try again**; balance and history are unchanged. Retry succeeds once. |
-| Settle an open bet | The first open bet becomes Won and its return is credited once. |
-| No live matches | Live shows Starting soon; former live fixtures show kick-off times. |
-| Live price feed | Pause or resume background price movement. |
-| Loading state | Skeleton rows for two seconds, then fixtures return. |
-| Reset demo | After confirmation, the sample history, favourites and 1,000 USDT are restored. |
+| Move odds | The pick shows the old price struck through and the new one, the slip explains the change, and placement waits for **Accept odds**. |
+| Suspend / reopen | The pick and stake stay; placing is paused with an explanation. Toggle again to reopen. |
+| Fail next placement | The next placement shows "Bet not placed" with **Try again**; balance and history are unchanged. Retry places once. |
+| Settle an open bet | The first open bet is marked won and its return credited once. |
+| No live events | Live shows the starting-soon fallback. |
+| Loading state | Skeleton rows for two seconds. |
+| Pause live prices | Stops background price movement. |
+| Reset demo | After confirmation, the sample history and 1,000 USDT are restored. |
 
 ## Worth checking
 
-- Several picks remain separate singles, each with its own stake and receipt line. Odds are never multiplied.
-- Invalid or unaffordable stakes block placement with a reason.
-- Casino, Chat, Deposit and the profile are informational panels; nothing outside the sportsbook transacts.
-- Keyboard: `/` focuses search and Escape clears it. Dialogs close with Escape and return focus. My Bets tabs use the arrow keys.
+- Several picks stay separate singles, each with its own stake and receipt line. Odds are never multiplied.
+- Invalid or unaffordable stakes block placement with a reason; the Place button says what is missing.
+- Casino, Weekly Prize, VIP, profile and Chat are previews only; nothing outside the sportsbook transacts.
+- Keyboard: `/` focuses search; tabs use the arrow keys; dialogs close with Escape and return focus.
 - Refresh keeps placed bets, favourites and balance. Unplaced picks and scenarios reset.
+- Times are shown in your own time zone (stated in the footer).
 
-AI assistance and asset provenance are disclosed in `SUBMISSION.md`.
+Tools, libraries and AI models are named in `TOOLS.md`.

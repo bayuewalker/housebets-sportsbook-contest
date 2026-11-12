@@ -1,12 +1,75 @@
-# HOUSE//LIVE QA Report
+# Housebets Sports — QA Report
 
 ## Scope and environment
 
 Frontend-only prototype. Data flow: UI action → in-memory state transition → validation/calculation → DOM feedback and local demo history. There is no backend, database, payment or betting API.
 
-Tooling: Node.js 24, pnpm 11.25.0, TypeScript, Vite 8, ESLint, the Node test runner via tsx, and Playwright Core 1.56.1 driving the system Google Chrome in headless mode.
+Tooling: Node.js 22.23, pnpm 11.25.0, TypeScript 5.9, Vite 8, ESLint 9 with typescript-eslint, the Node.js test runner via tsx, and Playwright Core 1.56.1 driving headless Google Chrome 156. Full list in `TOOLS.md`.
 
-## 2026-11-12 responsive audit
+## 2026-11-12 redesign (branch `cursor/housebets-redesign-a1e1`)
+
+The redesign replaced the shell, data, match page, slip and My bets, and split `src/main.ts` into `src/ui/` modules. Both QA scripts were rewritten for the new interface.
+
+### Results
+
+| Check | Result |
+| --- | --- |
+| `pnpm typecheck` | PASS |
+| `pnpm lint` | PASS |
+| `pnpm test` | **34 passed, 0 failed** (28 engine and data, 6 session) |
+| `pnpm build` | PASS (JS 95 KB, CSS 51 KB, four self-hosted font files) |
+| `pnpm qa:browser` against the local build | **123/123 passed** at 1440×1000 and 390×844 |
+| `pnpm qa:stress` against the local build | **52/52 passed** (both widths plus nine extra viewports) |
+
+These ran against the local build only. The public site still serves the previous release until the owner merges and publishes this branch.
+
+### Unit tests (`tests/`)
+
+New or rewritten for the redesign: a new pick starts with an empty stake that blocks placement; five leagues with 3–10 matches each and 13 live events; the featured match offers 40–85 markets across six football groups; sample history covers won, lost and cashed-out bets across several sports and weeks; cash out records its time; fixtures are scheduled relative to the current hour; live total-goal and both-teams-to-score markets are never already decided; storage from the previous version is replaced with a fresh sample session. The earlier invariants still pass: singles are never multiplied, changed odds need fresh acceptance, suspension keeps the pick and blocks payment, failure leaves the balance unchanged, repeat placement never double-debits, and the live feed never moves a selected price.
+
+### Browser QA (`scripts/qa-browser.mjs`)
+
+Each width starts from a fresh session: desktop 1440×1000, and phone 390×844 with touch, mobile emulation and 2× density.
+
+| Area | What is checked |
+| --- | --- |
+| Shell and Home | Housebets wordmark and no old branding; no marketing copy; Figtree and Red Hat Display load; VIP crown and wallet; Weekly Prize, icon rail with Live 13 and panel tabs Bet slip / My bets / Chat (desktop); bottom navigation and slip bar (phone); sport tabs Home, Live 13, Soccer; three Favourites chips; section order Your matches, Featured, Live now, Starting soon; "View all 13" and "+N markets" counts match their targets; times in the viewer's time zone |
+| Live | 13 live events; 6 football; an HT match and an inline suspended row; a flag on every league header; Tennis filter shows 2 |
+| Soccer | Live & Upcoming / All changes the list (All = 29); five leagues with 3–10 matches; market dropdown switches rows to Over/Under and BTTS; LaLiga chip filters |
+| Match | Breadcrumb Soccer › England › Premier League › ARS–BHA; 40–85 markets; suspended markets present; goalscorer table with fictional names and Next / Anytime / 2+; every odds button has an `aria-label`; Goals tab, market search for "corner", single and collapse-all collapse; compact sticky score bar on phone scroll; live prices move with ▲/▼ arrows |
+| Slip | Empty stake with 0.00 placeholder; Place disabled with "Enter a stake"; chips 5/10/25/50/100; 0.5 rejected with the limits; chip sets 10 and returns stake × odds; phone: Place bet and Accept odds pinned to the bottom of the sheet; odds change blocks placement until accepted; suspended pick kept and blocked; armed failure leaves the balance unchanged and offers retry; retry debits once with one receipt line; phone: toast sits above the slip bar |
+| Bet slip & My bets | Slip and history on one page; columns Placed / Bet / Odds / Stake / Returns / Result; four open bets; date filter options and Today; Settled shows won highlights; sport and 7-day filters narrow the list; an expanded row shows "Cashed out for 38.40 USDT"; cash out credits 31.20 once and moves the bet to Settled |
+| Layout and accessibility | No horizontal overflow on any page; phone tap targets of at least 44px (odds, navigation, tabs, top-bar buttons, selects, quick stakes); desktop keyboard focus ring and `/` shortcut |
+| Runtime | No page or console errors |
+
+Screenshots from the passing run are in `docs/screenshots/` (24 files).
+
+### Stress sweep (`scripts/qa-stress.mjs`)
+
+At 1440px and 390px: all 42 fixtures reachable from the lists; all 42 match pages render every market tab without overflow; back and forward navigation; 20 rapid taps toggle cleanly; nine taps spread across live price ticks are never lost; two singles from one market; 21 rapid tab switches leave one selected tab; two stakes typed across live ticks keep their values and focus; double-clicking Place debits once with two receipt lines; resizing through 13 widths from 1440 to 320px; reload keeps balance and new bet references; corrupt storage recovers 1,000.00 USDT; 8 seconds of idle feed with keyboard tabbing; no console errors or failed requests.
+
+Then all five pages at 320×640, 360×740, 390×844, 768×1024, 1024×768, 1280×800, 1440×1000, 1920×1080 and 844×390, checking page overflow, off-screen elements, clipped team names and console errors.
+
+### Issues found and fixed during this QA
+
+- At 320–360px the match page overflowed by up to 49px: the page and market toolbar grids sized to their content, and the market search kept its intrinsic width. Fixed with `minmax(0, 1fr)` columns and a shrinkable search field; the goalscorer table is tighter at 380px and below.
+- Between 768px and 1279px, long names such as "Brighton & Hove Albion" were cut off in list rows. The meta and "+N" columns are narrower there and league names wrap.
+- On phones, several controls were 40px tall (avatar, market tabs, goalscorer prices). All primary phone controls are now at least 44px.
+- The cash-out history sentence was split across flex items. It is now one text line.
+- New bets got timestamp references such as `HB-1762958400000-0`. They now continue the sample sequence (HB-1049, HB-1050).
+- Slip totals could wrap "USDT" onto its own line on phones. Values now stay on one line.
+- QA script issues: on phones the hidden desktop panel also rendered a notice, so selectors are now scoped to the sheet; one check assumed a fixed price that the live feed can move, so it now compares against the price shown in the slip.
+
+### Limits
+
+- Headless Chrome with device emulation, not physical iOS/Android hardware or the real on-screen keyboard.
+- Safari and Firefox not tested. No full screen-reader audit or WCAG conformance claim.
+
+# Earlier QA history (HOUSE//LIVE releases)
+
+The sections below describe the previous design, published under the working name HOUSE//LIVE, and are kept as a record.
+
+## 2026-11-12 responsive audit (previous design)
 
 Goal: confirm the design holds up on desktop and mobile beyond the two contest widths. A temporary audit covered 26 viewports:
 - 320, 359, 360, 375, 390, 414, 430 and 600px
@@ -23,7 +86,7 @@ At each viewport it checked all five pages, three non-football Match Centers, th
 - `pnpm qa:stress` gained a permanent responsive sweep of 8 checks. It loads all five pages at 320×640, 360×740, 768×1024, 1051×800, 1180×820, 1280×800, 1920×1080 and 844×390, and checks for page overflow, off-screen elements and truncated team names. It now has **36 checks**. Against the previous public build, the new checks failed at 320, 768 and 1051px, which confirms they catch the bug.
 - The 1440px and 390px layouts and screenshots are unchanged.
 
-## 2026-11-12 stability sweep
+## 2026-11-12 stability sweep (previous design)
 
 Goal: confirm everything works smoothly with no errors, beyond the scripted happy paths.
 
@@ -43,7 +106,7 @@ Goal: confirm everything works smoothly with no errors, beyond the scripted happ
   - no failed or 4xx/5xx requests
 - Repeated public runs of `qa:browser`: 17 of 18 passed 176/176. The first run reported 2 failures that never recurred in 17 sequential and parallel reruns; its output was truncated, so the check names are unknown.
 
-## 2026-11-12 final contest pass
+## 2026-11-12 final contest pass (previous design)
 
 The official contest page was reread against the live product, with priority given to the 20-point Match page (first tie-break), the 20-point Betslip + My Bets page, and the 15-point Housebets feel (second tie-break). Suggestions that conflict with the brief—especially live statistics, trackers and other explicitly excluded widgets—were rejected.
 
@@ -56,7 +119,7 @@ Changes verified in this pass:
 - Selection removal uses a larger 40px target.
 - Browser coverage increased to **176/176 passed** at 1440×1000 and 390×844.
 
-### Current automated checks
+### Automated checks at that release
 
 | Check | Result |
 | --- | --- |
