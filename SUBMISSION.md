@@ -30,7 +30,7 @@ Full detail with versions and licences is in `TOOLS.md`.
 
 - **Libraries shipped:** Figtree and Red Hat Display variable fonts via Fontsource (`@fontsource-variable/figtree`, `@fontsource-variable/red-hat-display` 5.3.0, SIL OFL 1.1), self-hosted. No UI framework, template or UI kit.
 - **Build and QA tools (not shipped):** TypeScript, Vite, ESLint with typescript-eslint, tsx with the Node.js test runner, Node.js, pnpm, Playwright Core driving headless Google Chrome.
-- **AI agents and models:** OpenAI ChatGPT/Codex for the initial build; a Cursor Cloud Agent running Anthropic Claude (Claude Opus) for the finishing passes and this redesign (data, UI, accessibility, QA and docs). The owner directed and reviewed the work. No AI-generated images.
+- **AI agents and models:** OpenAI ChatGPT/Codex for the initial build; a Cursor Cloud Agent running Anthropic Claude (Claude Opus) for the finishing passes and this redesign (data, UI, accessibility, QA and docs); Grok Bot for contest audit, review and QA prompts. The owner directed and reviewed the work. No AI-generated images.
 - **Assets:** the Housebets brand pack in `brand/` — official wordmark `brand/logo.svg` and mark `brand/mark.svg` (also `public/favicon.svg`). The top bar, left rail and side panel use that logo, the pack cyan and 8px radii. Interface icons, team badges and flags are original inline SVG/CSS. No club or league artwork. Fictional player names; all fixtures, prices and bets are sample data.
 - **Hosting:** GitHub Pages, deploy from branch (`gh-pages` / root). No custom Actions deployment.
 

@@ -38,6 +38,7 @@ No UI framework, component library, sportsbook template, UI kit, icon set, stock
 | --- | --- |
 | OpenAI ChatGPT / Codex | Initial build of the prototype (earlier branches) |
 | [Cursor](https://cursor.com/) Cloud Agent, running Anthropic Claude (Claude Opus) | Finishing passes and this redesign: fictional sample data, market pricing, UI modules, styling, accessibility, QA scripts, screenshots and documentation |
+| Grok Bot | Contest audit, review and QA prompts |
 
 The owner (bayuewalker) directed and reviewed the work. No AI image or design-generation model was used; there are no generated images in the entry.
 

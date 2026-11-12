@@ -296,9 +296,10 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   display: grid; grid-template-columns: auto minmax(0, 1fr) auto 44px; align-items: center; gap: 10px;
   min-height: 48px; padding: 0 6px 0 14px; background: var(--card-2); border-bottom: 1px solid var(--line);
 }
-.league-head h3 { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 14px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.league-country { color: var(--text-2); font-weight: 600; }
-.league-head .sep { color: var(--muted); }
+.league-head h3 { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 14px; font-weight: 800; }
+.league-country { flex: none; color: var(--text-2); font-weight: 600; }
+.league-head .sep { flex: none; color: var(--muted); }
+.league-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; }
 .league-count { color: var(--muted); font-size: 12px; font-weight: 600; }
 .event-row {
   display: grid; grid-template-columns: 116px minmax(0, 1fr) var(--odds-w, 300px) 56px; grid-template-areas: "meta teams odds more";
@@ -871,6 +872,10 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .wordmark { display: none; }
   .brand-logo:not(.is-mark) { display: none; }
   .brand-logo.is-mark { display: inline-flex; }
+}
+@media (max-width: 380px) {
+  .league-head .league-country,
+  .league-head .sep { display: none; }
 }
 @media (max-width: 380px) {
   .odds-label { font-size: 11px; }

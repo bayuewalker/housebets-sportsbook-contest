@@ -1,5 +1,21 @@
 import { createHash } from 'node:crypto';
 
+function jpegSize(buffer) {
+  if (buffer[0] !== 0xff || buffer[1] !== 0xd8) throw new Error('Not a JPEG');
+  let i = 2;
+  while (i < buffer.length - 8) {
+    if (buffer[i] !== 0xff) { i++; continue; }
+    const marker = buffer[i + 1];
+    if (marker === 0xd9) break;
+    if (marker === 0xc0 || marker === 0xc1 || marker === 0xc2) {
+      return { height: buffer.readUInt16BE(i + 5), width: buffer.readUInt16BE(i + 7) };
+    }
+    if (marker === 0xd8 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
+    i += 2 + buffer.readUInt16BE(i + 2);
+  }
+  throw new Error('JPEG SOF not found');
+}
+
 const repository = 'bayuewalker/housebets-sportsbook-contest';
 const site = 'https://bayuewalker.github.io/housebets-sportsbook-contest/';
 
@@ -36,6 +52,14 @@ try {
     verified++;
   }
   console.log(`PASS: ${verified} public assets match source ${expected.sourceCommit} (gh-pages ${head.sha}).`);
+  if (expected.files?.['og.jpg']) {
+    const og = Buffer.from(await (await get(`${site}og.jpg`)).arrayBuffer());
+    const { width, height } = jpegSize(og);
+    if (width !== 1200 || height !== 630) throw new Error(`og.jpg is ${width}×${height}, expected 1200×630`);
+    console.log('PASS: og.jpg is 1200×630.');
+  } else {
+    throw new Error('Release manifest has no og.jpg.');
+  }
   console.log('Next: browser QA of all five routes at 1440px and 390px. Asset verification does not replace interaction tests.');
 } catch (error) {
   console.error(`Pages verification failed: ${error instanceof Error ? error.message : String(error)}`);

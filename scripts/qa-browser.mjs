@@ -2,7 +2,23 @@
 // Usage: pnpm build && pnpm qa:browser   (QA_URL targets a deployed site; QA_SCREENSHOTS=dir captures images)
 import { chromium } from 'playwright-core';
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
+
+function jpegSize(buffer) {
+  if (buffer[0] !== 0xff || buffer[1] !== 0xd8) throw new Error('Not a JPEG');
+  let i = 2;
+  while (i < buffer.length - 8) {
+    if (buffer[i] !== 0xff) { i++; continue; }
+    const marker = buffer[i + 1];
+    if (marker === 0xd9) break;
+    if (marker === 0xc0 || marker === 0xc1 || marker === 0xc2) {
+      return { height: buffer.readUInt16BE(i + 5), width: buffer.readUInt16BE(i + 7) };
+    }
+    if (marker === 0xd8 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
+    i += 2 + buffer.readUInt16BE(i + 2);
+  }
+  throw new Error('JPEG SOF not found');
+}
 
 const shots = process.env.QA_SCREENSHOTS;
 const chrome = process.env.CHROME_PATH ?? ['/usr/local/bin/google-chrome', '/usr/bin/google-chrome', '/usr/bin/chromium'].find(existsSync);
@@ -28,6 +44,16 @@ const number = text => Number(String(text).replace(/[^0-9.]/g, ''));
 
 const browser = await chromium.launch(chrome ? { executablePath: chrome, args: ['--no-sandbox'] } : { channel: 'chrome' });
 try {
+  try {
+    const og = readFileSync('dist/og.jpg');
+    const { width, height } = jpegSize(og);
+    check('assets', 'og.jpg on disk is 1200×630', width === 1200 && height === 630, `${width}×${height}`);
+    const ogRes = await fetch(`${base}og.jpg`);
+    check('assets', 'og.jpg serves HTTP 200', ogRes.ok, String(ogRes.status));
+  } catch (e) {
+    check('assets', 'og.jpg on disk is 1200×630', false, e instanceof Error ? e.message : String(e));
+  }
+
   for (const [width, height, tag] of [[1440, 1000, 'desktop'], [390, 844, 'mobile']]) {
     const mobile = tag === 'mobile';
     const context = await browser.newContext({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: mobile ? 2 : 1 });
@@ -385,6 +411,21 @@ try {
       check(tag, '"/" focuses search', await page.evaluate(() => document.activeElement?.id === 'global-search'));
     }
     check(tag, 'no console or page errors', !errors.length, errors.slice(0, 5).join(' | '));
+    await context.close();
+  }
+
+  for (const [width, height, tag] of [[320, 640], [360, 740], [375, 812]]) {
+    const context = await browser.newContext({ viewport: { width, height }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+    const page = await context.newPage();
+    for (const route of ['/live', '/football']) {
+      await page.goto(`${base}#${route}`);
+      await page.waitForSelector('.league-head h3', { state: 'attached' });
+      await sleep(250);
+      const clipped = await page.evaluate(() => [...document.querySelectorAll('.league-head h3')]
+        .filter(h => h.scrollWidth > h.clientWidth + 1)
+        .map(h => h.innerText.replace(/\s+/g, ' ').trim()));
+      check(tag, `league headers ellipsis instead of clip on ${route}`, clipped.length === 0, clipped.slice(0, 4).join(' | '));
+    }
     await context.close();
   }
 } finally {

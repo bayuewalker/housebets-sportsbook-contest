@@ -52,7 +52,7 @@ export function leagueGroup(league: string, fixtures: Fixture[], options: RowOpt
   return `<section class="league" aria-label="${esc(league)}">
     <header class="league-head">
       ${leagueFlag(league)}
-      <h3><span class="league-country">${esc(info?.country ?? sportLabel(sport))}</span><span class="sep" aria-hidden="true">·</span>${esc(league)}</h3>
+      <h3><span class="league-country">${esc(info?.country ?? sportLabel(sport))}</span><span class="sep" aria-hidden="true">·</span><span class="league-name">${esc(league)}</span></h3>
       <span class="league-count">${plural(fixtures.length, sport === 'Football' ? 'match' : 'event')}</span>
       ${star(`league:${league}`, league)}
     </header>
