@@ -36,7 +36,7 @@ function detail(b: Bet): string {
     ${b.settledAt ? `<div><dt>${b.status === 'cashed' ? 'Cashed out' : 'Settled'}</dt><dd>${esc(fullDate(b.settledAt))}</dd></div>` : ''}
     <div><dt>${b.status === 'open' ? 'Potential returns' : 'Full-odds return'}</dt><dd>${money(potential)} USDT</dd></div>
   </div>
-  ${b.status === 'cashed' ? `<p class="cash-history">${icon('coin')}Cashed out for <b>${money(b.return)} USDT</b> on a ${money(b.stake)} USDT stake, against ${money(potential)} USDT at full odds.</p>` : ''}
+  ${b.status === 'cashed' ? `<p class="cash-history">${icon('coin')}<span>Cashed out for <b>${money(b.return)} USDT</b> on a ${money(b.stake)} USDT stake, against ${money(potential)} USDT at full odds.</span></p>` : ''}
   ${b.status === 'open' && b.cashOffer > 0 ? `<div class="bet-detail-actions">${cashButton(b)}<span>Offer updates with the match. It always needs your confirmation.</span></div>` : ''}`;
 }
 

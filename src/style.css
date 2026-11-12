@@ -131,7 +131,7 @@ table { border-collapse: collapse; width: 100%; }
 .odds.full .odds-label { color: var(--text-2); font-size: 12.5px; }
 .outcomes.list .odds.full { flex-direction: row; justify-content: space-between; gap: 10px; padding: 8px 12px; text-align: left; }
 .outcomes.list .odds.full .odds-label { white-space: normal; font-size: 13px; }
-.odds.cell { min-height: 40px; width: 100%; }
+.odds.cell { min-height: 44px; width: 100%; }
 .odds.flash.up { animation: flash-up 1.2s ease-out; }
 .odds.flash.down { animation: flash-down 1.2s ease-out; }
 @keyframes flash-up { 0% { box-shadow: inset 0 0 0 1px var(--up); background: rgba(61, 220, 151, .18); } 100% { box-shadow: none; } }
@@ -736,7 +736,11 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .wallet-btn { display: none; }
   .topbar-end { gap: 4px; }
   .icon-btn { width: 44px; height: 44px; }
-  .avatar { width: 40px; height: 40px; }
+  .avatar { width: 44px; height: 44px; }
+  .market-tabs button, .filter-chip, .segmented button, .tabs button, .team-switch button, .panel-tabs button,
+  .quick-stakes button, .chip-main, .text-btn, .view-all, .btn.small, .crumbs a, .crumb-btn { min-height: 44px; }
+  .chip-x { width: 44px; height: 44px; }
+  .expand { width: 44px; height: 44px; }
   .bottom-nav {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 36; display: grid; grid-template-columns: repeat(5, 1fr);
     height: calc(var(--nav-h) + var(--safe-b)); padding-bottom: var(--safe-b); background: var(--shell); border-top: 1px solid var(--line);
