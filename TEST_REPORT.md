@@ -6,9 +6,20 @@ Frontend-only prototype. Data flow: UI action → in-memory state transition →
 
 Tooling: Node.js 24, pnpm 11.25.0, TypeScript, Vite 8, ESLint, the Node test runner via tsx, and Playwright Core 1.56.1 driving the system Google Chrome in headless mode.
 
-## 2026-11-08 finishing pass
+## 2026-11-12 final contest pass
 
-### Automated checks
+The official contest page was reread against the live product, with priority given to the 20-point Match page (first tie-break), the 20-point Betslip + My Bets page, and the 15-point Housebets feel (second tie-break). Suggestions that conflict with the brief—especially live statistics, trackers and other explicitly excluded widgets—were rejected.
+
+Changes verified in this pass:
+
+- Football remains visibly active in the desktop and phone navigation while viewing a football Match Center.
+- Market-category pills stay available while scrolling the Match Center.
+- A changed selection shows the live price as **new** and previews the exact **Return after acceptance** before the player accepts it; placement remains blocked.
+- Cash Out is a distinct offer view rather than a copy of Open, while Settled demonstrates both won and lost singles.
+- Selection removal uses a larger 40px target.
+- Browser coverage increased to **176/176 passed** at 1440×1000 and 390×844.
+
+### Current automated checks
 
 | Check | Result |
 | --- | --- |
@@ -17,7 +28,7 @@ Tooling: Node.js 24, pnpm 11.25.0, TypeScript, Vite 8, ESLint, the Node test run
 | `pnpm lint` | PASS |
 | `pnpm test` | **29 passed, 0 failed** (25 engine, 4 session) |
 | `pnpm build` | PASS |
-| `pnpm qa:browser` against the local build | **164/164 passed** |
+| `pnpm qa:browser` against the local build | **176/176 passed** on the 12 November final pass |
 
 New behavioural tests: a suspended changed selection is never silently accepted; repeat placement never double-debits; one receipt per single with correct returns and unique IDs; search match reasons; removing suspended picks keeps open picks and stakes; the live feed never moves a selected price (200 iterations), clears stale markers, stops when nothing is live, and can be limited to on-screen prices.
 

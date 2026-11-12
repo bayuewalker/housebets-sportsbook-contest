@@ -53,7 +53,7 @@ All captured by `pnpm qa:browser` with headless Chrome at exactly 1440×1000 (de
 ## 6. QA summary
 
 - 29 behavioural tests, TypeScript, ESLint and the production build pass after a frozen-lockfile install.
-- 164 automated browser checks pass across 1440px and 390px: every page, filter, search, follow, market category, odds toggle, stake validation, changed/suspended/failed/placed states, cash out, settlement, persistence, dialogs, Escape and focus return, the live price feed, overflow, minimum text size, touch-target size, and the phone betslip bar vs bottom navigation.
+- 176 automated browser checks pass across 1440px and 390px: every page, filter, search, follow, sticky market categories and active navigation, odds toggle, stake validation, changed-price and revised-return review, suspended/failed/placed states, distinct Cash Out offers, won/lost history, settlement, persistence, dialogs, Escape and focus return, the live price feed, overflow, minimum text size, touch-target size, and the phone betslip bar vs bottom navigation.
 - Details and limits: `TEST_REPORT.md`. Requirement-by-requirement status: `REQUIREMENTS_AUDIT.md`.
 
 ## 7. Known limitations

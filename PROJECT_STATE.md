@@ -1,10 +1,10 @@
 # HOUSE//LIVE Project State
 
-Updated: 2026-11-08
+Updated: 2026-11-12
 
 ## Current outcome
 
-**SUBMISSION READY — awaiting owner approval.** All five linked pages, the single-bet engine and every required state are implemented. They pass 29 behavioural tests and 164 browser checks at exactly 1440px and 390px. Nothing has been submitted to the contest.
+**SUBMISSION READY — awaiting owner approval.** All five linked pages, the single-bet engine and every required state are implemented. They pass 29 behavioural tests and 176 browser checks at exactly 1440px and 390px. Nothing has been submitted to the contest.
 
 ## Milestones
 
@@ -13,6 +13,7 @@ Updated: 2026-11-08
 - [x] Implement changed odds, suspension, failure/retry, settlement, cash out, loading and no-live states.
 - [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (7 November).
 - [x] Finishing pass (8 November): Housebets-style shell and brand mark, phone bottom navigation, 11px text floor, receipts, retry, simulated live price feed, focus handling, and exact-width browser QA with screenshots.
+- [x] Final contest audit (12 November): reread the live scorecard; kept stats/trackers out of scope; strengthened Match navigation and sticky categories, changed-odds return review, Cash Out differentiation and touch targets.
 - [x] Correct contest rules and asset provenance in the docs.
 - [x] Merge the finishing pass to `main`, republish `gh-pages` and verify the public site.
 - [ ] Owner review, approval and submission (owner only).

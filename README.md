@@ -34,8 +34,8 @@ pnpm dev
 | Sports Home | `#/sports` | Main-event hero, Live now, Starting soon, top competitions, sport filters, search with match reasons, following |
 | Live | `#/live` | Every in-play fixture with ticking clocks, sport/competition filters with live counts, Starting soon fallback |
 | Football | `#/football` | Five required league tabs, match-result odds on every row, follow teams/competitions |
-| Match Center | `#/match/ars-bha` | Scoreboard and period, six market categories, live price movement, changed/suspended states |
-| Betslip + My Bets | `#/bets` | Stakes, quick stakes, explicit odds acceptance, placement receipt, retry, open/settled/cash-out history |
+| Match Center | `#/match/ars-bha` | Scoreboard and period, six sticky market categories, live price movement, changed/suspended states |
+| Betslip + My Bets | `#/bets` | Stakes, quick stakes, explicit odds/return acceptance, placement receipt, retry, distinct open/settled/cash-out views |
 
 The shell has a Housebets-style top bar (brand mark, Casino/Sports switch, simulated wallet, Deposit and profile), a left navigation and a right betslip rail on desktop. On phones, a bottom navigation (Menu, Sports, Casino, Chat, Search) sits under a persistent betslip bar that opens a bottom sheet. Casino, Chat, Deposit and profile open explanatory panels only; nothing outside the sportsbook is transactional.
 
