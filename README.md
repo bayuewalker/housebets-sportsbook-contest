@@ -27,7 +27,7 @@ pnpm dev
 
 `pnpm qa:browser` tests the existing `dist/` build, so run `pnpm build` first. It serves `dist/`, drives a local Chrome (Playwright Core) through every page and state at 1440×1000 and 390×844, and exits non-zero on any failed check. Set `QA_SCREENSHOTS=docs/screenshots` to refresh the screenshots, `QA_URL=<site>` to test a deployed site, and `CHROME_PATH` if Chrome is not in a standard location.
 
-`pnpm qa:stress` uses the same setup for robustness at both widths. It opens every category on all nine Match Centers and tests rapid taps, double-clicking Place, typing a stake during live price ticks, back/forward navigation, resizing, corrupt saved data, console errors and failed requests.
+`pnpm qa:stress` uses the same setup for robustness at both widths. It opens every category on all nine Match Centers and tests rapid taps, double-clicking Place, typing a stake during live price ticks, back/forward navigation, resizing, corrupt saved data, console errors and failed requests. It then loads all five pages at eight more viewports, from 320px phones and phone landscape through tablet and compact desktop to 1920px, and checks for overflow and truncated team names.
 
 ## Pages
 

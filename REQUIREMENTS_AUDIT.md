@@ -4,7 +4,7 @@ Audit date: 12 November 2026. Owner: bayuewalker. Auditor: final contest pass on
 
 ## Verdict
 
-**SUBMISSION READY, pending owner approval.** Every required page, feature and state is implemented and verified in a real browser at exactly 1440px and 390px (178 automated checks plus a 28-check stress sweep), plus 29 behavioural tests. Brand alignment is an original interpretation because no official starter pack was located; this is disclosed and is not a blocker. No score is claimed.
+**SUBMISSION READY, pending owner approval.** Every required page, feature and state is implemented and verified in a real browser at exactly 1440px and 390px (178 automated checks), plus a 36-check stress and responsive sweep from 320px to 1920px, plus 29 behavioural tests. Brand alignment is an original interpretation because no official starter pack was located; this is disclosed and is not a blocker. No score is claimed.
 
 ## Sources
 
@@ -68,7 +68,7 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 - `pnpm typecheck`, `pnpm lint`, `pnpm build`: pass.
 - `pnpm test`: 29 passed, 0 failed (25 engine, 4 session).
 - `pnpm qa:browser`: 178/178 checks passed (local build, headless Chrome, 1440×1000 and 390×844).
-- `pnpm qa:stress`: 28/28 checks passed (every Match Center and category, rapid and held taps, double placement, live-tick typing, history, resizing, corrupt storage, no errors or failed requests).
+- `pnpm qa:stress`: 36/36 checks passed (every Match Center and category, rapid and held taps, double placement, live-tick typing, history, resizing, corrupt storage, no errors or failed requests, and all five pages without overflow or truncated team names at 320, 360, 768, 1051, 1180, 1280 and 1920px plus 844×390 landscape).
 
 Public release `b26c52f` → `gh-pages` `38b9a59`: `pnpm pages:verify` passed, and `pnpm qa:browser` passed 176/176 against the live URL.
 

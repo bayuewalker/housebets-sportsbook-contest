@@ -123,6 +123,31 @@ try {
     check(tag, 'no failed or 4xx/5xx requests', !realFailures.length, realFailures.slice(0, 5).join(' | '));
     await context.close();
   }
+
+  // Responsive sweep beyond the two contest widths, including either side of each breakpoint
+  for (const [width, height] of [[320, 640], [360, 740], [768, 1024], [1051, 800], [1180, 820], [1280, 800], [1920, 1080], [844, 390]]) {
+    const tag = `${width}×${height}`;
+    const touch = width <= 932;
+    const context = await browser.newContext({ viewport: { width, height }, isMobile: touch, hasTouch: touch });
+    const page = await context.newPage();
+    const problems = [];
+    for (const route of ['/sports', '/live', '/football', '/match/ars-bha', '/bets']) {
+      await page.goto(`${base}#${route}`);
+      await page.waitForSelector('#page-title', { state: 'attached' });
+      const r = await page.evaluate(() => {
+        const vw = document.documentElement.clientWidth;
+        const scrolls = el => { for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) if (/(auto|scroll|hidden|clip)/.test(getComputedStyle(p).overflowX)) return true; return false; };
+        const offscreen = [...document.querySelectorAll('main *, .topbar *')].filter(el => { const b = el.getBoundingClientRect(); return b.width && (b.right > vw + 1 || b.left < -1) && !scrolls(el); }).length;
+        const cut = [...document.querySelectorAll('.row-match b')].filter(b => b.scrollWidth > b.clientWidth + 1).map(b => b.textContent);
+        return { overflow: document.documentElement.scrollWidth - vw, offscreen, cut };
+      });
+      if (r.overflow > 0) problems.push(`${route} overflows ${r.overflow}px`);
+      if (r.offscreen) problems.push(`${route} has ${r.offscreen} off-screen elements`);
+      if (r.cut.length) problems.push(`${route} truncates ${r.cut.join(', ')}`);
+    }
+    check(tag, 'all five pages fit with full team names', !problems.length, problems.slice(0, 4).join('; '));
+    await context.close();
+  }
 } finally {
   await browser.close();
   server?.kill();
