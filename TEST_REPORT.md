@@ -63,7 +63,7 @@ Screenshots from the passing run are in `docs/screenshots/` (34 files: five page
 
 ### Public release
 
-Source `22fc71610434c3ef4c2cb7fc435ec3dec0a7d8c4` was published as `gh-pages` `fb0c377f75b2ccc8354fa1e26d8281e5700351d4`. Before publishing, the release build passed `pnpm pages:prepare` (lint, 29 tests, build) and `pnpm qa:browser` 164/164. After publishing, `pnpm pages:verify` passed with all 4 public assets matching, and `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` passed 164/164 against the live site at 1440px and 390px.
+Source `b26c52f547839cd6bdef6185c2241cfad768cd26` was published as `gh-pages` `38b9a5982fc64f5a9fb3155b0eeebb6ae89a8aa7`. Before publishing, the clean merged release passed `pnpm pages:prepare` (lint, 29 tests, build) and `pnpm qa:browser` 176/176. After publishing, `pnpm pages:verify` passed with all 4 public assets matching, and `QA_URL=https://bayuewalker.github.io/housebets-sportsbook-contest/ pnpm qa:browser` passed 176/176 against the live site at 1440px and 390px.
 
 ### Limits
 
