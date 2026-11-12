@@ -24,6 +24,7 @@ Updated: 2026-11-12
 | --- | --- | --- | --- |
 | 7 November | `694b3ad47b8efade6b4fedd89bd69221d60a7e73` | `00de1670c55929ee5917fa08f06d32d40ff5e794` | `pnpm pages:verify` pass; public desktop sweep |
 | 8 November finishing pass ([PR #3](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/3)) | `22fc71610434c3ef4c2cb7fc435ec3dec0a7d8c4` | `fb0c377f75b2ccc8354fa1e26d8281e5700351d4` | `pnpm pages:verify` pass (4 public assets); `QA_URL=… pnpm qa:browser` 164/164 against the public site |
+| 12 November final contest pass ([PR #5](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/5)) | `b26c52f547839cd6bdef6185c2241cfad768cd26` | `38b9a5982fc64f5a9fb3155b0eeebb6ae89a8aa7` | `pnpm pages:verify` pass (4 public assets); `QA_URL=… pnpm qa:browser` 176/176 against the public site |
 
 Later documentation-only commits on `main` do not change the published app.
 

@@ -69,7 +69,7 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 - `pnpm test`: 29 passed, 0 failed (25 engine, 4 session).
 - `pnpm qa:browser`: 176/176 checks passed (local build, headless Chrome, 1440×1000 and 390×844).
 
-Public release `22fc716` → `gh-pages` `fb0c377`: `pnpm pages:verify` passed, and `pnpm qa:browser` passed 164/164 against the live URL.
+Public release `b26c52f` → `gh-pages` `38b9a59`: `pnpm pages:verify` passed, and `pnpm qa:browser` passed 176/176 against the live URL.
 
 ## Findings fixed in this pass
 
