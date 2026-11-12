@@ -5,7 +5,7 @@ const site = 'https://bayuewalker.github.io/housebets-sportsbook-contest/';
 
 async function get(url) {
   const response = await fetch(url, {
-    headers: { 'User-Agent': 'HOUSE-LIVE-release-verification', 'Cache-Control': 'no-cache' },
+    headers: { 'User-Agent': 'housebets-release-verification', 'Cache-Control': 'no-cache' },
     signal: AbortSignal.timeout(20000),
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
