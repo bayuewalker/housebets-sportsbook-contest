@@ -38,6 +38,8 @@ Typography: Manrope for display (headings, scores, team names), DM Sans for inte
 | ≤760px (390 target) | Drawer | Bar above bottom nav + sheet | 58px header; bottom nav `62px + safe-area inset`; 70px slip bar |
 | ≤359px | Drawer | Bar + sheet | Wordmark hidden, mark only |
 
+Fixture rows respond to the width of their own card, not the viewport. That matters because the sidebar and rail can squeeze the content column well below the screen width. Below 620px, a row stacks the odds under the teams, the same layout phones use. Below 340px, it also narrows the time column, lets long team names wrap instead of truncating, and drops the country prefix from the competition heading.
+
 `viewport-fit=cover` enables `env(safe-area-inset-*)`. Sheets are sized with `dvh` so they fit above an on-screen keyboard. Content gets bottom padding equal to the slip bar plus bottom nav, so nothing is hidden behind them.
 
 ## Components and states

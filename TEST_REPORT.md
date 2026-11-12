@@ -6,6 +6,23 @@ Frontend-only prototype. Data flow: UI action → in-memory state transition →
 
 Tooling: Node.js 24, pnpm 11.25.0, TypeScript, Vite 8, ESLint, the Node test runner via tsx, and Playwright Core 1.56.1 driving the system Google Chrome in headless mode.
 
+## 2026-11-12 responsive audit
+
+Goal: confirm the design holds up on desktop and mobile beyond the two contest widths. A temporary audit covered 26 viewports:
+- 320, 359, 360, 375, 390, 414, 430 and 600px
+- either side of every breakpoint: 760/761, 768, 820, 1024, 1050/1051, 1180 and 1280/1281px
+- 1366, 1440, 1600, 1920 and 2560px
+- phone landscape at 667×375, 844×390 and 932×430
+
+At each viewport it checked all five pages, three non-football Match Centers, the betslip in normal, changed-price and placed states, the demo, cash-out and menu dialogs, and Cash Out. It looked for page overflow, off-screen elements, clipped text, overlapping controls, text under 11px, targets under 24px, dialogs larger than the viewport, content hidden behind the fixed phone bars, and runtime errors.
+
+- **Fixed: team names were truncated in fixture rows at 761–900px and 1051–1180px.** At those widths the sidebar, and above 1050px the betslip rail as well, squeeze the content column. Even "Arsenal" and "Brighton" were cut off at 761px and 1051px. Fixture rows now respond to their card's own width with a container query, stacking the odds under the teams below 620px.
+- **Fixed: at 320px, long names such as "Manchester United" were truncated** and group headings wrapped their match count. Below 340px, names now wrap, the time column is narrower, and the heading shows the competition only.
+- **Fixed: the phone menu's brand link spanned underneath the close button.** It is now sized to its content.
+- After the fixes, the audit found nothing at any of the 26 viewports. It deliberately ignores three things: odds labels ending in "…" inside compact odds buttons, content scrolling under the fixed phone bars, and tabs clipped inside their horizontal scroller.
+- `pnpm qa:stress` gained a permanent responsive sweep of 8 checks. It loads all five pages at 320×640, 360×740, 768×1024, 1051×800, 1180×820, 1280×800, 1920×1080 and 844×390, and checks for page overflow, off-screen elements and truncated team names. It now has **36 checks**. Against the previous public build, the new checks failed at 320, 768 and 1051px, which confirms they catch the bug.
+- The 1440px and 390px layouts and screenshots are unchanged.
+
 ## 2026-11-12 stability sweep
 
 Goal: confirm everything works smoothly with no errors, beyond the scripted happy paths.
@@ -49,7 +66,7 @@ Changes verified in this pass:
 | `pnpm test` | **29 passed, 0 failed** (25 engine, 4 session) |
 | `pnpm build` | PASS |
 | `pnpm qa:browser` against the local build | **178/178 passed** after the 12 November stability fix |
-| `pnpm qa:stress` against the local build | **28/28 passed** |
+| `pnpm qa:stress` against the local build | **36/36 passed** (28 interaction checks plus 8 responsive viewports) |
 
 New behavioural tests: a suspended changed selection is never silently accepted; repeat placement never double-debits; one receipt per single with correct returns and unique IDs; search match reasons; removing suspended picks keeps open picks and stakes; the live feed never moves a selected price (200 iterations), clears stale markers, stops when nothing is live, and can be limited to on-screen prices.
 

@@ -514,7 +514,7 @@ main:focus{outline:none}
 .profile-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .profile-actions .button{font-size:13px;padding:10px}
 .drawer-nav{margin:20px 0 4px}
-.menu-modal .brand{font-size:21px}
+.menu-modal .brand{width:max-content;font-size:21px}
 .panel-history-link{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:18px;padding-top:16px;font-size:14px;font-weight:700;color:var(--cyan);border-top:1px solid var(--line-2)}
 .panel-history-link .icon{width:16px}
 .toast{position:fixed;left:50%;bottom:24px;z-index:100;transform:translateX(-50%);display:flex;align-items:center;gap:9px;max-width:min(90vw,460px);padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;color:var(--cyan-ink);background:#c6fbfd;box-shadow:0 12px 40px #0008}
@@ -699,6 +699,21 @@ main:focus{outline:none}
 
 @media(max-width:359px){
   .wordmark{display:none}
+}
+
+/* Sidebar + rail can squeeze a group well below the viewport width, so stack by the group's own width. */
+.fixture-group{container:fixtures/inline-size}
+@container fixtures (max-width:620px){
+  .fixture-row{grid-template-columns:62px minmax(0,1fr) 40px;gap:8px;padding:12px}
+  .fixture-row .follow{width:40px;height:40px}
+  .fixture-row .odds-grid{grid-column:1/3}
+  .fixture-row .more-markets{min-height:48px;border:1px solid var(--line-2)}
+}
+@container fixtures (max-width:340px){
+  .fixture-row{grid-template-columns:54px minmax(0,1fr) 40px}
+  .row-match b{white-space:normal;overflow-wrap:anywhere;line-height:1.2}
+  .group-heading h3>span{display:none}
+  .group-count{white-space:nowrap}
 }
 
 @media(prefers-reduced-motion:reduce){
