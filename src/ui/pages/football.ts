@@ -1,6 +1,6 @@
 import { leagues } from '../../data';
 import { icon } from '../../icons';
-import { esc, plural } from '../format';
+import { esc } from '../format';
 import { isLive, state, ui, type FootballMarket } from '../state';
 import { emptyState, leagueFlag, skeleton } from '../components/common';
 import { leagueGroup } from '../components/fixtures';
@@ -21,11 +21,13 @@ export function footballPage(): string {
       ${league ? leagueFlag(league) : icon('ball')}${esc(label)}<b>${count}</b>
     </button>`;
   };
+  const scopeCount = inScope.length;
+  const scopeNote = ui.footballScope === 'upcoming' ? 'today & live' : 'matches';
   const scope = (value: 'upcoming' | 'all', label: string) =>
     `<button data-action="football-scope" data-scope="${value}" class="${ui.footballScope === value ? 'active' : ''}" aria-pressed="${ui.footballScope === value}">${label}</button>`;
   return `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/sports">Sports</a>${icon('chevron')}<span aria-current="page">Soccer</span></nav>
-    <h1 id="page-title" tabindex="-1" class="page-title">${icon('ball')}Soccer <span>${plural(football.length, 'match')} · ${football.filter(isLive).length} live</span></h1>
-    <div class="filter-chips" role="group" aria-label="Competitions">${chip('', 'All leagues')}${leagues.map(l => chip(l, l)).join('')}</div>
+    <h1 id="page-title" tabindex="-1" class="page-title">${icon('ball')}Soccer <span><b class="scope-count">${scopeCount}</b> ${scopeNote} · ${football.filter(isLive).length} live</span></h1>
+    <div class="filter-chips" role="group" aria-label="Competitions">${chip('', ui.footballScope === 'upcoming' ? 'Today & live' : 'All leagues')}${leagues.map(l => chip(l, l)).join('')}</div>
     <div class="list-controls">
       <label class="select"><span>Market</span>
         <select id="football-market" aria-label="Market shown on each match">${MARKETS.map(([v, l]) => `<option value="${v}" ${ui.footballMarket === v ? 'selected' : ''}>${l}</option>`).join('')}</select>

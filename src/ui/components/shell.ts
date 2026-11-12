@@ -1,6 +1,6 @@
 import { sportLabel, sports, type Sport } from '../../data';
 import { totalReturn, totalStake, resolve } from '../../engine';
-import { brandMark, icon, sportIcon } from '../../icons';
+import { brandLogo, brandMark, icon, sportIcon } from '../../icons';
 import { esc, money, plural, timeZone } from '../format';
 import { currentFixture, isFavorite, liveFixtures, openBets, page, state, ui } from '../state';
 
@@ -19,7 +19,7 @@ export function topbar(): string {
   return `<header class="topbar">
     <div class="topbar-start">
       <button class="icon-btn rail-toggle" data-action="rail" aria-label="${ui.railExpanded ? 'Collapse' : 'Expand'} navigation" aria-expanded="${ui.railExpanded}">${icon('rail')}</button>
-      <a class="brand" href="#/sports" aria-label="Housebets Sports home">${brandMark()}${wordmark()}</a>
+      <a class="brand" href="#/sports" aria-label="Housebets Sports home">${brandLogo()}${brandMark()}${wordmark()}</a>
     </div>
     <button class="prize" data-action="info" data-topic="Prize" aria-haspopup="dialog" aria-label="Weekly Prize, 50,000 dollars, ${nextMondayCountdown()}">
       <span class="prize-icon">${icon('trophy')}</span>
@@ -31,6 +31,7 @@ export function topbar(): string {
         <span class="coin">${icon('coin')}</span><b>${money(s.balance)}</b><span class="unit">USDT</span>${icon('down', 'caret')}
       </button>
       <button class="btn accent wallet-btn" data-action="wallet" aria-haspopup="dialog">${icon('wallet')}<span>Wallet</span></button>
+      <button class="prize-compact" data-action="info" data-topic="Prize" aria-haspopup="dialog" aria-label="Weekly Prize, 50,000 dollars">${icon('trophy')}<b>$50,000</b></button>
       <button class="icon-btn vip" data-action="info" data-topic="VIP" aria-haspopup="dialog" aria-label="VIP club">${icon('crown')}</button>
       <button class="icon-btn avatar" data-action="info" data-topic="Profile" aria-haspopup="dialog" aria-label="Demo profile">${icon('profile')}</button>
       <button class="icon-btn panel-toggle" data-action="panel" aria-label="${ui.panelHidden ? 'Show' : 'Hide'} side panel" aria-expanded="${!ui.panelHidden}">${icon('panel')}</button>
@@ -150,7 +151,7 @@ export function mobileSlipBar(): string {
 
 export function footer(): string {
   return `<footer class="site-footer">
-    <span class="footer-brand">${brandMark()}${wordmark()}</span>
+    <span class="footer-brand">${brandLogo()}</span>
     <p>Sportsbook design concept · sample fixtures and odds · simulated USDT balance</p>
     <p>Times in your time zone (${esc(timeZone())}) · Decimal odds · Singles only</p>
   </footer>`;

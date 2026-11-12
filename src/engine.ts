@@ -233,7 +233,10 @@ export function toggleSuspension(s: State): void {
   s.revision++;
 }
 
-const searchable = (f: Fixture) => [f.home, f.away, f.homeShort, f.awayShort, f.league, f.sport, ...f.players, ...f.markets.map(m => m.name)];
+const searchable = (f: Fixture) => [
+  f.home, f.away, f.homeShort, f.awayShort, f.league, f.sport, ...f.players,
+  ...f.markets.flatMap(m => [m.name, ...m.outcomes.map(o => o.label)]),
+];
 
 export function searchFixtures(fixtures: Fixture[], query: string): Fixture[] {
   const q = query.trim().toLocaleLowerCase();
@@ -249,8 +252,17 @@ export function searchReason(f: Fixture, query: string): string {
   if (player) return `Player · ${player}`;
   if (has(f.league)) return 'Competition';
   if (has(f.sport)) return 'Sport';
-  const market = f.markets.find(m => has(m.name));
-  return market ? `Market · ${market.name}` : '';
+  const market = f.markets.find(m => has(m.name) || m.outcomes.some(o => has(o.label)));
+  if (!market) return '';
+  const outcome = market.outcomes.find(o => has(o.label));
+  if (outcome && !has(market.name)) return `Market · ${market.name} · ${outcome.label}`;
+  return `Market · ${market.name}`;
+}
+
+/** Favourite-team fixtures, then favourite competitions. Live comes before upcoming inside each group. */
+export function compareYourMatches(a: Fixture, b: Fixture, favorites: string[], live: (f: Fixture) => boolean): number {
+  const team = (f: Fixture) => (favorites.includes(`team:${f.home}`) || favorites.includes(`team:${f.away}`) ? 0 : 1);
+  return team(a) - team(b) || Number(live(b)) - Number(live(a)) || Date.parse(a.kickoff) - Date.parse(b.kickoff);
 }
 
 export function removeSuspended(s: State): number {

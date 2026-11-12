@@ -21,7 +21,7 @@ No UI framework, component library, sportsbook template, UI kit, icon set, stock
 | [typescript-eslint](https://typescript-eslint.io/) | 8.59.3 | TypeScript lint rules |
 | [tsx](https://tsx.is/) | 4.22.1 | Runs the TypeScript unit tests on the Node.js test runner |
 | [@types/node](https://www.npmjs.com/package/@types/node) | 22.19.19 | Node.js type definitions for scripts |
-| [Node.js](https://nodejs.org/) | 22.13 or later (QA ran on 22.23) | Runtime for build, tests and scripts |
+| [Node.js](https://nodejs.org/) | 22+ | Runtime for build, tests and scripts |
 | [pnpm](https://pnpm.io/) | 11.25.0 | Package manager |
 
 ## Quality assurance (not shipped)
@@ -47,6 +47,6 @@ GitHub Pages, deployed from the `gh-pages` branch root. No custom GitHub Actions
 
 ## Assets and data
 
-- The H mark, wordmark styling, every interface icon, team badges (colour + three-letter code) and country flags are original inline SVG/CSS made for this entry. No official Housebets, club, league or federation artwork is bundled.
-- The design follows the Housebets contest wireframes and the public Housebets look (deep teal-navy surfaces, cyan prices, top bar, slim left rail, right side panel). The official starter files / brand pack were not available to the author; the shell will be aligned with them if they are provided.
+- **Brand pack:** `brand/logo.svg` (official Housebets wordmark) and `brand/mark.svg` (official mark, also copied to `public/favicon.svg`). The top bar, left rail and side panel use this logo and mark, the pack cyan (`#02F7FD`) and 8px radii.
+- Interface icons, team badges (colour + three-letter code) and country flags are original inline SVG/CSS. No club, league or federation artwork is bundled.
 - All fixtures, odds, scores, bets and chat messages are sample data. Every player name is fictional. Club and competition names are used only as sample labels.

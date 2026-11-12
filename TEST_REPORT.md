@@ -16,16 +16,16 @@ The redesign replaced the shell, data, match page, slip and My bets, and split `
 | --- | --- |
 | `pnpm typecheck` | PASS |
 | `pnpm lint` | PASS |
-| `pnpm test` | **34 passed, 0 failed** (28 engine and data, 6 session) |
-| `pnpm build` | PASS (JS 95 KB, CSS 51 KB, four self-hosted font files) |
-| `pnpm qa:browser` against the local build | **123/123 passed** at 1440×1000 and 390×844 |
+| `pnpm test` | **35 passed, 0 failed** |
+| `pnpm build` | PASS (JS 110 KB, CSS 54 KB, four self-hosted font files) |
+| `pnpm qa:browser` against the local build | **158/158 passed** at 1440×1000 and 390×844 |
 | `pnpm qa:stress` against the local build | **52/52 passed** (both widths plus nine extra viewports) |
 
 These ran against the local build only. The public site still serves the previous release until the owner merges and publishes this branch.
 
 ### Unit tests (`tests/`)
 
-New or rewritten for the redesign: a new pick starts with an empty stake that blocks placement; five leagues with 3–10 matches each and 13 live events; the featured match offers 40–85 markets across six football groups; sample history covers won, lost and cashed-out bets across several sports and weeks; cash out records its time; fixtures are scheduled relative to the current hour; live total-goal and both-teams-to-score markets are never already decided; storage from the previous version is replaced with a fresh sample session. The earlier invariants still pass: singles are never multiplied, changed odds need fresh acceptance, suspension keeps the pick and blocks payment, failure leaves the balance unchanged, repeat placement never double-debits, and the live feed never moves a selected price.
+New or rewritten for the redesign: a new pick starts with an empty stake that blocks placement; five leagues with 3–10 matches each and 13 live events; Arsenal v Brighton offers 90–110 markets, every pre-match football fixture at least 60 and every live one at least 40, with Goalscorers, Players and Minutes; search matches market and outcome names; favourite-team fixtures sort first; sample history covers won, lost and cashed-out bets across several sports and weeks; cash out records its time; fixtures are scheduled relative to the current hour; live total-goal and both-teams-to-score markets are never already decided; storage from the previous version is replaced with a fresh sample session. The earlier invariants still pass: singles are never multiplied, changed odds need fresh acceptance, suspension keeps the pick and blocks payment, failure leaves the balance unchanged, repeat placement never double-debits, and the live feed never moves a selected price.
 
 ### Browser QA (`scripts/qa-browser.mjs`)
 
@@ -33,16 +33,16 @@ Each width starts from a fresh session: desktop 1440×1000, and phone 390×844 w
 
 | Area | What is checked |
 | --- | --- |
-| Shell and Home | Housebets wordmark and no old branding; no marketing copy; Figtree and Red Hat Display load; VIP crown and wallet; Weekly Prize, icon rail with Live 13 and panel tabs Bet slip / My bets / Chat (desktop); bottom navigation and slip bar (phone); sport tabs Home, Live 13, Soccer; three Favourites chips; section order Your matches, Featured, Live now, Starting soon; "View all 13" and "+N markets" counts match their targets; times in the viewer's time zone |
-| Live | 13 live events; 6 football; an HT match and an inline suspended row; a flag on every league header; Tennis filter shows 2 |
-| Soccer | Live & Upcoming / All changes the list (All = 29); five leagues with 3–10 matches; market dropdown switches rows to Over/Under and BTTS; LaLiga chip filters |
-| Match | Breadcrumb Soccer › England › Premier League › ARS–BHA; 40–85 markets; suspended markets present; goalscorer table with fictional names and Next / Anytime / 2+; every odds button has an `aria-label`; Goals tab, market search for "corner", single and collapse-all collapse; compact sticky score bar on phone scroll; live prices move with ▲/▼ arrows |
-| Slip | Empty stake with 0.00 placeholder; Place disabled with "Enter a stake"; chips 5/10/25/50/100; 0.5 rejected with the limits; chip sets 10 and returns stake × odds; phone: Place bet and Accept odds pinned to the bottom of the sheet; odds change blocks placement until accepted; suspended pick kept and blocked; armed failure leaves the balance unchanged and offers retry; retry debits once with one receipt line; phone: toast sits above the slip bar |
+| Shell and Home | Official Housebets wordmark and no old branding; no marketing copy; Figtree and Red Hat Display load; VIP crown and wallet; Weekly Prize (compact trophy and amount on phones), icon rail with Live 13 and panel tabs Bet slip / My bets / Chat (desktop); bottom navigation and slip bar (phone); sport tabs Home, Live 13, Soccer; three Favourites chips; section order Your matches, Featured, Live now, Starting soon; Your matches leads with Arsenal, then live favourite competitions; five top competitions on one row; "View all 13" and "+N markets" counts match their targets; search for "Over 2.5" and "Both teams to score" names the market; times in the viewer's time zone |
+| Live | 13 live events; 6 football; an HT match and an inline suspended row; a flag on every league header; competition chips under the sport chips; Premier League chip count matches the rows; Tennis filter shows 2; Tennis plus Premier League shows an empty state |
+| Soccer | Today & live header and chip share one count; All = 29; five leagues with 3–10 matches; market dropdown switches rows to Over/Under and BTTS; LaLiga chip filters |
+| Match | Breadcrumb Soccer › England › Premier League › ARS–BHA with a back button and menu; 90–110 markets; Players, Minutes and Corners & cards; at least 9 goalscorer markets; no narrow orphan card; suspended markets present; goalscorer table with fictional names and Next / Anytime / 2+; every odds button has an `aria-label`; Goals tab, market search for "corner", single and collapse-all collapse; compact sticky score bar on phone scroll; live prices move with ▲/▼ arrows |
+| Slip | Empty stake with 0.00 placeholder; Place disabled with "Enter a stake"; chips 5/10/25/50/100; 0.5 rejected with the limits; chip sets 10 and returns stake × odds; the amount and USDT stay on one line for Potential returns and Returns after accepting; phone: Place bet and Accept odds pinned to the bottom of the sheet; odds change blocks placement until accepted; suspended pick kept and blocked; a selected suspended odds button keeps its label and lock readable; armed failure leaves the balance unchanged and offers retry; retry debits once with one receipt line; phone: toast sits above the slip bar |
 | Bet slip & My bets | Slip and history on one page; columns Placed / Bet / Odds / Stake / Returns / Result; four open bets; date filter options and Today; Settled shows won highlights; sport and 7-day filters narrow the list; an expanded row shows "Cashed out for 38.40 USDT"; cash out credits 31.20 once and moves the bet to Settled |
 | Layout and accessibility | No horizontal overflow on any page; phone tap targets of at least 44px (odds, navigation, tabs, top-bar buttons, selects, quick stakes); desktop keyboard focus ring and `/` shortcut |
 | Runtime | No page or console errors |
 
-Screenshots from the passing run are in `docs/screenshots/` (24 files).
+Screenshots from the passing run are in `docs/screenshots/` (28 files, including the live competition filter and a selected suspended price at both widths).
 
 ### Stress sweep (`scripts/qa-stress.mjs`)
 

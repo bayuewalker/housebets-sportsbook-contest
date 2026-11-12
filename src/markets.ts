@@ -207,15 +207,82 @@ export function footballMarkets(s: FootballState): Market[] {
     add(`eh${hcp < 0 ? 'm' : 'p'}1`, `Handicap (3-way) · ${hs} ${line(hcp)}`, 'Handicaps', [`${hs} ${line(hcp)}`, `Draw ${line(hcp)}`, `${as} ${line(-hcp)}`], [w, d, 1 - w - d]);
   }
 
-  // Goalscorers
+  // Goalscorers. Player lists only keep prices that are still a real chance, so a late match
+  // does not fill the card with impossible lines. Yes/no markets use the same near-certainty filter.
   const scorer = (team: 0 | 1, i: number) => (team === 0 ? lh : la) * remaining * playerWeights[i];
   const names = [...s.squads[0].map((n, i) => [n, scorer(0, i)] as const), ...s.squads[1].map((n, i) => [n, scorer(1, i)] as const)].sort((x, y) => y[1] - x[1]);
   const totalRate = (lh + la) * remaining;
+  const atLeast = (mu: number, k: number) => {
+    let term = Math.exp(-mu);
+    let cdf = 0;
+    for (let n = 0; n < k; n++) { cdf += term; term *= mu / (n + 1); }
+    return Math.max(0, 1 - cdf);
+  };
+  const playerList = (id: string, name: string, weight: (mu: number) => number, floor = 0.015) => {
+    const rows = names.map(n => [n[0], weight(n[1])] as const).filter(n => n[1] >= floor);
+    if (rows.length >= 1) add(id, name, 'Goalscorers', rows.map(n => n[0]), rows.map(n => n[1]), 'list');
+  };
+  // A brace or a hat-trick stays on the card as a long price when the match is already underway.
+  const ensureList = (id: string, name: string, weight: (mu: number) => number, floor: number) => {
+    const rows = names.map(n => [n[0], weight(n[1])] as const).sort((a, b) => b[1] - a[1]);
+    const kept = rows.filter(n => n[1] >= floor);
+    const pick = kept.length ? kept : rows.slice(0, 3);
+    add(id, name, 'Goalscorers', pick.map(n => n[0]), pick.map(n => n[1]), 'list');
+  };
   add('scorer', live ? 'Next goalscorer' : 'First goalscorer', 'Goalscorers', [...names.map(n => n[0]), 'No goalscorer'], [...names.map(n => (n[1] / totalRate) * (1 - noGoal)), noGoal], 'list');
   add('anytime', 'Anytime goalscorer', 'Goalscorers', names.map(n => n[0]), names.map(n => 1 - Math.exp(-n[1])), 'list');
-  const brace = names.map(n => [n[0], 1 - Math.exp(-n[1]) * (1 + n[1])] as const).filter(n => n[1] > 0.005);
-  if (brace.length) add('brace', 'To score 2 or more', 'Goalscorers', brace.map(n => n[0]), brace.map(n => n[1]), 'list');
+  ensureList('brace', 'To score 2 or more', mu => atLeast(mu, 2), 0.01);
   add('last', 'Last goalscorer', 'Goalscorers', [...names.map(n => n[0]), 'No goalscorer'], [...names.map(n => (n[1] / totalRate) * (1 - noGoal)), noGoal], 'list');
+  ensureList('hat', 'Hat-trick', mu => atLeast(mu, 3), 0.004);
+  playerList('header', 'To score a header', mu => 1 - Math.exp(-mu * 0.22));
+  playerList('outside', 'To score from outside the box', mu => 1 - Math.exp(-mu * 0.16));
+  if (!firstHalfDone) playerList('both-halves', 'To score in both halves', mu => (1 - Math.exp(-mu * 0.48)) * (1 - Math.exp(-mu * 0.52)));
+  else add('both-halves', 'Goal in both halves', 'Goalscorers', ['Yes', 'No'], [1 - noGoal, noGoal]);
+  for (const [side, squad, label] of [[0, s.squads[0], hs], [1, s.squads[1], as]] as const) {
+    const teamRate = (side === 0 ? lh : la) * remaining;
+    const rows = squad.map((n, i) => [n, scorer(side, i)] as const);
+    const teamNo = Math.exp(-teamRate);
+    const scored = side === 0 ? sh > 0 : sa > 0;
+    add(`team-scorer-${side}`, `${label} ${scored ? 'next' : 'first'} goalscorer`, 'Goalscorers', [...rows.map(n => n[0]), 'No goalscorer'], [...rows.map(n => (n[1] / Math.max(teamRate, 1e-9)) * (1 - teamNo)), teamNo], 'list');
+  }
+  add('header-next', live ? 'Next goal is a header' : 'First goal is a header', 'Goalscorers', ['Yes', 'No'], [0.22 * (1 - noGoal), 1 - 0.22 * (1 - noGoal)]);
+  add('outside-next', live ? 'Next goal from outside the box' : 'First goal from outside the box', 'Goalscorers', ['Yes', 'No'], [0.16 * (1 - noGoal), 1 - 0.16 * (1 - noGoal)]);
+  const penalty = 0.03 + 0.09 * remaining;
+  add('penalty', 'Penalty scored', 'Goalscorers', ['Yes', 'No'], [penalty, 1 - penalty]);
+
+  // Players — fictional squad names only. Each row is that player's price.
+  const playerProp = (id: string, name: string, prob: (mu: number, i: number) => number) => {
+    const rows = names.map((n, i) => [n[0], prob(n[1], i)] as const).filter(n => n[1] >= 0.02 && n[1] <= 0.94);
+    if (rows.length >= 2) add(id, name, 'Players', rows.map(n => n[0]), rows.map(n => n[1]), 'list');
+  };
+  playerProp('sot', 'Shots on target', mu => 1 - Math.exp(-Math.max(mu * 3.4, 0.35 * remaining)));
+  playerProp('sot2', '2+ shots on target', mu => atLeast(Math.max(mu * 2.4, 0.2 * remaining), 2));
+  playerProp('shots', 'Player shots', mu => 1 - Math.exp(-Math.max(mu * 5, 0.7 * remaining)));
+  playerProp('booked', 'To be booked', (_mu, i) => 1 - Math.exp(-(0.16 + (11 - i) * 0.012) * (0.35 + remaining)));
+  playerProp('assist', 'To assist', mu => 1 - Math.exp(-mu * 0.72));
+
+  // Minutes. Past windows are closed; what is left is the open part of the current window onwards.
+  const nowMin = live ? Math.min(s.minute, 89) : 0;
+  const lambda = lh + la;
+  for (const start of [0, 10, 20, 30, 40, 50, 60, 70, 80]) {
+    const end = start + 10;
+    if (nowMin >= end) continue;
+    const from = Math.max(start, nowMin);
+    const p = 1 - Math.exp(-lambda * ((end - from) / 90));
+    add(`min-${start}`, `Goal ${start}–${end}`, 'Minutes', ['Yes', 'No'], [p, 1 - p]);
+  }
+  const timeBands: Array<[string, number]> = [];
+  for (const start of [0, 10, 20, 30, 40, 50, 60, 70, 80]) {
+    const end = start + 10;
+    const from = Math.max(start, nowMin);
+    if (from >= end) continue;
+    const p = Math.exp(-lambda * ((from - nowMin) / 90)) - Math.exp(-lambda * ((end - nowMin) / 90));
+    if (p >= 0.02) timeBands.push([`${start}–${end}`, p]);
+  }
+  const noFurther = Math.exp(-lambda * ((90 - nowMin) / 90));
+  if (timeBands.length) {
+    add('goal-time', goals === 0 ? 'First goal time' : 'Next goal time', 'Minutes', [...timeBands.map(b => b[0]), 'No goal'], [...timeBands.map(b => b[1]), noFurther], 'list');
+  }
 
   // Corners & cards
   const cornerShare = lh / (lh + la);
@@ -245,6 +312,96 @@ export function footballMarkets(s: FootballState): Market[] {
   for (const [side, name, now] of [[0, hs, s.cards[0]], [1, as, s.cards[1]]] as const) {
     const l = now + 1.5;
     overUnder(`cards-team${side}`, `${name} cards · ${l}`, 'Corners & Cards', over(poisson(cardRate / 2), now, l));
+  }
+  const cornerOdd = cornerTotal.reduce((t, p, k) => t + ((cornersNow + k) % 2 === 1 ? p : 0), 0);
+  add('corners-oe', 'Total corners · odd/even', 'Corners & Cards', ['Odd', 'Even'], [cornerOdd, 1 - cornerOdd]);
+  const cover = (rateH: number, rateA: number, nowH: number, nowA: number, hcp: number) => {
+    const h = poisson(rateH);
+    const a = poisson(rateA);
+    let win = 0;
+    let lose = 0;
+    h.forEach((ph, i) => a.forEach((pa, j) => {
+      const d = nowH + i + hcp - (nowA + j);
+      if (d > 0) win += ph * pa;
+      else if (d < 0) lose += ph * pa;
+    }));
+    return win / Math.max(1e-9, win + lose);
+  };
+  const split3 = (nowH: number, nowA: number, rateH: number, rateA: number) => {
+    const h = poisson(rateH);
+    const a = poisson(rateA);
+    let home = 0;
+    let away = 0;
+    let tie = 0;
+    h.forEach((ph, i) => a.forEach((pa, j) => {
+      const d = nowH + i - (nowA + j);
+      if (d > 0) home += ph * pa;
+      else if (d < 0) away += ph * pa;
+      else tie += ph * pa;
+    }));
+    return [home, tie, away];
+  };
+  for (const hcp of [-2.5, -1.5, 0.5, 1.5, 2.5]) {
+    const pWin = cover(cornerRate * cornerShare, cornerRate * (1 - cornerShare), s.corners[0], s.corners[1], hcp);
+    add(`ch${hcp < 0 ? 'm' : 'p'}${Math.abs(hcp) * 10}`, `Corner handicap · ${line(hcp)}`, 'Handicaps', [`${hs} ${line(hcp)}`, `${as} ${line(-hcp)}`], [pWin, 1 - pWin]);
+  }
+  add('most-corners', 'Most corners', 'Corners & Cards', [hs, 'Tie', as], split3(s.corners[0], s.corners[1], cornerRate * cornerShare, cornerRate * (1 - cornerShare)));
+  add('most-cards', 'Most cards', 'Corners & Cards', [hs, 'Tie', as], split3(s.cards[0], s.cards[1], cardRate / 2, cardRate / 2));
+  if (live) {
+    const mainNow = Math.max(0.5, Math.floor(cornerRate) + 0.5);
+    for (const l of [mainNow - 1, mainNow, mainNow + 1, mainNow + 2]) {
+      if (l < 0.5) continue;
+      overUnder(`corners-now-${l * 10}`, `Corners from now · ${l}`, 'Corners & Cards', over(poisson(cornerRate), 0, l));
+    }
+    const cardMain = Math.max(0.5, Math.floor(cardRate) + 0.5);
+    for (const l of [cardMain, cardMain + 1, cardMain + 2]) {
+      overUnder(`cards-now-${l * 10}`, `Cards from now · ${l}`, 'Corners & Cards', over(poisson(cardRate), 0, l));
+    }
+  }
+
+  // Lines that stay bettable after the score has moved: the team still to score, the margin, and the rest of the match.
+  if (sh === 0) add('score-home', `${hs} to score`, 'Goals', ['Yes', 'No'], [final(h => h > 0), 1 - final(h => h > 0)]);
+  if (sa === 0) add('score-away', `${as} to score`, 'Goals', ['Yes', 'No'], [final((_h, a) => a > 0), 1 - final((_h, a) => a > 0)]);
+  if (sa === 0) add('wtn-home', `${hs} win to nil`, 'Popular', ['Yes', 'No'], [final((h, a) => h > a && a === 0), 1 - final((h, a) => h > a && a === 0)]);
+  if (sh === 0) add('wtn-away', `${as} win to nil`, 'Popular', ['Yes', 'No'], [final((h, a) => a > h && h === 0), 1 - final((h, a) => a > h && h === 0)]);
+  const oddHome = final(h => h % 2 === 1);
+  const oddAway = final((_h, a) => a % 2 === 1);
+  add('odd-home', `${hs} goals · odd/even`, 'Goals', ['Odd', 'Even'], [oddHome, 1 - oddHome]);
+  add('odd-away', `${as} goals · odd/even`, 'Goals', ['Odd', 'Even'], [oddAway, 1 - oddAway]);
+  const marginRows: Array<[string, number]> = [
+    [`${hs} by 1`, final((h, a) => h - a === 1)],
+    [`${hs} by 2`, final((h, a) => h - a === 2)],
+    [`${hs} by 3+`, final((h, a) => h - a >= 3)],
+    ['Draw', final((h, a) => h === a)],
+    [`${as} by 1`, final((h, a) => a - h === 1)],
+    [`${as} by 2`, final((h, a) => a - h === 2)],
+    [`${as} by 3+`, final((h, a) => a - h >= 3)],
+  ];
+  const margins = marginRows.filter(row => row[1] >= 0.025);
+  if (margins.length >= 3) add('margin', 'Winning margin', 'Goals', margins.map(row => row[0]), margins.map(row => row[1]), 'list');
+  const multiRows: Array<[string, number]> = [
+    ['0–1', final((h, a) => h + a <= 1)],
+    ['2–3', final((h, a) => h + a >= 2 && h + a <= 3)],
+    ['4–6', final((h, a) => h + a >= 4 && h + a <= 6)],
+    ['7+', final((h, a) => h + a >= 7)],
+  ];
+  const multiBands = multiRows.filter(row => row[1] >= 0.025);
+  if (multiBands.length >= 2) add('multi', 'Multigoals', 'Goals', multiBands.map(row => row[0]), multiBands.map(row => row[1]), 'list');
+  for (const hcp of [-2.5, -2, 2, 2.5]) {
+    const win = final((h, a) => diff(h, a) + hcp > 0);
+    const lose = final((h, a) => diff(h, a) + hcp < 0);
+    add(`ahx${hcp < 0 ? 'm' : 'p'}${Math.abs(hcp) * 10}`, `Asian handicap · ${line(hcp)}`, 'Handicaps', [`${hs} ${line(hcp)}`, `${as} ${line(-hcp)}`], [win / Math.max(1e-9, win + lose), lose / Math.max(1e-9, win + lose)]);
+  }
+  add('2h-dc', '2nd half double chance', 'Halves', [`${hs} or Draw`, `${hs} or ${as}`, `Draw or ${as}`], [sH + sD, sH + (1 - sH - sD), sD + (1 - sH - sD)].map(p => Math.min(0.96, p)));
+  if (live) {
+    const rh = sum(rest, (h, a) => h > a);
+    const rd = sum(rest, (h, a) => h === a);
+    const ra = Math.max(0, 1 - rh - rd);
+    add('rest-result', 'Rest of match result', 'Popular', [hs, 'Draw', as], [rh, rd, ra]);
+    add('rest-dc', 'Rest of match double chance', 'Popular', [`${hs} or Draw`, `${hs} or ${as}`, `Draw or ${as}`], [rh + rd, rh + ra, rd + ra].map(p => Math.min(0.96, p)));
+    for (const l of [0.5, 1.5, 2.5]) overUnder(`rest-${l * 10}`, `Rest of match goals · ${l}`, 'Goals', sum(rest, (h, a) => h + a > l));
+    const restBoth = sum(rest, (h, a) => h > 0 && a > 0);
+    add('rest-btts', 'Both teams to score · rest of match', 'Goals', ['Yes', 'No'], [restBoth, 1 - restBoth]);
   }
   return out;
 }

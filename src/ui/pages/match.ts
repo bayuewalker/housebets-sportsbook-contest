@@ -1,4 +1,4 @@
-import { categories, leagueInfo, sportLabel, type Fixture, type Market } from '../../data';
+import { categories, categoryLabel, leagueInfo, sportLabel, type Fixture, type Market } from '../../data';
 import { icon } from '../../icons';
 import { esc, plural } from '../format';
 import { clockText, currentFixture, isLive, state, ui } from '../state';
@@ -108,19 +108,44 @@ export function matchPage(): string {
     ? `<a href="#/football">${esc(sportLabel(f.sport))}</a>`
     : `<button class="crumb-btn" data-action="sport" data-sport="${esc(f.sport)}">${esc(sportLabel(f.sport))}</button>`;
   let scorersPlaced = false;
-  const cards = shown.map(m => {
+  const pieces: Array<{ html: string; wide: boolean }> = [];
+  for (const m of shown) {
     if (scorerTable && SCORER_IDS.includes(m.id)) {
-      if (scorersPlaced) return '';
+      if (scorersPlaced) continue;
       scorersPlaced = true;
-      return scorerCard(f, q);
+      pieces.push({ html: scorerCard(f, q), wide: true });
+      continue;
     }
-    return marketCard(f, m);
-  }).join('');
+    pieces.push({ html: marketCard(f, m), wide: m.layout === 'list' || m.outcomes.length > 6 });
+  }
+  let column = 0;
+  const spanRow = pieces.map(() => false);
+  pieces.forEach((piece, index) => {
+    if (piece.wide) {
+      if (column === 1) spanRow[index - 1] = true;
+      column = 0;
+    } else column = column === 1 ? 0 : 1;
+  });
+  if (column === 1) spanRow[pieces.length - 1] = true;
+  const cards = pieces.map((piece, index) => (spanRow[index] ? piece.html.replace('class="market ', 'class="market span-row ') : piece.html)).join('');
   const allCollapsed = shown.length > 0 && shown.every(m => ui.collapsed.has(SCORER_IDS.includes(m.id) && scorerTable ? 'scorers' : m.id));
   const tab = (value: typeof ui.category, label: string, count: number) =>
     `<button role="tab" aria-controls="market-list" data-focus="cat-${esc(value)}" aria-selected="${ui.category === value}" tabindex="${ui.category === value ? 0 : -1}" class="${ui.category === value ? 'active' : ''}" data-action="category" data-category="${esc(value)}">${esc(label)}<b>${count}</b></button>`;
+  const backHref = f.sport === 'Football' ? '#/football' : '#/sports';
+  const backLabel = f.sport === 'Football' ? 'Back to Soccer' : 'Back to Sports';
+  const leagueJump = f.sport === 'Football'
+    ? `<button data-action="league" data-league="${esc(f.league)}">${esc(info?.country ?? '')} · ${esc(f.league)}</button>`
+    : '';
   return `<nav class="crumbs" aria-label="Breadcrumb">
-      <a href="#/sports">Sports</a>${icon('chevron')}${sportLink}${icon('chevron')}<span>${esc(info?.country ?? '')}</span>${icon('chevron')}<span>${esc(f.league)}</span>${icon('chevron')}<span aria-current="page">${esc(f.homeCode)}–${esc(f.awayCode)}</span>
+      <a class="crumb-back" href="${backHref}" aria-label="${backLabel}">${icon('back')}</a>
+      <details class="crumb-drop">
+        <summary><span>${esc(sportLabel(f.sport))}</span>${icon('chevron')}<span>${esc(info?.country ?? '')}</span>${icon('chevron')}<span>${esc(f.league)}</span>${icon('chevron')}<span aria-current="page">${esc(f.homeCode)}–${esc(f.awayCode)}</span></summary>
+        <div class="crumb-menu">
+          <a href="#/sports">Sports</a>
+          ${sportLink}
+          ${leagueJump}
+        </div>
+      </details>
     </nav>
     <h1 id="page-title" tabindex="-1" class="sr-only">${esc(f.home)} v ${esc(f.away)}</h1>
     ${compactScore(f)}
@@ -128,7 +153,7 @@ export function matchPage(): string {
     <div class="market-toolbar">
       <div class="market-tabs" role="tablist" aria-label="Market groups">
         ${tab('All', 'All markets', f.markets.length)}
-        ${available.map(c => tab(c, c, f.markets.filter(m => m.category === c).length)).join('')}
+        ${available.map(c => tab(c, categoryLabel(c), f.markets.filter(m => m.category === c).length)).join('')}
       </div>
       <div class="market-tools">
         <div class="search small" role="search">

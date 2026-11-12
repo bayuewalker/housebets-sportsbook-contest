@@ -10,7 +10,7 @@ A five-page, frontend-only sportsbook design for the [Housebets Sportsbook Desig
 
 ## Run
 
-Use Node.js 22.13 or later and pnpm 11.25.0.
+Use Node.js 22+ and pnpm 11.25.0.
 
 ```sh
 corepack enable
@@ -32,13 +32,13 @@ pnpm dev
 
 | Page | Route | What it does |
 | --- | --- | --- |
-| Home | `#/sports` | Sport tabs under search, Favourites chips, Your matches, Featured carousel, Live now, Starting soon, Top competitions; search across teams, players, competitions and markets |
-| Live | `#/live` | 13 in-play events across six sports, grouped by sport and league with flags, HT status, inline suspended rows and sport filters |
-| Soccer | `#/football` | Five leagues (3–10 matches each), league chips, a market dropdown (Match result, Over/Under, Both teams to score) and a Live & Upcoming / All toggle |
-| Match | `#/match/ars-bha` | Breadcrumb, scoreboard, 33–58 markets per football match (47 on Arsenal v Brighton; late in a match, decided lines drop out) in six groups plus All markets, market search, collapsible cards, goalscorer table, suspended markets, live price movement and a compact sticky score bar on phones |
+| Home | `#/sports` | Sport tabs under search, Favourites chips, Your matches (favourite team, then favourite competitions, live before upcoming), Featured carousel, Live now, Starting soon, Top competitions; search across teams, players, competitions, markets and outcome names |
+| Live | `#/live` | 13 in-play events across six sports, grouped by sport and league with flags, HT status, inline suspended rows, and sport and competition filters |
+| Soccer | `#/football` | Five leagues (3–10 matches each), league chips, a market dropdown (Match result, Over/Under, Both teams to score) and a Today & live / All toggle. The header count and the Today & live chip count the same fixtures |
+| Match | `#/match/ars-bha` | Back button and breadcrumb, scoreboard, 94 markets on Arsenal v Brighton (every pre-match football fixture has at least 60; every live one at least 40) across Popular, Goals, Halves, Handicaps, Goalscorers, Corners & cards, Players and Minutes, market search, collapsible cards, goalscorer table, suspended markets, live price movement and a compact sticky score bar on phones |
 | Bet slip & My bets | `#/bets` | The slip beside a My bets table (Placed / Bet / Odds / Stake / Returns / Result) with Open/Settled tabs, date and sport filters, expandable rows and cash-out history |
 
-**Shell:** a top bar with the H mark and wordmark, Weekly Prize countdown, wallet (USDT), VIP crown and profile; a slim left icon rail; and a right side panel with **Bet slip | My bets | Chat** on desktop. Below 1100px the panel becomes a bottom slip bar and sheet; below 768px a bottom navigation replaces the rail. Casino, Weekly Prize, VIP, profile and Chat are informational previews; nothing outside the sportsbook transacts.
+**Shell:** a top bar with the official Housebets wordmark, Weekly Prize countdown (a compact trophy and amount on phones), wallet (USDT), VIP crown and profile; a slim left icon rail; and a right side panel with **Bet slip | My bets | Chat** on desktop. Below 1100px the panel becomes a bottom slip bar and sheet; below 768px a bottom navigation replaces the rail. Casino, Weekly Prize, VIP, profile and Chat are informational previews; nothing outside the sportsbook transacts.
 
 Favourites, bet history and the demo balance persist in `localStorage`. Unplaced picks and demo scenarios reset on reload. Times are shown in the viewer's own time zone.
 
@@ -51,10 +51,10 @@ The live feed moves one on-screen, unselected in-play price every few seconds wi
 ## Architecture
 
 - `src/data.ts`: 42 sample fixtures across six sports with fictional squads, kick-offs relative to the current hour.
-- `src/markets.ts`: Poisson-based football market generator (result, goals, halves, handicaps, goalscorers, corners and cards) and two-way markets for other sports.
+- `src/markets.ts`: Poisson-based football market generator (result, goals, halves, handicaps, goalscorers, corners and cards, player props and minute windows) and two-way markets for other sports.
 - `src/engine.ts`: state transitions, validation, decimal calculations and simulated transactions.
 - `src/session.ts`: validates the persisted balance, favourites and bet history.
-- `src/icons.ts`: original inline SVG icons and the H mark.
+- `src/icons.ts`: original inline SVG icons, plus the official wordmark and mark from `brand/`.
 - `src/ui/state.ts`, `format.ts`, `render.ts`, `events.ts`, `feed.ts`: UI state, formatting, rendering with focus restore, delegated events and the simulated live feed.
 - `src/ui/components/`: shell, fixtures, slip, My bets, side panel, dialogs and shared pieces.
 - `src/ui/pages/`: Home, Live, Soccer, Match and Bet slip & My bets.
@@ -74,6 +74,6 @@ To publish an update, from a clean checkout of the intended `main` commit run `p
 
 ## Provenance
 
-The design follows the contest wireframes and the public Housebets look. The official starter files / brand pack were not available, so none were used; the shell will be aligned with them if they are provided. Every icon, badge, flag and the H mark are original. Player names are fictional and all data is sample data. Multis, accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, match trackers and AI search are intentionally absent.
+The shell uses the Housebets brand pack in `brand/` (official wordmark and mark, cyan, 8px radii) and follows the contest wireframes. Interface icons, badges and flags are original. Player names are fictional and all data is sample data. Multis, accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, match trackers and AI search are intentionally absent.
 
 Tools, libraries and AI models are listed in `TOOLS.md`. See also `JUDGE_GUIDE.md`, `DESIGN_SYSTEM.md`, `TEST_REPORT.md`, `REQUIREMENTS_AUDIT.md`, `PROJECT_STATE.md` and `SUBMISSION.md`.

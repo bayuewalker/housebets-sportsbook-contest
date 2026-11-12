@@ -70,17 +70,38 @@ try {
         && getComputedStyle(document.body).fontFamily.includes('Figtree');
     }));
     check(tag, 'top bar has VIP crown and wallet', await page.locator('.topbar .vip').isVisible() && await page.locator('.wallet-pill').isVisible());
+    check(tag, 'official Housebets wordmark replaces the placeholder mark', await page.locator('.topbar .brand-logo svg [fill="#02F7FD"]').count() > 0 && await page.locator('.topbar .brand-mark').count() === 0);
     if (!mobile) {
       check(tag, 'top bar shows the Weekly Prize widget', /Weekly Prize/.test(await page.locator('.prize').innerText()));
       check(tag, 'slim left icon rail with Live count', await page.locator('.rail').isVisible() && (await page.locator('.rail .rail-count.live').innerText()) === '13');
       check(tag, 'right panel tabs: Bet slip | My bets | Chat', (await page.locator('.side-panel [role="tab"]').allInnerTexts()).map(t => t.replace(/\d+/g, '').trim()).join('|') === 'Bet slip|My bets|Chat');
     } else {
       check(tag, 'bottom navigation and slip bar visible', await page.locator('.bottom-nav').isVisible() && await page.locator('.slip-bar').isVisible());
+      const prize = await page.locator('.prize-compact').boundingBox();
+      const vip = await page.locator('.topbar .vip').boundingBox();
+      check(tag, 'compact Weekly Prize sits beside the VIP crown', await page.locator('.prize-compact').isVisible()
+        && /50,000/.test(await page.locator('.prize-compact').innerText())
+        && prize && vip && prize.x < vip.x && Math.abs(prize.y - vip.y) < 16);
     }
     check(tag, 'sport tabs under search start Home, Live 13, Soccer', /^Home\s*Live\s*13\s*Soccer/.test((await page.locator('.sport-tabs').innerText()).replace(/\n/g, ' ')));
     check(tag, 'favourites chips listed', await page.locator('.fav-chips .chip').count() === 3);
     const sections = await page.locator('.home-section .section-head h2').allInnerTexts();
     check(tag, 'dense home: Your matches, Featured, Live now, Starting soon', ['Your matches', 'Featured', 'Live now', 'Starting soon'].every((s, i) => sections[i]?.includes(s)), sections.join(' / '));
+    if (await page.locator('#your-matches [data-action="toggle-mine"]').count()) await tap('#your-matches [data-action="toggle-mine"]');
+    const yours = await page.locator('#your-matches .event-row').evaluateAll(rows => rows.map(row => ({
+      arsenal: /Arsenal/.test(row.innerText),
+      live: row.classList.contains('is-live'),
+    })));
+    const arsenalCount = yours.filter(row => row.arsenal).length;
+    const rest = yours.slice(arsenalCount);
+    const firstLater = rest.findIndex(row => !row.live);
+    const lastLive = rest.reduce((index, row, i) => (row.live ? i : index), -1);
+    check(tag, 'your matches lead with Arsenal, then live favourite competitions', arsenalCount >= 1 && yours.slice(0, arsenalCount).every(row => row.arsenal) && yours[0].live && (firstLater < 0 || lastLive < firstLater), JSON.stringify(yours.slice(0, 6)));
+    if (!mobile) {
+      const compRows = await page.locator('.competitions button').evaluateAll(els => new Set(els.map(el => Math.round(el.getBoundingClientRect().top))).size);
+      check(tag, 'top competitions sit on one row', await page.locator('.competitions button').count() === 5 && compRows === 1, String(compRows));
+    }
+    check(tag, 'top competitions label the full schedule', /8 scheduled/.test(await page.locator('.competitions').innerText()));
     check(tag, 'Live now "View all 13" is accurate', (await page.locator('a.view-all[href="#/live"]').innerText()).includes('View all 13'));
     const moreLabel = await page.locator('.event-row .more').first().getAttribute('aria-label');
     const moreCount = Number(moreLabel.match(/View all (\d+) markets/)?.[1]);
@@ -91,6 +112,16 @@ try {
     check(tag, 'times use the viewer time zone, not UTC', !/Times shown in UTC/.test(await page.locator('main').innerText()) && /Times in your time zone/.test(await page.locator('.site-footer').innerText()));
     check(tag, 'home has no horizontal overflow', await overflow() <= 0);
     await shot('home');
+    await page.locator('#global-search').fill('Over 2.5');
+    await sleep(150);
+    check(tag, 'search matches an outcome and names the market', await page.locator('.event-row').count() > 0
+      && /Market ·/.test(await page.locator('.match-reason').first().innerText())
+      && /Over 2\.5/.test(await page.locator('.match-reason').first().innerText()));
+    await page.locator('#global-search').fill('Both teams to score');
+    await sleep(150);
+    check(tag, 'search matches a market name', /Market · Both teams to score/.test(await page.locator('.match-reason').first().innerText()));
+    await page.locator('#global-search').fill('');
+    await sleep(100);
 
     // Live
     await visit('/live');
@@ -98,8 +129,22 @@ try {
     check(tag, 'six live football matches', await page.locator('.sport-block').first().locator('.event-row').count() === 6);
     check(tag, 'half-time status and an inline suspended row', await page.locator('.live-badge.is-ht').count() >= 1 && await page.locator('.event-row.is-suspended .tag.suspended').count() >= 1);
     check(tag, 'league headers carry country flags', await page.locator('.league-head svg.flag').count() === await page.locator('.league-head').count());
+    const sportBox = await page.locator('[aria-label="Filter live events by sport"]').boundingBox();
+    const compBox = await page.locator('[aria-label="Filter live events by competition"]').boundingBox();
+    check(tag, 'competition chips sit under the sport chips', sportBox && compBox && compBox.y > sportBox.y);
+    await tap('[data-action="live-comp"][data-league="Premier League"]');
+    const plCount = number(await page.locator('[data-action="live-comp"][data-league="Premier League"] b').innerText());
+    check(tag, 'competition filter counts and narrows live Premier League', plCount >= 1 && await page.locator('.event-row').count() === plCount && await page.locator('.league').count() === 1);
+    await shot('live-competition');
+    await tap('[data-action="live-comp"][data-league=""]');
     await tap('[data-action="live-sport"][data-sport="Tennis"]');
     check(tag, 'live sport filter narrows to tennis', await page.locator('.event-row').count() === 2);
+    await tap('[data-action="live-sport"][data-sport="All"]');
+    await tap('[data-action="live-comp"][data-league="Premier League"]');
+    await tap('[data-action="live-sport"][data-sport="Tennis"]');
+    check(tag, 'empty state when sport and competition do not overlap', /Nothing live in Premier League/.test(await page.locator('.empty h3').innerText()));
+    await tap('[data-action="live-comp-clear"]');
+    check(tag, 'clearing the competition shows that sport again', await page.locator('.event-row').count() === 2);
     check(tag, 'live page has no horizontal overflow', await overflow() <= 0);
     await tap('[data-action="live-sport"][data-sport="All"]');
     await shot('live');
@@ -107,9 +152,12 @@ try {
     // Soccer
     await visit('/football');
     const scoped = await page.locator('.event-row').count();
+    const scopeCount = number(await page.locator('.scope-count').innerText());
+    const chipCount = number(await page.locator('[data-action="league-filter"][data-league=""] b').innerText());
+    check(tag, 'soccer header and Today & live chip share one count', scopeCount === chipCount && scopeCount === scoped && /today & live/i.test(await page.locator('.page-title').innerText()) && /Today & live/.test(await page.locator('[data-action="league-filter"][data-league=""]').innerText()), `${scopeCount}/${chipCount}/${scoped}`);
     await tap('[data-action="football-scope"][data-scope="all"]');
     const all = await page.locator('.event-row').count();
-    check(tag, 'Live & Upcoming / All toggle changes the list', all === 29 && scoped < all, `${scoped} → ${all}`);
+    check(tag, 'Live & Upcoming / All toggle changes the list', all === 29 && scoped < all && number(await page.locator('.scope-count').innerText()) === 29, `${scoped} → ${all}`);
     const perLeague = await page.locator('.league').evaluateAll(groups => groups.map(g => g.querySelectorAll('.event-row').length));
     check(tag, 'five leagues with 3–10 matches each', perLeague.length === 5 && perLeague.every(n => n >= 3 && n <= 10), perLeague.join(','));
     await page.selectOption('#football-market', 'goals');
@@ -128,7 +176,10 @@ try {
     await visit('/match/ars-bha');
     check(tag, 'breadcrumb Soccer › England › Premier League › ARS–BHA', /Soccer\s*England\s*Premier League\s*ARS–BHA/.test((await page.locator('.crumbs').innerText()).replace(/\n/g, ' ')));
     const total = number(await page.locator('.market-tabs [data-category="All"] b').innerText());
-    check(tag, 'match page offers 40–85 markets', total >= 40 && total <= 85, String(total));
+    check(tag, 'match page offers 90–110 markets', total >= 90 && total <= 110, String(total));
+    check(tag, 'Players, Minutes and Corners & cards groups are listed', /Players/.test(await page.locator('.market-tabs').innerText()) && /Minutes/.test(await page.locator('.market-tabs').innerText()) && /Corners & cards/.test(await page.locator('.market-tabs').innerText()));
+    check(tag, 'goalscorer group has at least 9 markets', number(await page.locator('.market-tabs [data-category="Goalscorers"] b').innerText()) >= 9);
+    check(tag, 'match page has a back button and breadcrumb menu', await page.locator('.crumb-back').isVisible() && await page.locator('.crumb-drop summary').isVisible());
     check(tag, 'some markets are suspended', await page.locator('.market.is-suspended').count() >= 1);
     check(tag, 'goalscorer table lists fictional squad with Next / Anytime / 2+', /Theo Marlow/.test(await page.locator('.scorer-table').innerText()) && (await page.locator('.scorer-table thead th').allInnerTexts()).join('|') === 'Player|Next|Anytime|2+');
     const unlabelled = await page.locator('.odds:not([aria-label])').count();
@@ -156,6 +207,24 @@ try {
     for (let i = 0; i < 24 && !moved; i++) { await sleep(500); moved = await page.locator('main .odds.up, main .odds.down').count() > 0; }
     check(tag, 'live prices move with up/down arrows', moved && await page.locator('main .odds .move').count() > 0);
     check(tag, 'match page has no horizontal overflow', await overflow() <= 0);
+    if (!mobile) {
+      const orphans = await page.locator('#market-list .market').evaluateAll(els => {
+        const rows = new Map();
+        const width = document.querySelector('#market-list').getBoundingClientRect().width;
+        for (const el of els) {
+          if (el.hidden || !el.offsetParent) continue;
+          const box = el.getBoundingClientRect();
+          const key = Math.round(box.top);
+          const list = rows.get(key) ?? [];
+          list.push(box.width);
+          rows.set(key, list);
+        }
+        let bad = 0;
+        for (const widths of rows.values()) if (widths.length === 1 && widths[0] < width * 0.75) bad += 1;
+        return bad;
+      });
+      check(tag, 'market grid has no narrow orphan card', orphans === 0, String(orphans));
+    }
     await shot('match');
 
     // Bet slip states
@@ -170,8 +239,17 @@ try {
     await tap(`${mobile ? 'dialog' : '.side-panel'} [data-action="stake"][data-value="10"]`);
     s = slip();
     const pickOdds = Number((await s.locator('.pick-odds').innerText()).match(/(\d+\.\d{2})\s*$/)[1]);
+    const sameLine = async root => root.locator('.slip-totals .returns dd').evaluate(el => {
+      const small = el.querySelector('small');
+      if (!small) return false;
+      const value = el.getBoundingClientRect();
+      const unit = small.getBoundingClientRect();
+      // A block-level unit sits under the amount and is as wide as the row. Flex items report display:block, so the line is judged from the boxes.
+      return unit.top < value.bottom - 1 && unit.bottom > value.top + 1 && unit.left > value.left + 4 && unit.width < value.width * 0.75;
+    });
     check(tag, 'stake chip sets 10 USDT and returns stake × odds', (await s.locator('[data-stake]').inputValue()) === '10'
       && number(await s.locator('.slip-totals .returns').innerText()) === Math.round(pickOdds * 1000) / 100);
+    check(tag, 'slip total keeps the amount and USDT on one line', await sameLine(s) && /Potential returns/.test(await s.locator('.slip-totals .returns').innerText()));
     if (mobile) {
       const footer = await page.locator('dialog .slip-footer').boundingBox();
       const place = await page.locator('dialog [data-action="place"]').boundingBox();
@@ -181,6 +259,7 @@ try {
     await demo('move');
     s = await openSlip();
     check(tag, 'odds change blocks placement until accepted', await s.locator('[data-action="accept"]').isVisible() && await s.locator('[data-action="place"]').isDisabled());
+    check(tag, 'returns after accepting keep USDT on the same line', /Returns after accepting/.test(await s.locator('.slip-totals .returns').innerText()) && await sameLine(s));
     if (mobile) {
       const accept = await page.locator('dialog [data-action="accept"]').boundingBox();
       check(tag, 'Accept odds is pinned in the sheet footer', accept && accept.y + accept.height <= height);
@@ -191,6 +270,34 @@ try {
     s = await openSlip();
     check(tag, 'suspended selection is kept but cannot be placed', await s.locator('.pick.is-suspended').count() === 1 && await s.locator('[data-action="place"]').isDisabled());
     await shot('slip-suspended');
+    await closeSheet();
+    const selected = page.locator('main .odds.selected.suspended').first();
+    await selected.scrollIntoViewIfNeeded();
+    const readable = await selected.evaluate(el => {
+      const label = el.querySelector('.odds-label');
+      const lock = el.querySelector('.odds-price');
+      const parse = value => value.match(/[\d.]+/g).map(Number);
+      const lum = value => {
+        const [r, g, b] = parse(value).map(channel => {
+          const v = channel / 255;
+          return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const contrast = (color, background) => {
+        const hi = Math.max(lum(color), lum(background));
+        const lo = Math.min(lum(color), lum(background));
+        return (hi + 0.05) / (lo + 0.05);
+      };
+      const background = getComputedStyle(el).backgroundColor;
+      return {
+        text: label?.textContent?.trim() ?? '',
+        label: contrast(getComputedStyle(label).color, background),
+        lock: contrast(getComputedStyle(lock).color, background),
+      };
+    });
+    check(tag, 'selected suspended odds keep the label and lock readable', readable.text.length > 0 && readable.label >= 3 && readable.lock >= 3, JSON.stringify(readable));
+    await shot('suspended-selected');
     await demo('suspend');
     await demo('fail');
     s = await openSlip();

@@ -4,17 +4,17 @@ Updated: 2026-11-12
 
 ## Current outcome
 
-**Redesign ready for owner review** on branch `cursor/housebets-redesign-a1e1`. It passes 34 unit tests, 123 browser checks at exactly 1440px and 390px, and a 52-check stress and responsive sweep from 320px to 1920px. It is not merged, the public site still shows the previous release, and nothing has been submitted to the contest.
+**Redesign ready for owner review** on branch `cursor/housebets-redesign-a1e1`. It passes 35 unit tests, 158 browser checks at exactly 1440px and 390px, and a 52-check stress and responsive sweep from 320px to 1920px. It is not merged, the public site still shows the previous release, and nothing has been submitted to the contest.
 
 ## Milestones
 
 - [x] Read the brief and official screenshots; identify exclusions.
 - [x] Implement the five linked pages, the single-bet engine and every required state (5–8 November, working name HOUSE//LIVE).
 - [x] Publish to GitHub Pages from `gh-pages` / (root) and verify (releases below).
-- [x] Redesign (12 November): fictional players; Poisson-priced markets with 33–58 per football match; 42 fixtures with 13 live; Housebets shell with Figtree and Red Hat Display, icon rail, Weekly Prize, VIP crown and Bet slip / My bets / Chat panel; dense home; pinned phone slip footer; empty stake with chips; My bets table with filters and cash-out history; odds arrows, local time zone, modular `src/ui/`, 44px phone targets.
+- [x] Redesign (12 November): fictional players; Poisson-priced markets (94 on Arsenal v Brighton, at least 60 pre-match and 40 live); 42 fixtures with 13 live; Housebets shell with the official wordmark and mark, Figtree and Red Hat Display, icon rail, Weekly Prize, VIP crown and Bet slip / My bets / Chat panel; dense home; pinned phone slip footer; empty stake with chips; My bets table with filters and cash-out history; odds arrows, local time zone, modular `src/ui/`, 44px phone targets.
 - [x] Rewrite browser and stress QA for the redesign; refresh screenshots; `TOOLS.md`; Big idea draft.
+- [x] Align the top bar, left rail and side panel with the brand pack in `brand/` (official wordmark and mark).
 - [ ] Owner review and merge of the redesign PR.
-- [ ] Align the shell with the official starter files / brand pack once provided.
 - [ ] Publish the merged build to `gh-pages` and re-run `pages:verify` and both QA scripts against the public URL.
 - [ ] Owner approval and submission (owner only).
 
@@ -39,12 +39,11 @@ Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, cop
 - Original work. Public libraries, models and tools are fine if named in the note. Entries may be shared publicly under the entrant's alias.
 - Prize paid in USDT with no wagering. Results about 7 days after closing. Winners transfer code and design rights; non-winners keep their work.
 - Tie-breakers: the Match page, then "Feels like Housebets".
-- The official starter files / brand pack were not available to the author. The shell (top bar, left navigation, side panel) must follow them once provided.
+- The brand pack is in `brand/` (`logo.svg` wordmark, `mark.svg`). The top bar, left rail and side panel use it.
 - Out of scope: multis, accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, match trackers and AI search. Bet slip and My bets stay on one shared page/panel.
 
 ## Open risks
 
-- Brand fidelity: without the official pack, "Feels like Housebets" rests on an interpretation of the wireframes and public site.
 - Not tested on physical devices, Safari/Firefox or with a screen reader.
 
 ## Next step

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   acceptChanges, cashOut, driftOdds, initialState, moveOdds, placeBets, placementError, removeSuspended,
-  searchFixtures, searchReason, settle, stakeValue, toggleSelection, toggleSuspension, totalReturn, totalStake,
+  compareYourMatches, searchFixtures, searchReason, settle, stakeValue, toggleSelection, toggleSuspension, totalReturn, totalStake,
 } from '../src/engine.ts';
 
 /** Arsenal to win at 1.22 with a 10 USDT stake. */
@@ -161,9 +161,11 @@ test('sample history covers every result type across several sports and weeks', 
   for (const b of bets) assert.equal(b.status === 'open', b.settledAt === undefined, b.id);
 });
 
-test('search covers teams, players, competition and markets', () => {
+test('search covers teams, players, competitions, markets and outcome names', () => {
   const s = initialState();
-  for (const term of ['Arsenal', 'Marlow', 'Premier League', 'Total corners', 'Spurs']) assert.ok(searchFixtures(s.fixtures, term).length, term);
+  for (const term of ['Arsenal', 'Marlow', 'Premier League', 'Total corners', 'Spurs', 'Over 2.5', 'Both teams to score', 'corners']) {
+    assert.ok(searchFixtures(s.fixtures, term).length, term);
+  }
   assert.equal(searchFixtures(s.fixtures, 'ZZZ-NOT-A-TEAM').length, 0);
 });
 
@@ -178,13 +180,55 @@ test('five leagues with three to ten matches each, and thirteen live events', ()
   assert.equal(live.filter(f => f.sport === 'Football').length, 6);
 });
 
-test('the featured match offers 40 to 85 markets across six football groups', () => {
-  const [ars] = initialState().fixtures;
-  assert.ok(ars.markets.length >= 40 && ars.markets.length <= 85, String(ars.markets.length));
-  assert.equal(new Set(ars.markets.map(m => m.category)).size, 6);
+test('football market depth matches the contest bar', () => {
+  const football = initialState().fixtures.filter(f => f.sport === 'Football');
+  const ars = football.find(f => f.id === 'ars-bha')!;
+  assert.equal(ars.clock, '52:00');
+  assert.ok(ars.markets.length >= 90 && ars.markets.length <= 110, String(ars.markets.length));
+  for (const group of ['Popular', 'Goals', 'Halves', 'Handicaps', 'Goalscorers', 'Corners & Cards', 'Players', 'Minutes']) {
+    assert.ok(ars.markets.some(m => m.category === group), group);
+  }
+  const scorers = ars.markets.filter(m => m.category === 'Goalscorers');
+  assert.ok(scorers.length >= 9, String(scorers.length));
+  for (const name of ['goalscorer', 'anytime', 'last', '2 or more', 'hat-trick', 'header', 'outside the box', 'both halves']) {
+    assert.ok(scorers.some(m => m.name.toLocaleLowerCase().includes(name)), name);
+  }
+  assert.ok(ars.markets.some(m => m.category === 'Players' && /shots on target/i.test(m.name)));
+  assert.ok(ars.markets.some(m => m.category === 'Players' && /booked/i.test(m.name)));
+  assert.ok(ars.markets.some(m => m.category === 'Players' && /assist/i.test(m.name)));
+  assert.ok(ars.markets.some(m => m.category === 'Minutes' && /Goal \d+–\d+/.test(m.name)));
+  assert.ok(ars.markets.some(m => m.name === 'Next goal time' || m.name === 'First goal time'));
   assert.ok(ars.markets.some(m => m.suspended));
   assert.equal(new Set(ars.markets.map(m => m.id)).size, ars.markets.length);
-  for (const m of ars.markets) for (const o of m.outcomes) assert.ok(o.odds >= 1.02 && o.odds <= 151, `${m.id} ${o.odds}`);
+  for (const f of football) {
+    const floor = f.live ? 40 : 60;
+    assert.ok(f.markets.length >= floor, `${f.id} ${f.markets.length}`);
+    assert.ok(f.markets.filter(m => m.category === 'Goalscorers').length >= 9, `${f.id} scorers`);
+    assert.equal(new Set(f.markets.map(m => m.id)).size, f.markets.length, f.id);
+    for (const m of f.markets) {
+      assert.doesNotMatch(m.name, /special|outright|boost|bet builder|accumulator/i, m.name);
+      for (const o of m.outcomes) assert.ok(o.odds >= 1.02 && o.odds <= 151, `${f.id} ${m.id} ${o.odds}`);
+    }
+  }
+  const milan = football.find(f => f.id === 'mil-rom')!;
+  assert.equal(milan.clock, '74:00');
+  assert.ok(milan.markets.length >= 40, String(milan.markets.length));
+  assert.ok(milan.markets.some(m => /from now|rest of match|next goal/i.test(m.name)));
+});
+
+test('your matches put favourite teams before favourite competitions, live first', () => {
+  const s = initialState();
+  const mine = s.fixtures.filter(f => s.favorites.some(key => key === `team:${f.home}` || key === `team:${f.away}` || key === `league:${f.league}`));
+  mine.sort((a, b) => compareYourMatches(a, b, s.favorites, f => f.live));
+  const arsenal = mine.filter(f => f.home === 'Arsenal' || f.away === 'Arsenal');
+  assert.ok(arsenal.length >= 2);
+  assert.deepEqual(mine.slice(0, arsenal.length).map(f => f.id), arsenal.map(f => f.id));
+  assert.equal(arsenal[0].id, 'ars-bha');
+  assert.equal(arsenal[0].live, true);
+  const rest = mine.slice(arsenal.length);
+  const firstLater = rest.findIndex(f => !f.live);
+  const lastLive = rest.reduce((index, f, i) => (f.live ? i : index), -1);
+  if (firstLater >= 0) assert.ok(lastLive < firstLater);
 });
 
 test('empty and unknown selections cannot transact', () => {
@@ -248,6 +292,8 @@ test('search explains why each fixture matched', () => {
   assert.equal(searchReason(ars, 'Marlow'), 'Player · Theo Marlow');
   assert.equal(searchReason(ars, 'premier'), 'Competition');
   assert.equal(searchReason(ars, 'corners'), 'Market · Total corners · 9.5');
+  assert.match(searchReason(ars, 'Over 2.5'), /^Market · .+ · Over 2\.5$/);
+  assert.match(searchReason(ars, 'Both teams to score'), /Market · Both teams to score/);
   assert.equal(searchReason(ars, '  '), '');
 });
 

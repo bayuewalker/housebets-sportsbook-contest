@@ -16,6 +16,8 @@ export const ui = {
   query: '',
   /** Sport shown on the home page and on the live page; "All" shows every sport. */
   sport: 'All' as Sport | 'All',
+  /** Competition chip on the live page. Stays put when the sport changes, so an empty combination can be shown. */
+  competition: '',
   league: '',
   footballMarket: 'result' as FootballMarket,
   footballScope: 'upcoming' as 'upcoming' | 'all',
@@ -112,6 +114,7 @@ export function closeDialog() {
 export function clearFilters() {
   ui.query = '';
   ui.sport = 'All';
+  ui.competition = '';
   ui.league = '';
 }
 

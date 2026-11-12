@@ -1,5 +1,5 @@
 import { leagueInfo, leagues, sportLabel, type Fixture } from '../../data';
-import { searchFixtures } from '../../engine';
+import { compareYourMatches, searchFixtures } from '../../engine';
 import { icon, sportIcon } from '../../icons';
 import { esc, plural } from '../format';
 import { followsFixture, isLive, liveFixtures, state, ui } from '../state';
@@ -37,7 +37,7 @@ export function homePage(): string {
   if (ui.query) return searchResults();
   if (ui.sport !== 'All') return sportPage();
   const s = state();
-  const mine = s.fixtures.filter(followsFixture).sort((a, b) => Number(isLive(b)) - Number(isLive(a)) || byKickoff(a, b));
+  const mine = s.fixtures.filter(followsFixture).sort((a, b) => compareYourMatches(a, b, s.favorites, isLive));
   const featured = FEATURED.map(id => s.fixtures.find(f => f.id === id)!).filter(Boolean);
   const live = liveFixtures();
   const soon = s.fixtures.filter(f => !isLive(f) && Date.parse(f.kickoff) - Date.now() < SOON_HOURS * 3_600_000).sort(byKickoff);
@@ -66,7 +66,7 @@ export function homePage(): string {
       ${sectionHead('<span id="comp-title">Top competitions</span>')}
       <div class="competitions">${leagues.map(l => {
         const n = s.fixtures.filter(f => f.league === l).length;
-        return `<button data-action="league" data-league="${esc(l)}">${leagueFlag(l)}<span><b>${esc(l)}</b><small>${esc(leagueInfo[l].country)} · ${plural(n, 'match')}</small></span>${icon('chevron')}</button>`;
+        return `<button data-action="league" data-league="${esc(l)}">${leagueFlag(l)}<span><b>${esc(l)}</b><small>${esc(leagueInfo[l].country)} · ${n} scheduled</small></span>${icon('chevron')}</button>`;
       }).join('')}</div>
     </section>`;
 }

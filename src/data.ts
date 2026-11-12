@@ -1,7 +1,7 @@
 import { footballMarkets, price, twoWayMarkets } from './markets';
 
 export type Sport = 'Football' | 'Tennis' | 'Basketball' | 'Baseball' | 'American Football' | 'Esports';
-export type Category = 'Popular' | 'Goals' | 'Halves' | 'Handicaps' | 'Goalscorers' | 'Corners & Cards' | 'Totals' | 'Sets' | 'Quarters' | 'Maps' | 'Innings';
+export type Category = 'Popular' | 'Goals' | 'Halves' | 'Handicaps' | 'Goalscorers' | 'Corners & Cards' | 'Players' | 'Minutes' | 'Totals' | 'Sets' | 'Quarters' | 'Maps' | 'Innings';
 export type Flag = 'eng' | 'eu' | 'esp' | 'ita' | 'ger' | 'usa' | 'int';
 export interface Outcome { id: string; label: string; odds: number; previous?: number }
 export interface Market { id: string; name: string; category: Category; outcomes: Outcome[]; suspended: boolean; layout?: 'list' }
@@ -30,7 +30,9 @@ export interface Fixture {
 
 export const sports: Sport[] = ['Football', 'Tennis', 'Basketball', 'Baseball', 'American Football', 'Esports'];
 export const sportLabel = (s: Sport) => (s === 'Football' ? 'Soccer' : s);
-export const categories: Category[] = ['Popular', 'Goals', 'Halves', 'Handicaps', 'Goalscorers', 'Corners & Cards', 'Sets', 'Quarters', 'Maps', 'Innings', 'Totals'];
+export const categories: Category[] = ['Popular', 'Goals', 'Halves', 'Handicaps', 'Goalscorers', 'Corners & Cards', 'Players', 'Minutes', 'Sets', 'Quarters', 'Maps', 'Innings', 'Totals'];
+/** Visible group name. The stored category keeps a stable id; the tab reads "Corners & cards". */
+export const categoryLabel = (c: Category | 'All') => (c === 'Corners & Cards' ? 'Corners & cards' : c);
 export const leagues = ['Premier League', 'Champions League', 'LaLiga', 'Serie A', 'Bundesliga'];
 export const leagueInfo: Record<string, { code: string; color: string; country: string; flag: Flag }> = {
   'Premier League': { code: 'PL', color: '#6d3fd6', country: 'England', flag: 'eng' },

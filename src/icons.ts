@@ -1,3 +1,14 @@
+import logoRaw from '../brand/logo.svg?raw';
+import markRaw from '../brand/mark.svg?raw';
+
+const brandSvg = (raw: string, cls: string) => raw.replace('<svg ', `<svg class="${cls}" focusable="false" aria-hidden="true" `);
+
+/** Official Housebets wordmark from the brand pack (`brand/logo.svg`). */
+export const brandLogo = () => `<span class="brand-logo">${brandSvg(logoRaw, 'logo-svg')}</span>`;
+
+/** Official Housebets mark from the brand pack (`brand/mark.svg`), used at small sizes. */
+export const brandMark = () => `<span class="brand-logo is-mark">${brandSvg(markRaw, 'mark-svg')}</span>`;
+
 /** Original line icons drawn for this prototype on a 24px grid. */
 const paths: Record<string, string> = {
   profile: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0',
@@ -43,10 +54,6 @@ const paths: Record<string, string> = {
 
 export const icon = (name: string, cls = '') =>
   `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[name] ?? paths.ball}"/></svg>`;
-
-/** An original H monogram: two posts joined by a wave. Replace with the official Housebets mark when the brand pack is supplied. */
-export const brandMark = () =>
-  `<svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0d2a32"/><path d="M10 7.5v17" stroke="#22e2e8" stroke-width="4.2" stroke-linecap="round"/><path d="M22 7.5v17" stroke="#15b7c0" stroke-width="4.2" stroke-linecap="round"/><path d="M10 17c2-2.6 4-2.6 6 0s4 2.6 6 0" fill="none" stroke="#22e2e8" stroke-width="3" stroke-linecap="round"/></svg>`;
 
 export const sportIcon = (sport: string) =>
   ({ Football: 'ball', Tennis: 'tennis', Basketball: 'basket', Baseball: 'baseball', 'American Football': 'amfootball', Esports: 'game' })[sport] ?? 'ball';

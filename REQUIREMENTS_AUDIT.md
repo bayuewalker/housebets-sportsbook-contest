@@ -4,7 +4,7 @@ Audit date: 12 November 2026. Owner: bayuewalker. Branch: `cursor/housebets-rede
 
 ## Verdict
 
-**Ready for owner review.** Every page, feature and state in the brief and the owner's redesign list is implemented and verified in a real browser at exactly 1440px and 390px (123 automated checks), plus a 52-check stress and responsive sweep and 34 unit tests. Two items depend on the owner: aligning the shell with the official brand pack once it is provided, and publishing and submitting. No score is claimed.
+**Ready for owner review.** Every page, feature and state in the brief and the owner's redesign list is implemented and verified in a real browser at exactly 1440px and 390px (158 automated checks), plus a 52-check stress and responsive sweep and 35 unit tests. Publishing and submitting still depend on the owner. No score is claimed.
 
 ## Sources
 
@@ -18,8 +18,8 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Task | Status | Evidence |
 | --- | --- | --- |
 | 1. Fictional players only | Verified | Hand-written and generated fictional squads; repository search found no real player names; QA checks fictional names in the goalscorer table |
-| 2. Match depth: six groups plus All markets N, market search, collapsible cards, breadcrumb, compact sticky score on phones, suspended markets, live odds movement | Verified | Arsenal v Brighton has 47 markets (football matches range 33–58; late in a match, decided lines drop out); unit test 40–85 for the featured match; QA checks every listed behaviour |
-| 3. Housebets feel: wordmark, Figtree and Red Hat Display, slim icon rail, Weekly Prize and VIP crown, Bet slip / My bets / Chat panel, sport tabs under search, Favourites chips | Verified | QA checks each element and that both fonts load. The mark is an original placeholder until the brand pack is provided |
+| 2. Match depth: groups plus All markets N, market search, collapsible cards, breadcrumb, compact sticky score on phones, suspended markets, live odds movement | Verified | Arsenal v Brighton has 94 markets (90–110). Every pre-match football fixture has at least 60 and every live one at least 40, including AC Milan v Roma. Groups include Players and Minutes; Goalscorers has at least 9 markets. QA checks the count, groups, search, collapse, breadcrumb and sticky score |
+| 3. Housebets feel: official wordmark, Figtree and Red Hat Display, slim icon rail, Weekly Prize and VIP crown, Bet slip / My bets / Chat panel, sport tabs under search, Favourites chips | Verified | The shell uses `brand/logo.svg` and `brand/mark.svg`. QA checks the official wordmark, both fonts, the crown, the prize and the panel |
 | 4. Data density: about 13 live (6 football), 3–10 matches in each of five leagues, inline suspended rows, HT, flags, accurate counts; Soccer market dropdown and Live & Upcoming / All | Verified | 42 fixtures, 13 live (6 football), leagues 8/5/6/5/5; QA checks counts, flags, HT, suspended rows, dropdown and toggle |
 | 5. No marketing copy; dense phone home (Favourites, Your matches, Featured, Upcoming) | Verified | QA checks old copy is absent and the section order |
 | 6. Phone slip: Accept odds / Place bet pinned to the bottom; toasts never cover the slip bar | Verified | QA measures the footer, Place and Accept positions and the toast against the bar |
@@ -32,9 +32,9 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Category | What the entry offers |
 | --- | --- |
 | Home | Sport tabs under search, Favourites, Your matches, Featured carousel, Live now, Starting soon, Top competitions, search with match reasons |
-| Live | 13 events grouped by sport and league, flags, ticking clocks, HT, suspended rows, sport filters |
+| Live | 13 events grouped by sport and league, flags, ticking clocks, HT, suspended rows, sport and competition filters |
 | Football | Five leagues, league chips, market dropdown, Live & Upcoming / All |
-| Match | Breadcrumb, scoreboard, six groups plus All markets, search, collapse, goalscorer table, suspended markets, moving prices, phone compact score |
+| Match | Back button and breadcrumb, scoreboard, Popular, Goals, Halves, Handicaps, Goalscorers, Corners & cards, Players and Minutes plus All markets, search, collapse, goalscorer table, suspended markets, moving prices, phone compact score |
 | Bet slip & My bets | One shared page and panel; singles only; empty stake with chips; changed-odds acceptance; suspended, failed and placed states; receipts; table with filters, expandable rows and cash out |
 | Feels like Housebets | Housebets shell structure and palette, Figtree and Red Hat Display, Weekly Prize and VIP crown |
 | Every state | Loading, empty search, no live, odds changed, suspended, failed, placing, placed, cash-out confirmation, settled, empty slip, invalid stake |
@@ -51,15 +51,15 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Frontend only, sample data | Verified | No backend, accounts, payments or betting API |
 | Out of scope absent: multis, accumulators, bet builder, boosts, free bets, promos, outrights, specials, stats widgets, match trackers, AI search | Verified | None present |
 | No imitation of other sportsbooks | Implemented | Built from the contest wireframes and Housebets look only |
-| Big idea 80–800 characters | Verified | 568 characters in `SUBMISSION.md` |
+| Big idea 80–800 characters | Verified | 768 characters in `SUBMISSION.md` |
 | Tools, libraries and models named | Verified | `TOOLS.md` and `SUBMISSION.md` section 4 |
-| Shell follows the official starter files / brand pack | Pending | Not available to the author; to be aligned once provided |
+| Shell follows the official starter files / brand pack | Verified | Official wordmark and mark from `brand/`; top bar, left rail and side panel use the pack cyan and 8px radii |
 | Physical devices, Safari/Firefox, screen reader | Not tested | Listed as a limitation |
 | Publishing the redesign and submission | Pending (owner) | Not merged, published or submitted; IP transfer not accepted on the owner's behalf |
 
 ## Checks run for this audit
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm build`: pass.
-- `pnpm test`: 34 passed, 0 failed.
-- `pnpm qa:browser`: 123/123 (local build, 1440×1000 and 390×844).
+- `pnpm test`: 35 passed, 0 failed.
+- `pnpm qa:browser`: 158/158 (local build, 1440×1000 and 390×844).
 - `pnpm qa:stress`: 52/52 (local build).

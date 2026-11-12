@@ -1,5 +1,5 @@
 import { leagues } from '../../data';
-import { brandMark, icon } from '../../icons';
+import { brandLogo, icon } from '../../icons';
 import { esc, money } from '../format';
 import { openBets, state, ui } from '../state';
 import { leagueFlag } from './common';
@@ -58,7 +58,7 @@ function info(): string {
 
 function menu(): string {
   const open = openBets().length;
-  return `<a class="brand" href="#/sports">${brandMark()}${wordmark()}</a>
+  return `<a class="brand" href="#/sports">${brandLogo()}${wordmark()}</a>
     <nav class="menu-nav" aria-label="Sportsbook pages">
       <a href="#/sports">${icon('home')}Home</a>
       <a href="#/live">${icon('live')}Live <b class="count live">${state().fixtures.filter(f => f.live && !state().noLive).length}</b></a>

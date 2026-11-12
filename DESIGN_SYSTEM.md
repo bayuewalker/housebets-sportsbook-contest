@@ -6,10 +6,10 @@ A familiar Housebets shell around dense, readable sports lists and an honest sin
 
 ## Brand
 
-- **Mark and wordmark:** an original rounded-square H mark (`brandMark()` in `src/icons.ts`, also `public/favicon.svg`) beside "Housebets" set in Red Hat Display. The mark is a placeholder drawn for this entry and should be swapped for the official logo once the brand pack is provided.
+- **Mark and wordmark:** the official Housebets wordmark (`brand/logo.svg`, inlined by `brandLogo()`) and mark (`brand/mark.svg`, also `public/favicon.svg`, inlined by `brandMark()`). The wordmark is the visible logo; the text "Housebets" stays available to assistive tech.
 - **Fonts:** Figtree (interface text) and Red Hat Display (headings, scores, prices in the scoreboard, wordmark), both variable fonts bundled from Fontsource under the SIL Open Font License.
 - **Shell:** top bar with rail toggle, mark, Weekly Prize countdown, wallet pill in USDT, Wallet button, VIP crown, profile and panel toggle; a 72px icon rail (Casino/Sports switch, Home, Live, Soccer, other sports, Favourites, My bets, Demo controls) with tooltips; a right side panel with **Bet slip | My bets | Chat**. On phones, a bottom navigation (Menu, Sports, Casino, Chat, Search) sits under a persistent slip bar.
-- **Provenance:** the layout follows the contest wireframes and the public Housebets look. No official Housebets, club or league artwork is used. Team badges are colour blocks with three-letter codes; flags are simple original SVGs.
+- **Provenance:** the top bar, left rail and side panel follow the brand pack in `brand/` (official logo and mark, cyan `#02F7FD`, 8px radii) and the contest wireframes. Interface icons, team badges and flags are original. Team badges are colour blocks with three-letter codes.
 
 ## Tokens (`src/style.css :root`)
 

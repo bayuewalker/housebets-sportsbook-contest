@@ -84,8 +84,15 @@ function handle(action: string, d: DOMStringMap, button: HTMLElement): boolean |
     case 'live-sport':
       ui.sport = d.sport as Sport | 'All';
       break;
+    case 'live-comp':
+      ui.competition = d.league ?? '';
+      break;
+    case 'live-comp-clear':
+      ui.competition = '';
+      break;
     case 'live-all':
       ui.sport = 'All';
+      ui.competition = '';
       break;
     case 'league':
       closeDialog();
