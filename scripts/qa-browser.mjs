@@ -414,7 +414,7 @@ try {
     await context.close();
   }
 
-  for (const [width, height, tag] of [[320, 640], [360, 740]]) {
+  for (const [width, height, tag] of [[320, 640], [360, 740], [375, 812]]) {
     const context = await browser.newContext({ viewport: { width, height }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
     const page = await context.newPage();
     for (const route of ['/live', '/football']) {

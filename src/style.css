@@ -873,7 +873,7 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .brand-logo:not(.is-mark) { display: none; }
   .brand-logo.is-mark { display: inline-flex; }
 }
-@media (max-width: 360px) {
+@media (max-width: 380px) {
   .league-head .league-country,
   .league-head .sep { display: none; }
 }
