@@ -180,6 +180,7 @@ main:focus{outline:none}
 .odds-grid{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:8px}
 .odds{position:relative;display:flex;flex-direction:column;justify-content:center;gap:3px;min-height:58px;padding:9px 12px;border-radius:10px;text-align:left;overflow:hidden;background:var(--raised);border:1px solid var(--line-2)}
 .odds-name{font-size:13px;line-height:1.3;color:var(--text-2);overflow-wrap:anywhere}
+.odds>*{pointer-events:none}
 .odds strong{display:flex;align-items:center;gap:5px;font-size:16px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 .odds.compact{min-height:50px;padding:7px 10px}
 .odds.compact .odds-name{display:block;max-width:100%;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}

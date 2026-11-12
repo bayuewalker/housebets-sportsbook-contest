@@ -128,6 +128,15 @@ try {
     await page.evaluate(() => window.scrollTo(0, 0));
     await sleep(7600);
     check(tag, 'live price feed moves odds', await page.locator('.odds.up, .odds.down').count() >= 1);
+    const moving = await page.locator('main .odds.up, main .odds.down').first().evaluate(el => { el.scrollIntoView({ block: 'center' }); return `main .odds[data-fixture="${el.dataset.fixture}"][data-market="${el.dataset.market}"][data-outcome="${el.dataset.outcome}"]`; });
+    const pressBox = await page.locator(moving).first().boundingBox();
+    await page.mouse.move(pressBox.x + pressBox.width / 2, pressBox.y + pressBox.height / 2);
+    await page.mouse.down();
+    await page.waitForFunction(s => !document.querySelector(s)?.matches('.up, .down'), moving, { timeout: 8000 });
+    await page.mouse.up();
+    check(tag, 'a tap held across a live price refresh still selects the price', await page.locator(moving).first().evaluate(el => el.classList.contains('selected')));
+    await page.locator(moving).first().click();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await demo('feed');
 
     // Selection, stake and returns

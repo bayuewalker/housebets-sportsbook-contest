@@ -12,7 +12,8 @@
     "watch": "vite --host 0.0.0.0",
     "pages:prepare": "pnpm lint && pnpm test && pnpm build && node scripts/prepare-pages.mjs",
     "pages:verify": "node scripts/verify-pages.mjs",
-    "qa:browser": "node scripts/qa-browser.mjs"
+    "qa:browser": "node scripts/qa-browser.mjs",
+    "qa:stress": "node scripts/qa-stress.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
