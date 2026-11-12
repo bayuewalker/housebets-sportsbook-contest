@@ -33,7 +33,7 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Five pages, interconnected | Verified | Hash routes `#/sports`, `#/live`, `#/football`, `#/match/:id`, `#/bets`; QA visits each by link at both widths |
 | Sports Home: Live now, Starting soon, Top competitions | Verified | Sections render with counts; competition tiles open Football filtered |
 | Sports navigation | Verified | Football, Tennis, Basketball, Esports and All sports filters (6/1/1/1/9) |
-| Search teams, players, competitions, markets | Verified | Unit test for match reasons; QA for Bukayo, Brighton, LaLiga, corners, no results, clear button and Escape |
+| Search teams, players, competitions, markets | Verified | Unit test for match reasons; QA for Marlow, Brighton, LaLiga, corners, no results, clear button and Escape |
 | Follow teams and competitions | Verified | QA follows LaLiga, Following shows 3 rows, unfollow returns to 2; persisted |
 | Live: every in-play match, filters, score and clock | Verified | 4 live fixtures, ticking clocks, sport/competition filters |
 | Live: nothing live → Starting soon | Verified | No-live scenario at both widths |

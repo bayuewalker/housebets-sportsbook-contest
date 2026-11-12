@@ -52,7 +52,7 @@ Fixture rows respond to the width of their own card, not the viewport. That matt
 | Slip summary | Total stake, potential return (sum of singles), "Place single bet · X USDT" | Amber banner, return-after-acceptance total and "Accept new odds" | Suspended banner with "Remove"; disabled place button with reason |
 | Placement | Busy state blocks repeat clicks | Success notice with one receipt row per single and a My Bets link | "Bet not placed" with reason and "Try again"; no debit |
 | Bet card | Status, fixture, outcome, odds, stake, return, reference | Separate Cash Out offer view and confirmation | Settled won/lost/cashed |
-| Fixture row | Status/time, teams with shields, score, star, result odds, more-markets link | Search reason chip ("Player · Bukayo Saka") | — |
+| Fixture row | Status/time, teams with shields, score, star, result odds, more-markets link | Search reason chip ("Player · Theo Marlow") | — |
 | Loading / empty | Skeleton rows; empty search with clear; Starting soon when nothing is live | | |
 
 Motion: odds flash, live dot pulse and sheet transitions are all disabled under `prefers-reduced-motion`.

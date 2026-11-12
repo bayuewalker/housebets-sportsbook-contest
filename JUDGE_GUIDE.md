@@ -4,7 +4,7 @@ https://bayuewalker.github.io/housebets-sportsbook-contest/ — no login, deposi
 
 ## A two-minute tour
 
-1. **Sports Home:** the main event (Arsenal v Brighton, live) leads, followed by Live now, Starting soon and Top competitions. Search for `Bukayo`, `LaLiga` or `corners`; each result says why it matched. Tap ☆ on a competition, then open **Following**.
+1. **Sports Home:** the main event (Arsenal v Brighton, live) leads, followed by Live now, Starting soon and Top competitions. Search for `Marlow` (a fictional player), `LaLiga` or `corners`; each result says why it matched. Tap ☆ on a competition, then open **Following**.
 2. **Live:** every in-play match, with ticking clocks. Filter by sport or competition; the counts show what is live.
 3. **Football:** switch between Premier League, Champions League, LaLiga, Serie A and Bundesliga. Every row has match-result odds.
 4. **Match Center:** open Arsenal v Brighton. Watch the prices: one on-screen price moves every few seconds with a green or red marker. Browse the six categories; Corners & Cards contains a suspended market. Tap **Arsenal** and enter 25 USDT.

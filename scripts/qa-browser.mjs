@@ -72,8 +72,8 @@ try {
       await page.locator(`.sport-tab[data-sport="${sport}"]`).click();
       check(tag, `sport filter ${sport} shows ${rows} fixtures`, await page.locator('.fixture-row').count() === rows);
     }
-    await page.locator('#global-search').fill('Bukayo');
-    check(tag, 'player search finds Arsenal with reason', (await page.locator('.fixture-row').count()) === 1 && /Player · Bukayo Saka/.test(await page.locator('.match-reason').innerText()));
+    await page.locator('#global-search').fill('Marlow');
+    check(tag, 'player search finds Arsenal with reason', (await page.locator('.fixture-row').count()) === 1 && /Player · Theo Marlow/.test(await page.locator('.match-reason').innerText()));
     for (const [term, reason] of [['Brighton', 'Team'], ['LaLiga', 'Competition'], ['corners', 'Market']]) {
       await page.locator('#global-search').fill(term);
       check(tag, `search "${term}" explains ${reason} match`, (await page.locator('.match-reason').first().innerText()).startsWith(reason));

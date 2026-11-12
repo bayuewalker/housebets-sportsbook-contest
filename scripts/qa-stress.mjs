@@ -13,7 +13,7 @@ if (!base) {
   base = 'http://127.0.0.1:4180/';
   for (let i = 0; i < 50; i++) { try { if ((await fetch(base)).ok) break; } catch { /* Server is still starting. */ } await new Promise(r => setTimeout(r, 100)); }
 }
-const fixtures = ['ars-bha', 'liv-mun', 'rma-bay', 'bar-atm', 'int-nap', 'dor-lev', 'sin-alc', 'bos-nyk', 'nav-g2'];
+const fixtures = ['ars-bha', 'liv-mun', 'rma-bay', 'bar-atm', 'int-nap', 'dor-lev', 'var-mor', 'bos-nyk', 'nav-g2'];
 const results = [];
 const check = (tag, name, ok, detail = '') => { results.push(ok); console.log(`${ok ? 'PASS' : 'FAIL'} [${tag}] ${name}${detail ? ` — ${detail}` : ''}`); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
