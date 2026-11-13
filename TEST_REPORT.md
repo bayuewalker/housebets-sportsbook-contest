@@ -18,7 +18,7 @@ Closes the open items from the PR #12 recheck: the mobile match opens on Popular
 | `pnpm qa:browser` | **192/192** |
 | `pnpm qa:stress` | **52/52** |
 
-The same browser and stress scripts then passed against the public URL after publish: `pages:verify` matched 9 public assets and confirmed `og.jpg` is 1200×630, `qa:browser` was 192/192, and `qa:stress` was 52/52. Source `549dca1`, gh-pages `4e8b72a`. No contest entry has been submitted.
+The same browser and stress scripts passed against the public URL after the republish of current `main`: `pages:verify` matched 9 public assets and confirmed `og.jpg` is 1200×630, `qa:browser` was 192/192, and `qa:stress` was 52/52. Source `3792468`, gh-pages `fc52526`. The compiled assets match the PR #13 publish. No contest entry has been submitted.
 
 The 12 November redesign section below is the historical result for that branch. Its 159 browser checks and 35 unit tests are not the current totals.
 

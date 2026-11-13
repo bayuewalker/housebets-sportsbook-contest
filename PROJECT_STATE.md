@@ -4,7 +4,7 @@ Updated: 2026-11-13
 
 ## Current outcome
 
-**Recheck corrections are published.** Source `549dca1fe68c20394caa40ee08cdff2b35c72c71` ([PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)). The public site is gh-pages `4e8b72a79b706136e6d2715d04f69dcd552f823d`. `pnpm pages:verify` matched 9 public assets and confirmed `og.jpg` is 1200×630. Against that public URL: 192 browser checks and 52 stress checks. No contest entry has been submitted. That account step is separate from deployment.
+**The public site matches the app on `main`.** gh-pages `fc52526c7c2e5a2ffbb2f0fd8c2bb9a9ada7030f` records source `37924688cf02c529c266af3f48c974c2ce21aa9d`. The compiled assets are the same bundle as [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13) (`549dca1` / `4e8b72a`); this republish changes only `build-info.json`. `pnpm pages:verify` matched 9 public assets and confirmed `og.jpg` is 1200×630. Against that public URL: 192 browser checks and 52 stress checks. No contest entry has been submitted. That account step is separate from deployment.
 
 ## Milestones
 
@@ -17,6 +17,7 @@ Updated: 2026-11-13
 - [x] Owner review and merge of the redesign (PR #10) and the follow-up polish (PR #11, PR #12).
 - [x] Publish PR #12 as gh-pages `654a2b1` (source `9724145`).
 - [x] Publish the recheck correction ([PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)) as gh-pages `4e8b72a` (source `549dca1`). `pages:verify` plus both QA scripts passed against the public URL.
+- [x] Republish `main` at `3792468` as gh-pages `fc52526`. The compiled assets are unchanged. `pages:verify` plus both QA scripts passed against the public URL.
 - [ ] Owner approval and submission (owner only). No entry has been submitted.
 
 ## Release record
@@ -29,8 +30,9 @@ Updated: 2026-11-13
 | 12 November stability fix ([PR #7](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/7)) | `757d1a5950c19f9af390745b4460c5a3ad1fc8f0` | `b0470f5baa21c08f54f2eb2e7f5c06c4b1ac9235` | `pnpm pages:verify` pass; `qa:browser` 178/178 and `qa:stress` 28/28 against the public site |
 | 12 November responsive fix ([PR #8](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/8)) | `2bea9c501c02b85b43619dad3153f48057ae5fe9` | `3a3eb3566e22f5092d61d6d4e01f5896fde7f0e4` | `pnpm pages:verify` pass; `qa:browser` 178/178, `qa:stress` 36/36 and 26-viewport audit (0 findings) against the public site |
 | 13 November recheck correction ([PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)) | `549dca1fe68c20394caa40ee08cdff2b35c72c71` | `4e8b72a79b706136e6d2715d04f69dcd552f823d` | `pnpm pages:verify` pass (9 public assets, `og.jpg` 1200×630); `qa:browser` 192/192 and `qa:stress` 52/52 against the public site |
+| 13 November republish of current `main` | `37924688cf02c529c266af3f48c974c2ce21aa9d` | `fc52526c7c2e5a2ffbb2f0fd8c2bb9a9ada7030f` | `pnpm pages:verify` pass (9 public assets, `og.jpg` 1200×630); `qa:browser` 192/192 and `qa:stress` 52/52. Compiled assets identical to the PR #13 publish; only `build-info.json` changed |
 
-Releases through PR #8 are the previous design. The current public site is the 13 November row. Later documentation-only commits on `main` do not change the published app.
+Releases through PR #8 are the previous design. The current public site is the republish row. Later documentation-only commits on `main` do not change the published app.
 
 Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, copy `.pages/` to the `gh-pages` root (removing obsolete hashed assets), commit and push without force, then run `pnpm pages:verify`. No custom Actions deployment, and no secrets or tokens in the repository.
 
