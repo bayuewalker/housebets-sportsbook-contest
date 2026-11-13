@@ -8,7 +8,7 @@ Contest: [Housebets Sportsbook Design Contest](https://www.housebets.com/contest
 
 https://bayuewalker.github.io/housebets-sportsbook-contest/
 
-Served from `gh-pages` / (root) with no login. The live site is currently gh-pages `654a2b1` (source `9724145`, PR #12). This recheck correction is not on that publish until it is merged and published. Submission status is separate: nothing has been submitted.
+Served from `gh-pages` / (root) with no login. The live site is gh-pages `4e8b72a` (source `549dca1`, [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)). Submission status is separate: nothing has been submitted.
 
 ## 2. Five linked pages
 
