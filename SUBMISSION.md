@@ -8,7 +8,7 @@ Contest: [Housebets Sportsbook Design Contest](https://www.housebets.com/contest
 
 https://bayuewalker.github.io/housebets-sportsbook-contest/
 
-Served from `gh-pages` / (root) with no login. The public site shows the redesign only after the owner merges it to `main` and publishes a new `gh-pages` build (see `README.md`). Re-run `pnpm pages:verify` and the browser QA against the public URL after publishing.
+Served from `gh-pages` / (root) with no login. The live site is currently gh-pages `654a2b1` (source `9724145`, PR #12). This recheck correction is not on that publish until it is merged and published. Submission status is separate: nothing has been submitted.
 
 ## 2. Five linked pages
 
@@ -52,8 +52,8 @@ Captured by `QA_SCREENSHOTS=docs/screenshots pnpm qa:browser` with headless Chro
 
 ## 6. QA summary
 
-- 35 unit tests, TypeScript, ESLint and the production build pass.
-- `pnpm qa:browser`: 159/159 checks at 1440px and 390px (all five pages, data density, market depth, competition filter, search, collapse, sticky phone score bar, live price arrows, every slip state, a selected suspended price, USDT on one line, the My bets table and filters, cash out, tap-target size, focus and console errors).
+- 37 unit tests, TypeScript, ESLint and the production build pass.
+- `pnpm qa:browser`: 192/192. That total includes the 1440×1000 and 390×844 pass plus league-header checks at 320, 360 and 375, match-result clearance at 390×844, 390×740 and with the market search focused, away-player search, the no-live fallback, rail names, horizontal fades and a cash-out action on the open row.
 - `pnpm qa:stress`: 52/52 checks (all 42 match pages and every market tab at both widths, taps during live price ticks, double placement, history navigation, resizing, reload and corrupt-storage recovery, and nine extra viewports from 320px to 1920px).
 - Details and limits: `TEST_REPORT.md`. Requirement-by-requirement status: `REQUIREMENTS_AUDIT.md`.
 

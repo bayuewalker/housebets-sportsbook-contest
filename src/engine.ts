@@ -82,7 +82,7 @@ function sampleBets(now: Date): Bet[] {
     ['HB-1047', 'bos-nyk', 'Basketball', 'Boston Celtics v New York Knicks', 'Match winner', 'Celtics', 1.72, 15, 'open', -95, undefined, 17.1],
     ['HB-1046', 'rma-bay', 'Football', 'Real Madrid v Bayern Munich', 'Total goals · 2.5', 'Over 2.5', 1.8, 10, 'open', -180, undefined, 9.2],
     ['HB-1045', 'past-che-eve', 'Football', 'Chelsea v Everton', 'Both teams to score', 'Yes', 1.75, 20, 'won', -day - 150, -day],
-    ['HB-1044', 'past-hal-mor', 'Tennis', 'L. Halden v C. Moreno', 'Match winner', 'L. Halden', 2.1, 10, 'lost', -day - 300, -day - 160],
+    ['HB-1044', 'past-hal-mor', 'Tennis', 'L. Halden v C. Mornell', 'Match winner', 'L. Halden', 2.1, 10, 'lost', -day - 300, -day - 160],
     ['HB-1043', 'past-bar-sev', 'Football', 'Barcelona v Sevilla', 'Match result', 'Barcelona', 1.45, 30, 'cashed', -3 * day - 120, -3 * day - 40, 38.4],
     ['HB-1042', 'past-mia-bos', 'Basketball', 'Miami Heat v Boston Celtics', 'Point spread · 4.5', 'Celtics -4.5', 1.91, 12, 'won', -5 * day - 200, -5 * day - 30],
     ['HB-1041', 'past-nav-g2', 'Esports', 'Natus Vincere v G2 Esports', 'Total maps · 2.5', 'Over 2.5', 2.05, 8, 'lost', -9 * day - 90, -9 * day],

@@ -218,6 +218,18 @@ try {
     check(tag, 'Players, Minutes and Corners & cards groups are listed', /Players/.test(await page.locator('.market-tabs').innerText()) && /Minutes/.test(await page.locator('.market-tabs').innerText()) && /Corners & cards/.test(await page.locator('.market-tabs').innerText()));
     check(tag, 'goalscorer group has at least 9 markets', number(await page.locator('.market-tabs [data-category="Goalscorers"] b').innerText()) >= 9);
     check(tag, 'match page has a back button and breadcrumb menu', await page.locator('.crumb-back').isVisible() && await page.locator('.crumb-drop summary').isVisible());
+    check(tag, 'match page opens on Popular', await page.locator('[data-category="Popular"][aria-selected="true"]').count() === 1);
+    if (mobile) {
+      const clearance = await page.evaluate(() => {
+        const boxes = [...document.querySelectorAll('#market-result .odds')].map(el => el.getBoundingClientRect());
+        const slip = document.querySelector('.slip-bar')?.getBoundingClientRect();
+        const nav = document.querySelector('.bottom-nav')?.getBoundingClientRect();
+        const limit = Math.min(slip?.top ?? innerHeight, nav?.top ?? innerHeight, innerHeight);
+        return boxes.length === 3 && boxes.every(b => b.top >= 0 && b.bottom <= limit + 0.5 && b.height >= 44) && window.scrollY === 0;
+      });
+      check(tag, 'match result prices sit above the slip bar', clearance);
+    }
+    await tap('[data-action="category"][data-category="All"]');
     check(tag, 'some markets are suspended', await page.locator('.market.is-suspended').count() >= 1);
     check(tag, 'goalscorer table lists fictional squad with Next / Anytime / 2+', /Theo Marlow/.test(await page.locator('.scorer-table').innerText()) && (await page.locator('.scorer-table thead th').allInnerTexts()).join('|') === 'Player|Next|Anytime|2+');
     const unlabelled = await page.locator('.odds:not([aria-label])').count();
@@ -383,6 +395,7 @@ try {
     check(tag, 'expanded row shows cash-out history', /Cashed out for 38\.40 USDT/.test(cashText), cashText.slice(0, 120));
     await shot('bets-settled');
     await tap('[data-action="history"][data-tab="open"]');
+    check(tag, 'cash out is on the open row before expanding', await page.locator('.bet-row [data-action="cash"][data-id="HB-1048"]').isVisible());
     await tap('[data-action="expand"][data-id="HB-1048"]');
     const cashBefore = await balance();
     await tap('#bet-HB-1048 [data-action="cash"]');
@@ -402,6 +415,8 @@ try {
         .filter(el => el.offsetParent).filter(el => el.getBoundingClientRect().height < 44).length);
       check(tag, 'tap targets are at least 44px tall', small === 0 && smallOdds === 0, `${small}/${smallOdds}`);
     } else {
+      const rail = await page.locator('.rail-nav a').evaluateAll(els => els.map(el => el.getAttribute('aria-label')));
+      check(tag, 'collapsed rail names every destination', rail.includes('Home') && rail.includes('Soccer') && rail.some(n => /^Live, \d+ events$/.test(n)) && rail.some(n => /^My bets(?:, \d+ open bets)?$/.test(n)), rail.join(' | '));
       await visit('/sports');
       await page.keyboard.press('Tab');
       await page.keyboard.press('Tab');
@@ -411,6 +426,94 @@ try {
       check(tag, '"/" focuses search', await page.evaluate(() => document.activeElement?.id === 'global-search'));
     }
     check(tag, 'no console or page errors', !errors.length, errors.slice(0, 5).join(' | '));
+    await context.close();
+  }
+
+  {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+    const page = await context.newPage();
+    const clear = () => page.evaluate(() => {
+      const boxes = [...document.querySelectorAll('#market-result .odds')].map(el => el.getBoundingClientRect());
+      const bars = [...document.querySelectorAll('.slip-bar, .bottom-nav')].map(el => el.getBoundingClientRect()).filter(b => b.top < innerHeight && b.bottom > 0);
+      const limit = Math.min(innerHeight, ...bars.map(b => b.top));
+      return boxes.length === 3 && boxes.every(b => b.height >= 44 && b.top >= -0.5 && b.bottom <= limit + 0.5);
+    });
+    await page.goto(`${base}#/match/ars-bha`);
+    await page.waitForSelector('#market-result .odds');
+    await page.evaluate(() => window.scrollTo(0, 0));
+    check('390x844', 'fresh match result is above the slip bar', await clear());
+    await page.locator('[data-action="mobile-slip"]').tap();
+    await page.waitForSelector('dialog[open]');
+    await page.locator('dialog [data-action="close"]').tap();
+    await page.waitForTimeout(100);
+    check('390x844', 'match result stays above the slip bar after opening the slip', await clear());
+    await page.setViewportSize({ width: 390, height: 480 });
+    await page.locator('#market-search').focus();
+    await page.waitForTimeout(50);
+    check('390x480', 'match result stays clear while the market search is focused', await clear());
+    await page.setViewportSize({ width: 390, height: 740 });
+    await page.locator('#market-search').blur();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    check('390x740', 'match result needs no scroll above the slip bar', await clear() && await page.evaluate(() => window.scrollY === 0));
+    await page.locator('[data-category="Goalscorers"]').tap();
+    await page.locator('#market-search').fill('Rafe');
+    await page.waitForTimeout(120);
+    const rafe = await page.locator('.scorer-table').innerText();
+    check('search', 'away player search keeps the home tab and shows his prices', /Rafe Halloran/.test(rafe) && /Anytime/.test(rafe) && (await page.locator('.team-switch [aria-selected="true"]').innerText()).trim() === 'Arsenal', rafe.slice(0, 160));
+    await page.locator('#market-search').fill('zzzz');
+    await page.waitForTimeout(120);
+    check('search', 'unknown player search explains the empty result', /No markets match/.test(await page.locator('#market-list').innerText()));
+    await page.goto(`${base}#/sports`);
+    await page.locator('.demo-entry').first().tap();
+    check('demo', 'demo states names the three-step sequence', /Change the odds/.test(await page.locator('dialog').innerText()) && /Suspend the market/.test(await page.locator('dialog').innerText()) && /place the same bet again/.test(await page.locator('dialog').innerText()));
+    await page.locator('[data-action="no-live"]').tap();
+    await page.waitForSelector('.fallback, .empty');
+    const fallback = await page.locator('main').innerText();
+    check('live', 'no-live fallback has no past kick-offs', !/Yesterday/.test(fallback));
+    await context.close();
+  }
+
+  {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const page = await context.newPage();
+    await page.goto(`${base}#/match/ars-bha`);
+    await page.waitForSelector('.market-tabs');
+    const last = page.locator('.market-tabs [role="tab"]').last();
+    await last.click();
+    const label = (await last.innerText()).replace(/\s+/g, ' ').trim();
+    await page.locator('#market-list .odds').first().click();
+    await page.waitForTimeout(80);
+    const visible = await page.evaluate(() => {
+      const tab = document.querySelector('.market-tabs [aria-selected="true"]');
+      const scroller = document.querySelector('.market-tabs');
+      const box = tab.getBoundingClientRect();
+      const frame = scroller.getBoundingClientRect();
+      return box.left >= frame.left - 1 && box.right <= frame.right + 1;
+    });
+    check('tabs', `active market tab stays in view after a pick (${label})`, visible);
+    const players = await page.locator('[data-category="Players"]').innerText();
+    await page.locator('[data-category="Players"]').click();
+    const card = await page.locator('#market-list .market-name').first().innerText();
+    check('players', 'player market names the threshold and period', /\d\+|First card/.test(card) && /rest of match|full match/.test(card), card);
+    check('players', 'Players tab is still available', /Players/.test(players));
+    await page.goto(`${base}#/live`);
+    const body = await page.locator('body').innerText();
+    check('names', 'WTA fixture does not use M. Kessler', !/Kessler/.test(body) && /Pellam/.test(body));
+    await context.close();
+  }
+
+  for (const width of [360, 390, 454]) {
+    const context = await browser.newContext({ viewport: { width, height: 800 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+    const page = await context.newPage();
+    await page.goto(`${base}#/sports`);
+    await page.waitForSelector('.sport-tabs');
+    const fades = await page.evaluate(() => {
+      const el = document.querySelector('.sport-tabs');
+      const read = left => { el.scrollLeft = left; el.dispatchEvent(new Event('scroll')); return el.dataset.fade; };
+      const max = el.scrollWidth - el.clientWidth;
+      return { start: read(0), mid: read(max / 2), end: read(max), overflow: max > 2 };
+    });
+    check(`${width}px`, 'horizontal fade follows the scroll position', fades.overflow && fades.start === 'end' && fades.mid === 'both' && fades.end === 'start', JSON.stringify(fades));
     await context.close();
   }
 
@@ -425,6 +528,13 @@ try {
         .filter(h => h.scrollWidth > h.clientWidth + 1)
         .map(h => h.innerText.replace(/\s+/g, ' ').trim()));
       check(tag, `league headers ellipsis instead of clip on ${route}`, clipped.length === 0, clipped.slice(0, 4).join(' | '));
+      if (width === 375) {
+        const cut = await page.evaluate(() => [...document.querySelectorAll('.league-name')]
+          .filter(el => /Champions League|Premier League|WTA Finals|CS2 Major/.test(el.textContent))
+          .filter(el => el.scrollWidth > el.clientWidth + 1)
+          .map(el => el.textContent.trim()));
+        check(tag, `long league names stay fully visible on ${route}`, cut.length === 0, cut.join(' | '));
+      }
     }
     await context.close();
   }

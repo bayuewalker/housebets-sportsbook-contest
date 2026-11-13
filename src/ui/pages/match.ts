@@ -3,6 +3,7 @@ import { icon } from '../../icons';
 import { esc, plural } from '../format';
 import { clockText, currentFixture, isLive, state, ui } from '../state';
 import { badge, emptyState, leagueFlag, liveBadge, oddsButton, periodText, star } from '../components/common';
+import { outcomesForQuery, scorerRows } from '../query';
 
 const SCORER_IDS = ['scorer', 'anytime', 'brace'];
 
@@ -16,7 +17,9 @@ function columns(m: Market): string {
   return m.outcomes.length === 2 ? 'cols-2' : 'cols-3';
 }
 
-function marketCard(f: Fixture, m: Market): string {
+function marketCard(f: Fixture, m: Market, q: string): string {
+  const outcomes = outcomesForQuery(m, q);
+  if (!outcomes.length) return '';
   const open = !ui.collapsed.has(m.id);
   const bodyId = `market-${m.id}`;
   return `<section class="market ${m.suspended ? 'is-suspended' : ''} ${open ? '' : 'is-collapsed'}" aria-label="${esc(m.name)}">
@@ -29,7 +32,7 @@ function marketCard(f: Fixture, m: Market): string {
     </h3>
     <div class="market-body" id="${bodyId}" ${open ? '' : 'hidden'}>
       ${m.suspended ? '<p class="market-msg">Prices are under review and reopen shortly. Picks already in your slip are kept.</p>' : ''}
-      <div class="outcomes ${columns(m)}">${m.outcomes.map(o => oddsButton(f, m, o)).join('')}</div>
+      <div class="outcomes ${columns(m)}">${outcomes.map(o => oddsButton(f, m, o)).join('')}</div>
     </div>
   </section>`;
 }
@@ -39,14 +42,19 @@ function scorerCard(f: Fixture, q: string): string {
   const [first, anytime, brace] = SCORER_IDS.map(id => f.markets.find(m => m.id === id));
   if (!first || !anytime) return '';
   const open = !ui.collapsed.has('scorers');
-  const squad = f.players.slice(ui.scorerTeam * 6, ui.scorerTeam * 6 + 6);
-  const players = squad.filter(name => !q || name.toLocaleLowerCase().includes(q) || [first, anytime, brace].some(m => m && m.name.toLocaleLowerCase().includes(q)));
+  const marketNames = [first, anytime, brace].flatMap(m => m ? [m.name] : []);
+  const players = scorerRows(f.players, ui.scorerTeam, q, marketNames);
+  const showTeam = new Set(players.map(p => p.team)).size > 1;
   const cell = (m: Market | undefined, name: string) => {
     const o = m?.outcomes.find(x => x.label === name);
     return `<td>${m && o ? oddsButton(f, m, o, 'cell') : '<span class="odds-closed" aria-label="Not offered">–</span>'}</td>`;
   };
   const team = (side: 0 | 1) => `<button role="tab" data-focus="scorer-${side}" aria-selected="${ui.scorerTeam === side}" tabindex="${ui.scorerTeam === side ? 0 : -1}" class="${ui.scorerTeam === side ? 'active' : ''}" data-action="scorer-team" data-team="${side}">${esc(side === 0 ? f.homeShort : f.awayShort)}</button>`;
   const none = first.outcomes.find(o => o.label === 'No goalscorer');
+  const marketQuery = !q || marketNames.some(name => name.toLocaleLowerCase().includes(q));
+  const sideName = (side: 0 | 1) => side === 0 ? f.homeShort : f.awayShort;
+  const rows = players.map(p => `<tr><th scope="row">${esc(p.name)}${showTeam ? `<small class="scorer-side">${esc(sideName(p.team))}</small>` : ''}</th>${cell(first, p.name)}${cell(anytime, p.name)}${cell(brace, p.name)}</tr>`).join('');
+  const empty = `<tr class="none-row"><td colspan="4">No player matches “${esc(q)}”. Clear the search to return to ${esc(sideName(ui.scorerTeam))}.</td></tr>`;
   return `<section class="market scorers ${open ? '' : 'is-collapsed'}" aria-label="Goalscorers">
     <h3 class="market-head">
       <button data-action="collapse" data-market="scorers" aria-expanded="${open}" aria-controls="market-scorers">
@@ -58,8 +66,8 @@ function scorerCard(f: Fixture, q: string): string {
       <table class="scorer-table">
         <thead><tr><th scope="col">Player</th><th scope="col">${first.name.startsWith('Next') ? 'Next' : 'First'}</th><th scope="col">Anytime</th><th scope="col">2+</th></tr></thead>
         <tbody>
-          ${players.map(name => `<tr><th scope="row">${esc(name)}</th>${cell(first, name)}${cell(anytime, name)}${cell(brace, name)}</tr>`).join('')}
-          ${none && !q ? `<tr class="none-row"><th scope="row">No goalscorer</th><td>${oddsButton(f, first, none, 'cell')}</td><td></td><td></td></tr>` : ''}
+          ${rows || empty}
+          ${none && marketQuery ? `<tr class="none-row"><th scope="row">No goalscorer</th><td>${oddsButton(f, first, none, 'cell')}</td><td></td><td></td></tr>` : ''}
         </tbody>
       </table>
       <p class="market-msg">Squad names are fictional sample players.</p>
@@ -99,7 +107,7 @@ export function matchPage(): string {
   const f = currentFixture();
   const q = ui.marketQuery.trim().toLocaleLowerCase();
   const available = categories.filter(c => f.markets.some(m => m.category === c));
-  if (ui.category !== 'All' && !available.includes(ui.category)) ui.category = 'All';
+  if (ui.category !== 'All' && !available.includes(ui.category)) ui.category = available.includes('Popular') ? 'Popular' : 'All';
   const inCategory = f.markets.filter(m => ui.category === 'All' || m.category === ui.category);
   const shown = inCategory.filter(m => matches(m, q) || (SCORER_IDS.includes(m.id) && f.players.some(p => p.toLocaleLowerCase().includes(q))));
   const scorerTable = f.sport === 'Football' && shown.some(m => SCORER_IDS.includes(m.id));
@@ -116,7 +124,8 @@ export function matchPage(): string {
       pieces.push({ html: scorerCard(f, q), wide: true });
       continue;
     }
-    pieces.push({ html: marketCard(f, m), wide: m.layout === 'list' || m.outcomes.length > 6 });
+    const html = marketCard(f, m, q);
+    if (html) pieces.push({ html, wide: m.layout === 'list' || outcomesForQuery(m, q).length > 6 });
   }
   let column = 0;
   const spanRow = pieces.map(() => false);
@@ -146,12 +155,13 @@ export function matchPage(): string {
           ${leagueJump}
         </div>
       </details>
+      <button class="demo-entry crumb-demo" data-action="demo" aria-haspopup="dialog">Demo states</button>
     </nav>
     <h1 id="page-title" tabindex="-1" class="sr-only">${esc(f.home)} v ${esc(f.away)}</h1>
     ${compactScore(f)}
     ${scoreboard(f)}
     <div class="market-toolbar">
-      <div class="market-tabs" role="tablist" aria-label="Market groups">
+      <div class="market-tabs h-scroll" role="tablist" aria-label="Market groups">
         ${tab('All', 'All markets', f.markets.length)}
         ${available.map(c => tab(c, categoryLabel(c), f.markets.filter(m => m.category === c).length)).join('')}
       </div>

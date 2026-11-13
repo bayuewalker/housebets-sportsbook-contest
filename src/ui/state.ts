@@ -21,7 +21,7 @@ export const ui = {
   league: '',
   footballMarket: 'result' as FootballMarket,
   footballScope: 'upcoming' as 'upcoming' | 'all',
-  category: 'All' as Category | 'All',
+  category: 'Popular' as Category | 'All',
   marketQuery: '',
   collapsed: new Set<string>(),
   scorerTeam: 0 as 0 | 1,
@@ -82,6 +82,17 @@ export const currentFixture = (): Fixture => current.fixtures.find(f => f.id ===
 
 export const isLive = (f: Fixture) => f.live && !current.noLive;
 export const liveFixtures = () => current.fixtures.filter(isLive);
+
+/** Scheduled fixture with a kick-off still in the future. Ignores the no-live demo override, so hiding live events cannot relabel them as upcoming. */
+export function isUpcoming(f: Fixture, now = Date.now()): boolean {
+  return !f.live && Date.parse(f.kickoff) > now;
+}
+
+export function upcomingFixtures(fixtures: Fixture[], now = Date.now(), withinMs?: number): Fixture[] {
+  return fixtures
+    .filter(f => isUpcoming(f, now) && (withinMs === undefined || Date.parse(f.kickoff) - now < withinMs))
+    .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff));
+}
 export const isFavorite = (key: string) => current.favorites.includes(key);
 export const openBets = () => current.bets.filter(b => b.status === 'open');
 export const pickKey = (p: { fixtureId: string; marketId: string; outcomeId: string }) => `${p.fixtureId}:${p.marketId}:${p.outcomeId}`;

@@ -8,7 +8,7 @@ import { slip, type SlipScope } from './slip';
 const messages: Array<[string, string, string]> = [
   ['tidewalker', '#5fd1c9', 'Marlow nearly had a second there'],
   ['northbank_88', '#e3a35c', 'Corners line on ARS v BHA keeps moving'],
-  ['quietpunter', '#9a8cf0', 'Halden v Drescher later, anyone watching?'],
+  ['quietpunter', '#9a8cf0', 'Halden v Drestan later, anyone watching?'],
   ['lowblock', '#ef7f8f', 'Half-time at Stamford, 1–1 and level on chances'],
   ['setpiece_sam', '#7cc7f2', 'Celtics pulling away in Q3'],
   ['tidewalker', '#5fd1c9', 'Villa v West Ham suspended, VAR check?'],

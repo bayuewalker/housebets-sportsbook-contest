@@ -1,10 +1,10 @@
 # Housebets Sports — Project State
 
-Updated: 2026-11-12
+Updated: 2026-11-13
 
 ## Current outcome
 
-**Redesign ready for owner review** on branch `cursor/housebets-redesign-a1e1`. It passes 35 unit tests, 159 browser checks at exactly 1440px and 390px, and a 52-check stress and responsive sweep from 320px to 1920px. It is not merged, the public site still shows the previous release, and nothing has been submitted to the contest.
+**Recheck corrections are in this commit.** Local verification: 37 unit tests, 192 browser checks at 1440×1000 and 390×844, and 52 stress checks from 320px to 1920px. No contest entry has been submitted. That account step is separate from deployment. The public site still serves gh-pages `654a2b1` (source `9724145`) until this commit is merged and published.
 
 ## Milestones
 
@@ -14,9 +14,10 @@ Updated: 2026-11-12
 - [x] Redesign (12 November): fictional players; Poisson-priced markets (100 on Arsenal v Brighton, at least 60 pre-match and 40 live); 42 fixtures with 13 live; Housebets shell with the official wordmark and mark, Figtree and Red Hat Display, icon rail, Weekly Prize, VIP crown and Bet slip / My bets / Chat panel; dense home; pinned phone slip footer; empty stake with chips; My bets table with filters and cash-out history; odds arrows, local time zone, modular `src/ui/`, 44px phone targets.
 - [x] Rewrite browser and stress QA for the redesign; refresh screenshots; `TOOLS.md`; Big idea draft.
 - [x] Align the top bar, left rail and side panel with the brand pack in `brand/` (official wordmark and mark).
-- [ ] Owner review and merge of the redesign PR.
-- [ ] Publish the merged build to `gh-pages` and re-run `pages:verify` and both QA scripts against the public URL.
-- [ ] Owner approval and submission (owner only).
+- [x] Owner review and merge of the redesign (PR #10) and the follow-up polish (PR #11, PR #12).
+- [x] Publish PR #12 as gh-pages `654a2b1` (source `9724145`).
+- [ ] Publish this recheck correction and re-run `pages:verify` plus both QA scripts against the public URL.
+- [ ] Owner approval and submission (owner only). No entry has been submitted.
 
 ## Release record
 

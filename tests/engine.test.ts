@@ -4,6 +4,8 @@ import {
   acceptChanges, cashOut, driftOdds, initialState, moveOdds, placeBets, placementError, removeSuspended,
   compareYourMatches, searchFixtures, searchReason, settle, stakeValue, toggleSelection, toggleSuspension, totalReturn, totalStake,
 } from '../src/engine.ts';
+import { upcomingFixtures } from '../src/ui/state.ts';
+import { scorerRows } from '../src/ui/query.ts';
 
 /** Arsenal to win at 1.22 with a 10 USDT stake. */
 const picked = () => {
@@ -194,11 +196,16 @@ test('football market depth matches the contest bar', () => {
     assert.ok(scorers.some(m => m.name.toLocaleLowerCase().includes(name)), name);
   }
   assert.ok(ars.markets.some(m => m.id === 'goal-range' && m.name === 'Total goals range'));
-  assert.ok(ars.markets.some(m => m.category === 'Players' && /shots on target/i.test(m.name)));
-  assert.ok(ars.markets.some(m => m.category === 'Players' && /booked/i.test(m.name)));
-  assert.ok(ars.markets.some(m => m.category === 'Players' && /assist/i.test(m.name)));
-  for (const name of ['Shots outside the box', 'Shots off target', 'Fouls committed', 'Offsides', 'Tackles', 'To be carded first']) {
+  assert.ok(ars.markets.some(m => m.category === 'Players' && /1\+ shots on target · rest of match/.test(m.name)));
+  assert.ok(ars.markets.some(m => m.category === 'Players' && /1\+ booking · rest of match/.test(m.name)));
+  assert.ok(ars.markets.some(m => m.category === 'Players' && /1\+ assist · rest of match/.test(m.name)));
+  for (const name of ['1+ shots outside the box · rest of match', '1+ shots off target · rest of match', '1+ foul · rest of match', '1+ offside · rest of match', '1+ tackle · rest of match', 'First card · rest of match']) {
     assert.ok(ars.markets.some(m => m.category === 'Players' && m.name === name), name);
+  }
+  const prematch = football.find(f => f.id === 'liv-mun')!;
+  for (const m of prematch.markets.filter(m => m.category === 'Players')) {
+    assert.match(m.name, /· full match$/);
+    assert.match(m.name, /\d\+|First card/);
   }
   assert.ok(ars.markets.some(m => m.category === 'Minutes' && /Goal \d+–\d+/.test(m.name)));
   assert.ok(ars.markets.some(m => m.name === 'Next goal time' || m.name === 'First goal time'));
@@ -349,4 +356,31 @@ test('live price feed can be limited to prices on screen', () => {
     assert.equal(c.marketId, 'result');
   }
   assert.equal(driftOdds(s, Math.random, () => false), undefined);
+});
+
+test('no-live fallback only keeps future scheduled fixtures', () => {
+  const s = initialState();
+  s.noLive = true;
+  const soon = upcomingFixtures(s.fixtures);
+  assert.ok(soon.length > 0);
+  assert.ok(soon.every(f => !f.live && Date.parse(f.kickoff) > Date.now()));
+  assert.equal(soon.some(f => f.id === 'mil-rom' || f.id === 'psg-ben'), false);
+  assert.equal(s.fixtures.some(f => f.home.includes('Kessler') || f.away.includes('Kessler')), false);
+  assert.equal(s.fixtures.some(f => f.league === 'WTA Finals' && /Pellam/.test(f.home)), true);
+});
+
+test('goalscorer search checks both squads without changing the selected team', () => {
+  const players = ['Theo Marlow', 'Ruben Castell', 'Idris Vane', 'Kofi Ashdown', 'Leon Corvell', 'Arlo Esterby', 'Rafe Halloran', 'Oskar Lindgard', 'Jules Mornay', 'Tomas Northcote', 'Milo Saltmarsh', 'Cyril Thackery'];
+  const markets = ['Next goalscorer', 'Anytime goalscorer', 'To score 2 or more'];
+  const away = scorerRows(players, 0, 'rafe', markets);
+  assert.deepEqual(away, [{ name: 'Rafe Halloran', team: 1 }]);
+  const home = scorerRows(players, 1, 'theo', markets);
+  assert.deepEqual(home, [{ name: 'Theo Marlow', team: 0 }]);
+  const cleared = scorerRows(players, 0, '', markets);
+  assert.equal(cleared.length, 6);
+  assert.ok(cleared.every(p => p.team === 0));
+  const named = scorerRows(players, 1, 'anytime', markets);
+  assert.equal(named.length, 6);
+  assert.ok(named.every(p => p.team === 1));
+  assert.equal(scorerRows(players, 0, 'zzzz', markets).length, 0);
 });

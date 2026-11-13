@@ -40,8 +40,9 @@ export function topbar(): string {
 }
 
 function railLink(href: string, label: string, glyph: string, active: boolean, count = '', live = false): string {
-  return `<a class="rail-item ${active ? 'active' : ''}" href="${href}" ${active ? 'aria-current="page"' : ''} data-tip="${esc(label)}">
-    ${icon(glyph)}<span class="rail-label">${esc(label)}</span>${count ? `<b class="rail-count ${live ? 'live' : ''}">${count}</b>` : ''}
+  const name = count ? `${label}, ${plural(Number(count), live ? 'event' : 'open bet')}` : label;
+  return `<a class="rail-item ${active ? 'active' : ''}" href="${href}" ${active ? 'aria-current="page"' : ''} data-tip="${esc(label)}" aria-label="${esc(name)}">
+    ${icon(glyph)}<span class="rail-label">${esc(label)}</span>${count ? `<b class="rail-count ${live ? 'live' : ''}" aria-hidden="true">${count}</b>` : ''}
   </a>`;
 }
 
@@ -69,8 +70,14 @@ export function iconRail(): string {
       ${railButton('favourites', 'Favourites', 'star')}
       ${railLink('#/bets', 'My bets', 'ticket', section === 'bets', open ? String(open) : '')}
     </nav>
-    <div class="rail-foot">${railButton('demo', 'Demo controls', 'settings', false, 'aria-haspopup="dialog"')}</div>
+    <div class="rail-foot">${railButton('demo', 'Demo states', 'settings', false, 'aria-haspopup="dialog"')}</div>
   </aside>`;
+}
+
+export function demoLaunch(): string {
+  return `<button class="demo-entry" data-action="demo" aria-haspopup="dialog">
+    <b>Demo states</b><span>Change odds, suspend, fail and retry</span>
+  </button>`;
 }
 
 export function searchBar(): string {
@@ -96,7 +103,7 @@ export function sportTabs(): string {
       ${icon(sportIcon(s))}<span>${esc(sportLabel(s))}</span><b>${fixtures.filter(f => f.sport === s).length}</b>
     </button>`;
   };
-  return `<nav class="sport-tabs" aria-label="Sports">
+  return `<nav class="sport-tabs h-scroll" aria-label="Sports">
     ${tab('#/sports', 'Home', 'home', section === 'home' && ui.sport === 'All')}
     ${tab('#/live', 'Live', 'live', section === 'live', liveFixtures().length, true)}
     ${tab('#/football', 'Soccer', 'ball', section === 'football', fixtures.filter(f => f.sport === 'Football').length)}
@@ -106,7 +113,7 @@ export function sportTabs(): string {
 
 export function favouriteChips(): string {
   const favourites = state().favorites;
-  return `<div class="fav-chips" role="group" aria-label="Favourites">
+  return `<div class="fav-chips h-scroll" role="group" aria-label="Favourites">
     <span class="fav-title">${icon('star')}Favourites</span>
     ${favourites.length ? favourites.map(key => {
       const [kind, name] = key.split(':');

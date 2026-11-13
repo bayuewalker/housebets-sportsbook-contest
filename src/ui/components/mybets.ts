@@ -37,7 +37,7 @@ function detail(b: Bet): string {
     <div><dt>${b.status === 'open' ? 'Potential returns' : 'Full-odds return'}</dt><dd>${money(potential)} USDT</dd></div>
   </div>
   ${b.status === 'cashed' ? `<p class="cash-history">${icon('coin')}<span>Cashed out for <b>${money(b.return)} USDT</b> on a ${money(b.stake)} USDT stake, against ${money(potential)} USDT at full odds.</span></p>` : ''}
-  ${b.status === 'open' && b.cashOffer > 0 ? `<div class="bet-detail-actions">${cashButton(b)}<span>Offer updates with the match. It always needs your confirmation.</span></div>` : ''}`;
+  ${b.status === 'open' && b.cashOffer > 0 ? `<div class="bet-detail-actions">${cashButton(b)}<span>This sample offer stays at ${money(b.cashOffer)} USDT until you confirm it.</span></div>` : ''}`;
 }
 
 function row(b: Bet): string {
@@ -52,6 +52,7 @@ function row(b: Bet): string {
       <td data-label="Bet" class="bet-cell">
         <span class="bet-sport" title="${esc(sportLabel(b.sport))}">${icon(sportIcon(b.sport))}</span>
         <span class="bet-copy"><strong>${esc(b.outcome)}</strong><small>${esc(b.market)} · ${esc(b.fixture)}</small></span>
+        ${b.status === 'open' && b.cashOffer > 0 ? cashButton(b) : ''}
       </td>
       <td data-label="Odds" class="num">${b.odds.toFixed(2)}</td>
       <td data-label="Stake" class="num">${money(b.stake)}</td>

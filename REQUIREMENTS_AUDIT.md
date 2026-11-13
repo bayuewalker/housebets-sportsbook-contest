@@ -55,11 +55,13 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Tools, libraries and models named | Verified | `TOOLS.md` and `SUBMISSION.md` section 4 |
 | Shell follows the official starter files / brand pack | Verified | Official wordmark and mark from `brand/`; top bar, left rail and side panel use the pack cyan and 8px radii |
 | Physical devices, Safari/Firefox, screen reader | Not tested | Listed as a limitation |
-| Publishing the redesign and submission | Pending (owner) | Not merged, published or submitted; IP transfer not accepted on the owner's behalf |
+| Publishing and submission | Published through PR #12; this correction is not published yet | Live site is gh-pages `654a2b1` (source `9724145`). No contest entry has been submitted, and the IP transfer has not been accepted on the owner's behalf |
 
 ## Checks run for this audit
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm build`: pass.
-- `pnpm test`: 35 passed, 0 failed.
-- `pnpm qa:browser`: 159/159 (local build, 1440×1000 and 390×844).
+- `pnpm test`: 37 passed, 0 failed.
+- `pnpm qa:browser`: 192/192 (local build).
 - `pnpm qa:stress`: 52/52 (local build).
+
+The 12 November redesign audit above recorded 35 tests and 159 browser checks. Those figures describe that pass, not this correction.

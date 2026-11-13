@@ -3,7 +3,7 @@ import { esc } from './format';
 import { currentFixture, page, save, state, ui } from './state';
 import { oddsButton } from './components/common';
 import { dialog } from './components/dialogs';
-import { bottomNav, favouriteChips, footer, iconRail, mobileSlipBar, searchBar, sportTabs, topbar } from './components/shell';
+import { bottomNav, demoLaunch, favouriteChips, footer, iconRail, mobileSlipBar, searchBar, sportTabs, topbar } from './components/shell';
 import { sidePanel } from './components/panel';
 import { betsPage } from './pages/bets';
 import { footballPage } from './pages/football';
@@ -58,6 +58,10 @@ export function render() {
   const selection = input ? [input.selectionStart, input.selectionEnd] : null;
   const oldModal = document.querySelector('dialog');
   const scrollers = Array.from(document.querySelectorAll<HTMLElement>('dialog, dialog .slip-body, .side-panel .slip-body, .side-panel .panel-body')).map(el => el.scrollTop);
+  const strips = Array.from(document.querySelectorAll<HTMLElement>('.h-scroll')).map(el => ({
+    key: el.getAttribute('aria-label') ?? el.className,
+    left: el.scrollLeft,
+  }));
   if (!oldModal && ui.dialog && where && !where.inModal) opener = where;
   const closing = !!oldModal && !ui.dialog;
   oldModal?.close();
@@ -67,7 +71,7 @@ export function render() {
   root.className = `app page-${p} ${withPanel ? 'with-panel' : 'no-panel'} ${ui.railExpanded ? 'rail-open' : ''}`;
   root.innerHTML = `${topbar()}${iconRail()}
     <main id="main" tabindex="-1">
-      <div class="main-head">${searchBar()}${sportTabs()}${p === 'home' && !ui.query && ui.sport === 'All' ? favouriteChips() : ''}</div>
+      <div class="main-head">${demoLaunch()}${searchBar()}${sportTabs()}${p === 'home' && !ui.query && ui.sport === 'All' ? favouriteChips() : ''}</div>
       <div class="page">${pageView()}</div>
       ${footer()}
     </main>
@@ -88,6 +92,7 @@ export function render() {
   document.querySelectorAll<HTMLElement>('dialog, dialog .slip-body, .side-panel .slip-body, .side-panel .panel-body').forEach((el, i) => {
     el.scrollTop = scrollers[i] ?? 0;
   });
+  restoreStrips(strips);
 
   const find = (inModal: boolean, w: { key: string; index: number }) => {
     const list = controls(inModal, w.key);
@@ -129,6 +134,29 @@ export function refreshOutcome(key: string) {
     for (const name of button.getAttributeNames()) if (!next.hasAttribute(name)) button.removeAttribute(name);
     for (const name of next.getAttributeNames()) if (button.getAttribute(name) !== next.getAttribute(name)) button.setAttribute(name, next.getAttribute(name)!);
     if (button.innerHTML !== next.innerHTML) button.innerHTML = next.innerHTML;
+  });
+}
+
+function restoreStrips(saved: Array<{ key: string; left: number }>) {
+  document.querySelectorAll<HTMLElement>('.h-scroll').forEach(el => {
+    const key = el.getAttribute('aria-label') ?? el.className;
+    const previous = saved.find(item => item.key === key);
+    if (previous) el.scrollLeft = previous.left;
+    const active = el.querySelector<HTMLElement>('.active, [aria-selected="true"]');
+    if (active) {
+      const frame = el.getBoundingClientRect();
+      const box = active.getBoundingClientRect();
+      if (box.left < frame.left + 8) el.scrollLeft -= frame.left + 8 - box.left;
+      else if (box.right > frame.right - 8) el.scrollLeft += box.right - (frame.right - 8);
+    }
+    const paint = () => {
+      const overflow = el.scrollWidth - el.clientWidth > 2;
+      const atStart = el.scrollLeft <= 2;
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+      el.dataset.fade = !overflow || (atStart && atEnd) ? 'none' : !atStart && !atEnd ? 'both' : atStart ? 'end' : 'start';
+    };
+    paint();
+    el.addEventListener('scroll', paint, { passive: true });
   });
 }
 

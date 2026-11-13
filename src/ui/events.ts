@@ -412,7 +412,7 @@ export function bindEvents() {
 
   window.addEventListener('hashchange', () => {
     closeDialog();
-    ui.category = 'All';
+    ui.category = 'Popular';
     ui.marketQuery = '';
     ui.collapsed.clear();
     ui.scorerTeam = 0;

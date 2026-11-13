@@ -6,6 +6,22 @@ Frontend-only prototype. Data flow: UI action → in-memory state transition →
 
 Tooling: Node.js 22.23, pnpm 11.25.0, TypeScript 5.9, Vite 8, ESLint 9 with typescript-eslint, the Node.js test runner via tsx, and Playwright Core 1.56.1 driving headless Google Chrome 156. Full list in `TOOLS.md`.
 
+## 2026-11-13 recheck corrections
+
+Closes the open items from the PR #12 recheck: the mobile match opens on Popular with the three Match result prices above the slip bar at 390×844 and 390×740; focusing the market search moves the fixed bars aside; goalscorer search looks at both squads; the no-live fallback lists only future scheduled fixtures; the WTA fixture is N. Pellam v A. Quillane; collapsed rail links have accessible names; player props name a threshold and the rest-of-match or full-match window; Demo states is labelled on the page; horizontal fades track scroll position; cash out is on the open row; the sample offer copy says the amount is fixed until confirmation.
+
+| Check | Result |
+| --- | --- |
+| `pnpm lint` | PASS |
+| `pnpm test` | **37 passed, 0 failed** |
+| `pnpm build` | PASS |
+| `pnpm qa:browser` | **192/192** |
+| `pnpm qa:stress` | **52/52** |
+
+These ran against the local build. The public site remains gh-pages `654a2b1` (source `9724145`) until this correction is published. No contest entry has been submitted.
+
+The 12 November redesign section below is the historical result for that branch. Its 159 browser checks and 35 unit tests are not the current totals.
+
 ## 2026-11-12 redesign (branch `cursor/housebets-redesign-a1e1`)
 
 The redesign replaced the shell, data, match page, slip and My bets, and split `src/main.ts` into `src/ui/` modules. Both QA scripts were rewritten for the new interface.
