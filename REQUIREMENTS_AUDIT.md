@@ -55,13 +55,14 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Tools, libraries and models named | Verified | `TOOLS.md` and `SUBMISSION.md` section 4 |
 | Shell follows the official starter files / brand pack | Verified | Official wordmark and mark from `brand/`; top bar, left rail and side panel use the pack cyan and 8px radii |
 | Physical devices, Safari/Firefox, screen reader | Not tested | Listed as a limitation |
-| Publishing and submission | Published through PR #12; this correction is not published yet | Live site is gh-pages `654a2b1` (source `9724145`). No contest entry has been submitted, and the IP transfer has not been accepted on the owner's behalf |
+| Publishing and submission | Published | Live site is gh-pages `4e8b72a` (source `549dca1`, [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)). `pages:verify` and both QA scripts passed against the public URL. No contest entry has been submitted, and the IP transfer has not been accepted on the owner's behalf |
 
 ## Checks run for this audit
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm build`: pass.
 - `pnpm test`: 37 passed, 0 failed.
-- `pnpm qa:browser`: 192/192 (local build).
-- `pnpm qa:stress`: 52/52 (local build).
+- `pnpm qa:browser`: 192/192 against the public URL.
+- `pnpm qa:stress`: 52/52 against the public URL.
+- `pnpm pages:verify`: pass (9 public assets, `og.jpg` 1200×630).
 
 The 12 November redesign audit above recorded 35 tests and 159 browser checks. Those figures describe that pass, not this correction.
