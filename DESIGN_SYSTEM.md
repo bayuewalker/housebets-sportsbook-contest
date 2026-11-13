@@ -27,7 +27,7 @@ A familiar Housebets shell around dense, readable sports lists and an honest sin
 | Price up / down | `--up`, `--down` | `#3ddc97`, `#ff6b81` |
 | Changed odds / HT / cashed out | `--amber` | `#f6c35c` |
 | Radii | `--radius`, `--r-sm` | 16px, 10px |
-| Shell sizes | `--topbar`, `--rail`, `--panel`, `--nav-h`, `--bar-h` | 64px, 72px, 340px, 64px, 60px |
+| Shell sizes | `--topbar`, `--rail`, `--panel`, `--nav-h`, `--bar-h` | 64px, 72px, 340px, 64px, 60px. At ≤767px the phone overrides are top bar 58px, bottom nav 60px, slip bar 56px |
 
 Prices, balances, scores and clocks use tabular numerals. Phone inputs are 16px so iOS does not zoom on focus.
 
@@ -41,7 +41,7 @@ Prices, balances, scores and clocks use tabular numerals. Phone inputs are 16px 
 | 768–1099px | Rail | Hidden; slip bar + bottom sheet | Compact sticky score bar on the match page |
 | ≤899px | Rail | Bar + sheet | Weekly Prize widget hidden |
 | ≤767px (390 target) | Bottom navigation | Bar + sheet | Event rows stack odds under teams; My bets table becomes cards; 44px tap targets |
-| ≤380px | Bottom navigation | Bar + sheet | Wordmark hidden, mark only; tighter goalscorer table |
+| ≤340px | Bottom navigation | Bar + sheet | Wordmark logo hidden, mark only; tighter goalscorer table |
 
 `viewport-fit=cover` enables safe-area insets. Content gets bottom padding equal to the slip bar plus bottom navigation, so nothing is hidden behind them.
 
@@ -56,7 +56,7 @@ Prices, balances, scores and clocks use tabular numerals. Phone inputs are 16px 
 | Slip pick | Market, outcome, price, match link, stake field (empty, placeholder 0.00), quick stakes 5/10/25/50/100, returns | Old price struck through beside the new one, "Accept odds" | Suspended message; placing paused |
 | Slip footer | Total stake, returns, Place bet · X USDT, pinned to the bottom of the sheet on phones | Accept odds above Place bet | Button label says what is missing ("Enter a stake", "Enter a stake for each pick") |
 | Placement | Busy state blocks repeat clicks | Receipt with one line per single and a My bets link | "Bet not placed" with Try again; no debit |
-| My bets table | Placed / Bet / Odds / Stake / Returns / Result; Open and Settled tabs; date and sport filters | Expanded row with reference, times and cash-out history; won rows highlighted | Empty state per filter |
+| My bets table | Placed / Bet / Odds / Stake / Returns / Result; Open and Settled tabs; date and sport filters; Cash out on an eligible open row | Expanded row with reference, times and cash-out history; won rows highlighted | Empty state per filter |
 | Loading / empty | Skeleton rows; empty search; starting-soon fallback when nothing is live | | |
 
 Motion: price flashes, the live dot pulse and sheet transitions are disabled under `prefers-reduced-motion`.

@@ -1,7 +1,7 @@
 import { sportLabel, sports } from '../../data';
 import { icon, sportIcon } from '../../icons';
 import { esc, plural } from '../format';
-import { isLive, liveFixtures, state, ui } from '../state';
+import { liveFixtures, state, ui, upcomingFixtures } from '../state';
 import { emptyState, leagueFlag, sectionHead, skeleton } from '../components/common';
 import { groupByLeague, groupBySport } from '../components/fixtures';
 
@@ -21,18 +21,21 @@ export function livePage(): string {
     </button>`;
   const heading = `<h1 id="page-title" tabindex="-1" class="page-title"><span class="live-dot"></span>Live <span>${plural(all.length, 'event')} in play</span></h1>`;
   const filters = `<div class="live-filters">
-    <div class="filter-chips" role="group" aria-label="Filter live events by sport">
+    <div class="filter-chips h-scroll" role="group" aria-label="Filter live events by sport">
       ${sportChip('All', 'All', all.length, 'live')}
       ${sports.map(s => sportChip(s, sportLabel(s), all.filter(f => f.sport === s).length, sportIcon(s))).join('')}
     </div>
-    <div class="filter-chips" role="group" aria-label="Filter live events by competition">
+    <div class="filter-chips h-scroll" role="group" aria-label="Filter live events by competition">
       ${compChip('', 'All competitions', sportShown.length)}
       ${competitions.map(league => compChip(league, league, sportShown.filter(f => f.league === league).length)).join('')}
     </div>
   </div>`;
   if (ui.loading) return `${heading}${skeleton()}`;
   if (!all.length) {
-    const soon = state().fixtures.filter(f => !isLive(f)).sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff)).slice(0, 8);
+    const soon = upcomingFixtures(state().fixtures).slice(0, 8);
+    if (!soon.length) {
+      return `${heading}${emptyState('No live events right now', 'Nothing on the schedule starts in the future.', '', '', 'clock')}`;
+    }
     return `${heading}
       <div class="fallback" role="status">${icon('clock')}<div><b>No live events right now.</b><span>Here is what starts next.</span></div></div>
       ${sectionHead(`${icon('clock')}Starting soon`, `<span class="section-count">${soon.length}</span>`)}

@@ -1,15 +1,13 @@
-import { leagueInfo, leagues, sportLabel, type Fixture } from '../../data';
+import { leagueInfo, leagues, sportLabel } from '../../data';
 import { compareYourMatches, searchFixtures } from '../../engine';
 import { icon, sportIcon } from '../../icons';
 import { esc, plural } from '../format';
-import { followsFixture, isLive, liveFixtures, state, ui } from '../state';
+import { followsFixture, isLive, liveFixtures, state, ui, upcomingFixtures } from '../state';
 import { emptyState, leagueFlag, sectionHead, skeleton } from '../components/common';
 import { eventRow, featuredCard, groupByLeague } from '../components/fixtures';
 
 const FEATURED = ['ars-bha', 'psg-ben', 'liv-mun', 'rma-bay', 'bar-atm', 'int-nap', 'bos-nyk'];
 const SOON_HOURS = 12;
-
-const byKickoff = (a: Fixture, b: Fixture) => Date.parse(a.kickoff) - Date.parse(b.kickoff);
 
 function toggleLink(action: string, expanded: boolean, total: number, shown: number): string {
   if (total <= shown && !expanded) return `<span class="section-count">${total}</span>`;
@@ -26,7 +24,7 @@ function sportPage(): string {
   const sport = ui.sport as Exclude<typeof ui.sport, 'All'>;
   const list = state().fixtures.filter(f => f.sport === sport);
   const live = list.filter(isLive);
-  const upcoming = list.filter(f => !isLive(f)).sort(byKickoff);
+  const upcoming = upcomingFixtures(list);
   return `<h1 id="page-title" tabindex="-1" class="page-title">${icon(sportIcon(sport))}${esc(sportLabel(sport))} <span>${plural(list.length, 'event')}</span></h1>
     ${live.length ? `${sectionHead('<span class="live-dot"></span>Live', `<span class="section-count">${live.length}</span>`)}${groupByLeague(live)}` : ''}
     ${upcoming.length ? `${sectionHead(`${icon('clock')}Upcoming`, `<span class="section-count">${upcoming.length}</span>`)}${groupByLeague(upcoming)}` : ''}`;
@@ -40,7 +38,7 @@ export function homePage(): string {
   const mine = s.fixtures.filter(followsFixture).sort((a, b) => compareYourMatches(a, b, s.favorites, isLive));
   const featured = FEATURED.map(id => s.fixtures.find(f => f.id === id)!).filter(Boolean);
   const live = liveFixtures();
-  const soon = s.fixtures.filter(f => !isLive(f) && Date.parse(f.kickoff) - Date.now() < SOON_HOURS * 3_600_000).sort(byKickoff);
+  const soon = upcomingFixtures(s.fixtures, Date.now(), SOON_HOURS * 3_600_000);
   const mineShown = ui.showAllMine ? mine : mine.slice(0, 3);
   const soonShown = ui.showAllSoon ? soon : soon.slice(0, 6);
   return `<h1 id="page-title" tabindex="-1" class="sr-only">Sports home</h1>
@@ -60,7 +58,9 @@ export function homePage(): string {
     </section>
     <section class="home-section" aria-labelledby="soon-title" id="starting-soon">
       ${sectionHead(`<span id="soon-title">${icon('clock')}Starting soon</span>`, toggleLink('toggle-soon', ui.showAllSoon, soon.length, 6))}
-      <div class="rows">${soonShown.map(f => eventRow(f, { showLeague: true })).join('')}</div>
+      ${soon.length
+        ? `<div class="rows">${soonShown.map(f => eventRow(f, { showLeague: true })).join('')}</div>`
+        : emptyState('Nothing starting soon', 'Every remaining fixture is already live, or its kick-off has passed.', '', '', 'clock')}
     </section>
     <section class="home-section" aria-labelledby="comp-title">
       ${sectionHead('<span id="comp-title">Top competitions</span>')}

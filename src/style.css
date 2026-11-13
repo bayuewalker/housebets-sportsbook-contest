@@ -222,6 +222,17 @@ table { border-collapse: collapse; width: 100%; }
 
 main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
 .main-head { display: grid; gap: 12px; margin-bottom: 18px; }
+.demo-entry {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 40px; padding: 6px 12px;
+  border-radius: 12px; background: var(--card); border: 1px solid var(--line-2); text-align: left;
+}
+.demo-entry:hover { border-color: var(--brand); }
+.demo-entry b { font-size: 13px; }
+.demo-entry span { color: var(--muted); font-size: 12px; font-weight: 600; }
+.crumb-demo { display: none; width: auto; flex: none; min-height: 44px; padding: 0 10px; }
+.demo-steps { display: grid; gap: 4px; padding-left: 18px; color: var(--text-2); font-size: 13px; }
+.demo-steps li { padding-left: 4px; }
+.scorer-side { display: block; color: var(--muted); font-size: 11px; font-weight: 700; }
 .search {
   display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 6px 0 14px;
   border-radius: 14px; background: var(--card); border: 1px solid var(--line-2); color: var(--muted);
@@ -614,6 +625,7 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
 .expand .icon { width: 18px; height: 18px; transition: transform .15s; }
 .bet.expanded .expand .icon { transform: rotate(180deg); }
 .bet-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.bet-cell .cash { margin-left: auto; flex: none; }
 .bet-sport { display: grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 9px; background: var(--card-2); color: var(--brand); }
 .bet-sport .icon { width: 16px; height: 16px; }
 .bet-copy { display: grid; min-width: 0; }
@@ -787,6 +799,10 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .bottom-nav > * { display: grid; justify-items: center; align-content: center; gap: 3px; min-height: 44px; color: var(--muted); font-size: 11px; font-weight: 700; }
   .bottom-nav .active { color: var(--brand); }
   .slip-bar { left: 0; bottom: calc(var(--nav-h) + var(--safe-b)); padding: 5px 10px; }
+  /* A focused field brings up the phone keyboard. Move the fixed bars off-screen so the market stays reachable. */
+  .app:has(main input:focus) .slip-bar,
+  .app:has(main input:focus) .bottom-nav { transform: translateY(100vh); }
+  .app:has(main input:focus) main { padding-bottom: 24px; }
   .slip-bar button { min-height: 48px; padding: 0 12px; }
   .slip-bar-count { width: 34px; height: 34px; }
   .toast, .app.with-panel .toast { left: 50%; bottom: calc(var(--nav-h) + var(--bar-h) + 28px + var(--safe-b)); }
@@ -798,9 +814,39 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .sport-tabs, .fav-chips, .filter-chips, .market-tabs {
     overscroll-behavior-inline: contain;
     scroll-snap-type: inline proximity;
-    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 20px), transparent 100%);
-    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 20px), transparent 100%);
   }
+  .h-scroll[data-fade="end"] {
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 20px), transparent);
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 20px), transparent);
+  }
+  .h-scroll[data-fade="start"] {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 20px);
+    mask-image: linear-gradient(to right, transparent, #000 20px);
+  }
+  .h-scroll[data-fade="both"] {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+  }
+  .app.page-match .main-head { display: none; }
+  .app.page-match .crumb-demo { display: inline-flex; }
+  .app.page-match .page { gap: 8px; }
+  .app.page-match .crumbs { flex-wrap: nowrap; }
+  .app.page-match .crumb-drop { min-width: 0; flex: 1; }
+  .app.page-match .crumb-drop summary { max-width: 100%; overflow: hidden; }
+  .app.page-match .crumb-drop summary span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .app.page-match .scoreboard { gap: 6px; padding: 8px 10px 10px; }
+  .app.page-match .scoreboard-main { gap: 6px; }
+  .app.page-match .sb-team { gap: 2px; }
+  .app.page-match .sb-team .star { width: 28px; height: 28px; }
+  .app.page-match .club.large { width: 28px; height: 28px; border-radius: 8px; font-size: 9px; }
+  .app.page-match .sb-team b { font-size: 12px; line-height: 1.15; }
+  .app.page-match .sb-score { gap: 0; }
+  .app.page-match .sb-score strong { font-size: 26px; }
+  .app.page-match .market-toolbar { gap: 6px; padding-top: 6px; padding-bottom: 6px; }
+  .app.page-match .market-status { display: none; }
+  .app.page-match .market-head button { min-height: 44px; }
+  .app.page-match .market-body { gap: 6px; padding-bottom: 8px; }
+  .app.page-match .odds.full { min-height: 44px; padding: 4px 6px; }
   .sport-tab, .fav-chips .chip, .filter-chip, .market-tabs button { scroll-snap-align: start; }
   .fav-title { display: none; }
   .page { gap: 14px; }
@@ -860,7 +906,8 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .bet-row td { padding: 0; }
   .bet-row td.placed { grid-column: 1 / 3; display: flex; align-items: center; }
   .bet-row td.result { grid-column: 3; grid-row: 1; justify-self: end; }
-  .bet-row td.bet-cell { grid-column: 1 / -1; display: flex; }
+  .bet-row td.bet-cell { grid-column: 1 / -1; display: flex; flex-wrap: wrap; }
+  .bet-row td.bet-cell .cash { margin-left: 0; flex: 1 0 100%; justify-content: center; }
   .bet-row td.num { text-align: left; }
   .bet-row td.num::before { content: attr(data-label); display: block; color: var(--muted); font-size: 11px; font-weight: 600; }
   .bet.won .bet-row td:first-child { box-shadow: none; }

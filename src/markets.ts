@@ -250,21 +250,23 @@ export function footballMarkets(s: FootballState): Market[] {
   const penalty = 0.03 + 0.09 * remaining;
   add('penalty', 'Penalty scored', 'Goalscorers', ['Yes', 'No'], [penalty, 1 - penalty]);
 
-  // Players — fictional squad names only. Each row is that player's price.
+  // Players — fictional squad names only. Each price is P(at least the named threshold)
+  // over the same window as the model: the rest of a live match, or the full match before kick-off.
+  const period = live ? 'rest of match' : 'full match';
   const playerProp = (id: string, name: string, prob: (mu: number, i: number) => number) => {
     const rows = names.map((n, i) => [n[0], prob(n[1], i)] as const).filter(n => n[1] >= 0.02 && n[1] <= 0.94);
-    if (rows.length >= 2) add(id, name, 'Players', rows.map(n => n[0]), rows.map(n => n[1]), 'list');
+    if (rows.length >= 2) add(id, `${name} · ${period}`, 'Players', rows.map(n => n[0]), rows.map(n => n[1]), 'list');
   };
-  playerProp('sot', 'Shots on target', mu => 1 - Math.exp(-Math.max(mu * 3.4, 0.35 * remaining)));
+  playerProp('sot', '1+ shots on target', mu => 1 - Math.exp(-Math.max(mu * 3.4, 0.35 * remaining)));
   playerProp('sot2', '2+ shots on target', mu => atLeast(Math.max(mu * 2.4, 0.2 * remaining), 2));
-  playerProp('shots', 'Player shots', mu => 1 - Math.exp(-Math.max(mu * 5, 0.7 * remaining)));
-  playerProp('sot-out', 'Shots outside the box', mu => 1 - Math.exp(-Math.max(mu * 1.8, 0.28 * remaining)));
-  playerProp('shots-off', 'Shots off target', mu => 1 - Math.exp(-Math.max(mu * 2.8, 0.4 * remaining)));
-  playerProp('booked', 'To be booked', (_mu, i) => 1 - Math.exp(-(0.16 + (11 - i) * 0.012) * (0.35 + remaining)));
-  playerProp('assist', 'To assist', mu => 1 - Math.exp(-mu * 0.72));
-  playerProp('fouls', 'Fouls committed', (_mu, i) => 1 - Math.exp(-(0.42 + (i % 6) * 0.05) * (0.45 + remaining)));
-  playerProp('offsides', 'Offsides', mu => 1 - Math.exp(-Math.max(mu * 1.3, 0.22 * remaining)));
-  playerProp('tackles', 'Tackles', (_mu, i) => 1 - Math.exp(-(0.5 + (i % 5) * 0.06) * (0.4 + remaining)));
+  playerProp('shots', '1+ shots', mu => 1 - Math.exp(-Math.max(mu * 5, 0.7 * remaining)));
+  playerProp('sot-out', '1+ shots outside the box', mu => 1 - Math.exp(-Math.max(mu * 1.8, 0.28 * remaining)));
+  playerProp('shots-off', '1+ shots off target', mu => 1 - Math.exp(-Math.max(mu * 2.8, 0.4 * remaining)));
+  playerProp('booked', '1+ booking', (_mu, i) => 1 - Math.exp(-(0.16 + (11 - i) * 0.012) * (0.35 + remaining)));
+  playerProp('assist', '1+ assist', mu => 1 - Math.exp(-mu * 0.72));
+  playerProp('fouls', '1+ foul', (_mu, i) => 1 - Math.exp(-(0.42 + (i % 6) * 0.05) * (0.45 + remaining)));
+  playerProp('offsides', '1+ offside', mu => 1 - Math.exp(-Math.max(mu * 1.3, 0.22 * remaining)));
+  playerProp('tackles', '1+ tackle', (_mu, i) => 1 - Math.exp(-(0.5 + (i % 5) * 0.06) * (0.4 + remaining)));
   const cardWeight = names.map((_n, i) => 0.7 + ((names.length - i) % 7) * 0.15);
   const cardTotal = cardWeight.reduce((sum, weight) => sum + weight, 0);
   const cardChance = Math.min(0.82, 0.5 + 0.35 * remaining);
@@ -273,7 +275,7 @@ export function footballMarkets(s: FootballState): Market[] {
     .filter(row => row[1] >= 0.02);
   if (cardRows.length >= 2) {
     const used = cardRows.reduce((sum, row) => sum + row[1], 0);
-    add('card-first', 'To be carded first', 'Players', [...cardRows.map(row => row[0]), 'No card'], [...cardRows.map(row => row[1]), Math.max(0.02, 1 - used)], 'list');
+    add('card-first', `First card · ${period}`, 'Players', [...cardRows.map(row => row[0]), 'No card'], [...cardRows.map(row => row[1]), Math.max(0.02, 1 - used)], 'list');
   }
 
   // Minutes. Past windows are closed; what is left is the open part of the current window onwards.

@@ -10,15 +10,23 @@ function demo(): string {
   const s = state();
   const item = (action: string, glyph: string, title: string, text: string, armed = false) =>
     `<button data-action="${action}" class="${armed ? 'armed' : ''}">${icon(glyph)}<b>${title}</b><span>${text}</span></button>`;
-  return `<p class="eyebrow">Demo controls</p>
-    <h2>Trigger any state</h2>
-    <p class="dialog-intro">Sample data and simulated transactions. Price and suspension changes target your first selection, or Arsenal's match result when the slip is empty.</p>
+  return `<p class="eyebrow">Demo states</p>
+    <h2>Show the three review states</h2>
+    <ol class="demo-steps">
+      <li>Change the odds. The slip waits until you accept.</li>
+      <li>Suspend the market. The pick stays, and placement stops.</li>
+      <li>Fail the next placement, then place the same bet again to retry.</li>
+    </ol>
+    <p class="dialog-intro">These controls are not bets. They target your first selection, or Arsenal's match result when the slip is empty.</p>
     <div class="demo-grid">
-      ${item('move', 'refresh', 'Move odds', 'Needs explicit acceptance')}
-      ${item('suspend', 'lock', 'Suspend / reopen', 'Selection stays in the slip')}
-      ${item('fail', 'info', s.failNext ? 'Failure armed' : 'Fail next placement', s.failNext ? 'Click again to disarm' : 'Balance stays untouched', s.failNext)}
+      ${item('move', 'refresh', '1. Change odds', 'Needs explicit acceptance')}
+      ${item('suspend', 'lock', '2. Suspend / reopen', 'Selection stays in the slip')}
+      ${item('fail', 'info', s.failNext ? '3. Failure armed' : '3. Fail next placement', s.failNext ? 'Place the bet, then place it again' : 'Then place again to retry', s.failNext)}
+    </div>
+    <p class="menu-label">More sample states</p>
+    <div class="demo-grid">
       ${item('settle', 'check', 'Settle an open bet', 'Marks it won and pays out')}
-      ${item('no-live', 'clock', s.noLive ? 'Restore live events' : 'No live events', 'Shows the starting-soon fallback', s.noLive)}
+      ${item('no-live', 'clock', s.noLive ? 'Restore live events' : 'No live events', 'Starting soon lists future kick-offs only', s.noLive)}
       ${item('loading', 'refresh', 'Loading state', 'Two-second skeleton')}
       ${item('feed', 'live', ui.liveFeed ? 'Pause live prices' : 'Resume live prices', 'In-play prices move every few seconds', !ui.liveFeed)}
     </div>
@@ -38,7 +46,7 @@ function info(): string {
         </dl>
         <div class="dialog-actions">
           <button class="btn ghost" data-action="view-open">${icon('ticket')}My bets</button>
-          <button class="btn ghost" data-action="demo">${icon('settings')}Demo controls</button>
+          <button class="btn ghost" data-action="demo">${icon('settings')}Demo states</button>
         </div>
         <p class="dialog-intro">Favourites, bet history and the demo balance are stored in this browser only.</p>`;
     case 'Prize':
@@ -72,7 +80,7 @@ function menu(): string {
       <button data-action="info" data-topic="Prize">${icon('trophy')}Weekly Prize</button>
       <button data-action="info" data-topic="VIP">${icon('crown')}VIP club</button>
       <button data-action="info" data-topic="Profile">${icon('profile')}Demo profile</button>
-      <button data-action="demo">${icon('settings')}Demo controls</button>
+      <button data-action="demo">${icon('settings')}Demo states</button>
     </div>`;
 }
 
@@ -105,7 +113,7 @@ export function dialog(): string {
       body = menu();
       break;
     case 'demo':
-      label = 'Demo controls';
+      label = 'Demo states';
       body = demo();
       break;
     case 'wallet':

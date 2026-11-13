@@ -1,7 +1,7 @@
 import { leagues } from '../../data';
 import { icon } from '../../icons';
 import { esc } from '../format';
-import { isLive, state, ui, type FootballMarket } from '../state';
+import { isLive, isUpcoming, state, ui, type FootballMarket } from '../state';
 import { emptyState, leagueFlag, skeleton } from '../components/common';
 import { leagueGroup } from '../components/fixtures';
 
@@ -10,7 +10,7 @@ const UPCOMING_HOURS = 24;
 
 export function footballPage(): string {
   const football = state().fixtures.filter(f => f.sport === 'Football');
-  const inScope = football.filter(f => ui.footballScope === 'all' || isLive(f) || Date.parse(f.kickoff) - Date.now() < UPCOMING_HOURS * 3_600_000);
+  const inScope = football.filter(f => ui.footballScope === 'all' || isLive(f) || (isUpcoming(f) && Date.parse(f.kickoff) - Date.now() < UPCOMING_HOURS * 3_600_000));
   const list = inScope
     .filter(f => !ui.league || f.league === ui.league)
     .sort((a, b) => Number(isLive(b)) - Number(isLive(a)) || Date.parse(a.kickoff) - Date.parse(b.kickoff));
@@ -27,7 +27,7 @@ export function footballPage(): string {
     `<button data-action="football-scope" data-scope="${value}" class="${ui.footballScope === value ? 'active' : ''}" aria-pressed="${ui.footballScope === value}">${label}</button>`;
   return `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/sports">Sports</a>${icon('chevron')}<span aria-current="page">Soccer</span></nav>
     <h1 id="page-title" tabindex="-1" class="page-title">${icon('ball')}Soccer <span><b class="scope-count">${scopeCount}</b> ${scopeNote} · ${football.filter(isLive).length} live</span></h1>
-    <div class="filter-chips" role="group" aria-label="Competitions">${chip('', ui.footballScope === 'upcoming' ? 'Today & live' : 'All leagues')}${leagues.map(l => chip(l, l)).join('')}</div>
+    <div class="filter-chips h-scroll" role="group" aria-label="Competitions">${chip('', ui.footballScope === 'upcoming' ? 'Today & live' : 'All leagues')}${leagues.map(l => chip(l, l)).join('')}</div>
     <div class="list-controls">
       <label class="select"><span>Market</span>
         <select id="football-market" aria-label="Market shown on each match">${MARKETS.map(([v, l]) => `<option value="${v}" ${ui.footballMarket === v ? 'selected' : ''}>${l}</option>`).join('')}</select>
