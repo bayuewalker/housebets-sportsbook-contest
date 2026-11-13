@@ -55,7 +55,7 @@ Evidence levels: **Verified** means source plus an automated browser or unit che
 | Tools, libraries and models named | Verified | `TOOLS.md` and `SUBMISSION.md` section 4 |
 | Shell follows the official starter files / brand pack | Verified | Official wordmark and mark from `brand/`; top bar, left rail and side panel use the pack cyan and 8px radii |
 | Physical devices, Safari/Firefox, screen reader | Not tested | Listed as a limitation |
-| Publishing and submission | Published | Live site is gh-pages `4e8b72a` (source `549dca1`, [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)). `pages:verify` and both QA scripts passed against the public URL. No contest entry has been submitted, and the IP transfer has not been accepted on the owner's behalf |
+| Publishing and submission | Published | Live site is gh-pages `fc52526` (source `3792468`). The compiled app is the [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13) bundle. `pages:verify` and both QA scripts passed against the public URL. No contest entry has been submitted, and the IP transfer has not been accepted on the owner's behalf |
 
 ## Checks run for this audit
 
