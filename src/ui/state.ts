@@ -23,6 +23,7 @@ export const ui = {
   footballScope: 'upcoming' as 'upcoming' | 'all',
   category: 'Popular' as Category | 'All',
   marketQuery: '',
+  searchCategoryOrigin: null as Category | 'All' | null,
   collapsed: new Set<string>(),
   scorerTeam: 0 as 0 | 1,
   panelTab: 'slip' as PanelTab,
@@ -53,6 +54,19 @@ try {
 }
 
 export const state = () => current;
+
+export function setMarketQuery(query: string) {
+  ui.marketQuery = query;
+  if (!query.trim() && ui.searchCategoryOrigin !== null) {
+    ui.category = ui.searchCategoryOrigin;
+    ui.searchCategoryOrigin = null;
+  }
+}
+
+export function searchAllMarkets() {
+  ui.searchCategoryOrigin ??= ui.category;
+  ui.category = 'All';
+}
 
 export function resetState() {
   current = initialState();

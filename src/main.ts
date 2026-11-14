@@ -4,7 +4,9 @@ import './style.css';
 import { bindEvents } from './ui/events';
 import { startFeed } from './ui/feed';
 import { render } from './ui/render';
+import { watchKeyboard } from './ui/viewport';
 
 bindEvents();
 render();
 startFeed();
+watchKeyboard();

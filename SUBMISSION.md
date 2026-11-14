@@ -8,7 +8,7 @@ Contest: [Housebets Sportsbook Design Contest](https://www.housebets.com/contest
 
 https://bayuewalker.github.io/housebets-sportsbook-contest/
 
-Served from `gh-pages` / (root) with no login. The live site is gh-pages `fc52526` (source `3792468`). The compiled app is the [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13) bundle. Submission status is separate: nothing has been submitted.
+Served from `gh-pages` / (root) with no login. The current deployed source and asset checksums are recorded in [build-info.json](https://bayuewalker.github.io/housebets-sportsbook-contest/build-info.json). Submission status is separate: nothing has been submitted.
 
 ## 2. Five linked pages
 
@@ -30,7 +30,7 @@ Full detail with versions and licences is in `TOOLS.md`.
 
 - **Libraries shipped:** Figtree and Red Hat Display variable fonts via Fontsource (`@fontsource-variable/figtree`, `@fontsource-variable/red-hat-display` 5.3.0, SIL OFL 1.1), self-hosted. No UI framework, template or UI kit.
 - **Build and QA tools (not shipped):** TypeScript, Vite, ESLint with typescript-eslint, tsx with the Node.js test runner, Node.js, pnpm, Playwright Core driving headless Google Chrome.
-- **AI agents and models:** OpenAI ChatGPT/Codex for the initial build; a Cursor Cloud Agent running Anthropic Claude (Claude Opus) for the finishing passes and this redesign (data, UI, accessibility, QA and docs); Grok Bot for contest audit, review and QA prompts. The owner directed and reviewed the work. No AI-generated images.
+- **AI agents and models:** OpenAI ChatGPT/Codex for the initial build and 14 November final polish; a Cursor Cloud Agent running Anthropic Claude (Claude Opus) for the finishing passes and this redesign (data, UI, accessibility, QA and docs); Grok Bot for contest audit, review and QA prompts. The owner directed and reviewed the work. No AI-generated images.
 - **Assets:** the Housebets brand pack in `brand/` — official wordmark `brand/logo.svg` and mark `brand/mark.svg` (also `public/favicon.svg`). The top bar, left rail and side panel use that logo, the pack cyan and 8px radii. Interface icons, team badges and flags are original inline SVG/CSS. No club or league artwork. Fictional player names; all fixtures, prices and bets are sample data.
 - **Hosting:** GitHub Pages, deploy from branch (`gh-pages` / root). No custom Actions deployment.
 

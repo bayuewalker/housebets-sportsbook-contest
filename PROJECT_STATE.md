@@ -1,10 +1,10 @@
 # Housebets Sports — Project State
 
-Updated: 2026-11-13
+Updated: 2026-11-14
 
 ## Current outcome
 
-**The public site matches the app on `main`.** gh-pages `fc52526c7c2e5a2ffbb2f0fd8c2bb9a9ada7030f` records source `37924688cf02c529c266af3f48c974c2ce21aa9d`. The compiled assets are the same bundle as [PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13) (`549dca1` / `4e8b72a`); this republish changes only `build-info.json`. `pnpm pages:verify` matched 9 public assets and confirmed `og.jpg` is 1200×630. Against that public URL: 192 browser checks and 52 stress checks. No contest entry has been submitted. That account step is separate from deployment.
+The final polish addresses the remaining PR #15 audit findings: scoped search recovery, cross-team player labels, mobile breadcrumbs, keyboard dismissal and resize fades. Local validation: 41 unit tests, lint and production build pass. Full browser/stress totals from 13 November are historical, not a claim about this pass. Deployment identity is recorded in the public [build-info.json](https://bayuewalker.github.io/housebets-sportsbook-contest/build-info.json); release verification is recorded in the finishing PR. Contest submission remains an owner action.
 
 ## Milestones
 
@@ -32,7 +32,7 @@ Updated: 2026-11-13
 | 13 November recheck correction ([PR #13](https://github.com/bayuewalker/housebets-sportsbook-contest/pull/13)) | `549dca1fe68c20394caa40ee08cdff2b35c72c71` | `4e8b72a79b706136e6d2715d04f69dcd552f823d` | `pnpm pages:verify` pass (9 public assets, `og.jpg` 1200×630); `qa:browser` 192/192 and `qa:stress` 52/52 against the public site |
 | 13 November republish of current `main` | `37924688cf02c529c266af3f48c974c2ce21aa9d` | `fc52526c7c2e5a2ffbb2f0fd8c2bb9a9ada7030f` | `pnpm pages:verify` pass (9 public assets, `og.jpg` 1200×630); `qa:browser` 192/192 and `qa:stress` 52/52. Compiled assets identical to the PR #13 publish; only `build-info.json` changed |
 
-Releases through PR #8 are the previous design. The current public site is the republish row. Later documentation-only commits on `main` do not change the published app.
+Releases through PR #8 are the previous design. The table records releases through 13 November; consult build-info.json for the final polish deployment. Later documentation-only commits on `main` do not change the published app.
 
 Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, copy `.pages/` to the `gh-pages` root (removing obsolete hashed assets), commit and push without force, then run `pnpm pages:verify`. No custom Actions deployment, and no secrets or tokens in the repository.
 
@@ -52,4 +52,4 @@ Publishing: build from a clean checkout of `main`, run `pnpm pages:prepare`, cop
 
 ## Next step
 
-The public prototype matches the recheck correction. The remaining step is the owner's own review and submission, including the IP transfer for winners.
+After final release verification, the remaining step is the owner's own review and submission, including the IP transfer for winners.
