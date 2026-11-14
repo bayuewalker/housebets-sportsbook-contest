@@ -3,13 +3,7 @@ import { icon } from '../../icons';
 import { esc, plural } from '../format';
 import { clockText, currentFixture, isLive, state, ui } from '../state';
 import { badge, emptyState, leagueFlag, liveBadge, oddsButton, periodText, star } from '../components/common';
-import { outcomesForQuery, scorerRows } from '../query';
-
-const SCORER_IDS = ['scorer', 'anytime', 'brace'];
-
-function matches(m: Market, q: string): boolean {
-  return !q || m.name.toLocaleLowerCase().includes(q) || m.outcomes.some(o => o.label.toLocaleLowerCase().includes(q));
-}
+import { matchingMarkets, outcomesForQuery, scorerRows, searchesBothTeams, SCORER_IDS } from '../query';
 
 function columns(m: Market): string {
   if (m.id === 'correct') return 'cols-3';
@@ -44,7 +38,7 @@ function scorerCard(f: Fixture, q: string): string {
   const open = !ui.collapsed.has('scorers');
   const marketNames = [first, anytime, brace].flatMap(m => m ? [m.name] : []);
   const players = scorerRows(f.players, ui.scorerTeam, q, marketNames);
-  const showTeam = new Set(players.map(p => p.team)).size > 1;
+  const showTeam = searchesBothTeams(q, marketNames);
   const cell = (m: Market | undefined, name: string) => {
     const o = m?.outcomes.find(x => x.label === name);
     return `<td>${m && o ? oddsButton(f, m, o, 'cell') : '<span class="odds-closed" aria-label="Not offered">–</span>'}</td>`;
@@ -63,6 +57,7 @@ function scorerCard(f: Fixture, q: string): string {
     </h3>
     <div class="market-body" id="market-scorers" ${open ? '' : 'hidden'}>
       <div class="team-switch" role="tablist" aria-label="Team">${team(0)}${team(1)}</div>
+      ${showTeam ? '<p class="market-msg" role="status">Searching both teams</p>' : ''}
       <table class="scorer-table">
         <thead><tr><th scope="col">Player</th><th scope="col">${first.name.startsWith('Next') ? 'Next' : 'First'}</th><th scope="col">Anytime</th><th scope="col">2+</th></tr></thead>
         <tbody>
@@ -108,8 +103,9 @@ export function matchPage(): string {
   const q = ui.marketQuery.trim().toLocaleLowerCase();
   const available = categories.filter(c => f.markets.some(m => m.category === c));
   if (ui.category !== 'All' && !available.includes(ui.category)) ui.category = available.includes('Popular') ? 'Popular' : 'All';
-  const inCategory = f.markets.filter(m => ui.category === 'All' || m.category === ui.category);
-  const shown = inCategory.filter(m => matches(m, q) || (SCORER_IDS.includes(m.id) && f.players.some(p => p.toLocaleLowerCase().includes(q))));
+  const allMatches = matchingMarkets(f, q);
+  const shown = allMatches.filter(m => ui.category === 'All' || m.category === ui.category);
+  const outsideMatches = allMatches.length - shown.length;
   const scorerTable = f.sport === 'Football' && shown.some(m => SCORER_IDS.includes(m.id));
   const info = leagueInfo[f.league];
   const sportLink = f.sport === 'Football'
@@ -148,7 +144,7 @@ export function matchPage(): string {
   return `<nav class="crumbs" aria-label="Breadcrumb">
       <a class="crumb-back" href="${backHref}" aria-label="${backLabel}">${icon('back')}</a>
       <details class="crumb-drop">
-        <summary><span>${esc(sportLabel(f.sport))}</span>${icon('chevron')}<span>${esc(info?.country ?? '')}</span>${icon('chevron')}<span>${esc(f.league)}</span>${icon('chevron')}<span aria-current="page">${esc(f.homeCode)}–${esc(f.awayCode)}</span></summary>
+        <summary><span class="crumb-compact">${esc(f.league)}</span><span class="crumb-full">${esc(sportLabel(f.sport))}</span>${icon('chevron', 'crumb-full')}<span class="crumb-full">${esc(info?.country ?? '')}</span>${icon('chevron', 'crumb-full')}<span class="crumb-full">${esc(f.league)}</span>${icon('chevron', 'crumb-full')}<span class="crumb-full" aria-current="page">${esc(f.homeCode)}–${esc(f.awayCode)}</span>${icon('down', 'crumb-compact')}</summary>
         <div class="crumb-menu">
           <a href="#/sports">Sports</a>
           ${sportLink}
@@ -178,5 +174,5 @@ export function matchPage(): string {
         ${isLive(f) ? `<span class="${ui.liveFeed && !state().noLive ? 'feed-on' : ''}"><span class="live-dot"></span>${ui.liveFeed ? 'Prices update live' : 'Live prices paused'}</span>` : `<span>${icon('clock')}Pre-match prices</span>`}
       </p>
     </div>
-    <div class="markets" id="market-list" role="tabpanel" aria-label="Markets">${cards || emptyState(`No markets match “${ui.marketQuery}”`, 'Try another word, such as corners, handicap or a player name.', 'Clear market search', 'clear-market-search')}</div>`;
+    <div class="markets" id="market-list" role="tabpanel" aria-label="Markets">${cards || (outsideMatches > 0 ? emptyState(`No results in ${categoryLabel(ui.category)}`, `${plural(outsideMatches, 'matching market')} in other categories. Search all markets to see them.`, 'Search all markets', 'search-all-markets') : emptyState(`No markets match “${ui.marketQuery}”`, 'Try another word, such as corners, handicap or a player name.', 'Clear market search', 'clear-market-search'))}</div>`;
 }

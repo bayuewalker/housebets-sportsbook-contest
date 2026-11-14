@@ -20,9 +20,9 @@ A familiar Housebets shell around dense, readable sports lists and an honest sin
 | Cards | `--card`, `--card-2`, `--raised` | `#0e1e25`, `#12262e`, `#162d36` |
 | Lines | `--line`, `--line-2` | `#1a2e36`, `#24404a` |
 | Text | `--text`, `--text-2`, `--muted` | `#eef5f6`, `#b6c7cd`, `#869ba3` |
-| Brand cyan (links, active icons) | `--brand` | `#22e2e8` |
+| Brand cyan (links, active icons) | `--brand` | `#02f7fd` |
 | Primary action / selected price | `--accent`, `--accent-ink` | `#a7f0f1`, `#06282c` |
-| Prices | `--price` | `#5fe3ea` |
+| Prices | `--price` | `#5ef6ff` |
 | Live | `--live` | `#ff4d67` |
 | Price up / down | `--up`, `--down` | `#3ddc97`, `#ff6b81` |
 | Changed odds / HT / cashed out | `--amber` | `#f6c35c` |

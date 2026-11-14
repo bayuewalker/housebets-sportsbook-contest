@@ -800,9 +800,9 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
   .bottom-nav .active { color: var(--brand); }
   .slip-bar { left: 0; bottom: calc(var(--nav-h) + var(--safe-b)); padding: 5px 10px; }
   /* A focused field brings up the phone keyboard. Move the fixed bars off-screen so the market stays reachable. */
-  .app:has(main input:focus) .slip-bar,
-  .app:has(main input:focus) .bottom-nav { transform: translateY(100vh); }
-  .app:has(main input:focus) main { padding-bottom: 24px; }
+  .keyboard-open .app .slip-bar,
+  .keyboard-open .app .bottom-nav { transform: translateY(100vh); }
+  .keyboard-open .app main { padding-bottom: 24px; }
   .slip-bar button { min-height: 48px; padding: 0 12px; }
   .slip-bar-count { width: 34px; height: 34px; }
   .toast, .app.with-panel .toast { left: 50%; bottom: calc(var(--nav-h) + var(--bar-h) + 28px + var(--safe-b)); }
@@ -932,4 +932,12 @@ main { grid-column: 2; grid-row: 2; min-width: 0; padding: 18px 24px 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* The full breadcrumb remains available on desktop and in the menu. */
+.crumb-drop summary .crumb-compact { display: none; }
+@media (max-width: 767px) {
+  .crumb-drop summary .crumb-full { display: none; }
+  .crumb-drop summary .crumb-compact { display: inline-flex; }
+  .crumb-drop summary > span.crumb-compact { flex: 1; display: block; }
 }

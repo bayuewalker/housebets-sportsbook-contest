@@ -5,7 +5,7 @@ import {
 import { plural } from './format';
 import { render, root, setDialogCancel } from './render';
 import {
-  clearFilters, closeDialog, go, isFavorite, isSelected, page, pickKey, resetState, state, toast, ui,
+  clearFilters, closeDialog, go, isFavorite, isSelected, page, pickKey, resetState, searchAllMarkets, setMarketQuery, state, toast, ui,
   type DateFilter, type FootballMarket, type InfoTopic, type PanelTab,
 } from './state';
 
@@ -195,6 +195,7 @@ function handle(action: string, d: DOMStringMap, button: HTMLElement): boolean |
       navigate('/bets');
       break;
     case 'category':
+      ui.searchCategoryOrigin = null;
       ui.category = d.category as Category | 'All';
       break;
     case 'collapse':
@@ -209,8 +210,11 @@ function handle(action: string, d: DOMStringMap, button: HTMLElement): boolean |
       }
       break;
     }
+    case 'search-all-markets':
+      searchAllMarkets();
+      break;
     case 'clear-market-search':
-      ui.marketQuery = '';
+      setMarketQuery('');
       render();
       root.querySelector<HTMLInputElement>('#market-search')?.focus();
       return false;
@@ -360,7 +364,7 @@ export function bindEvents() {
       if (page() !== 'home') navigate('/sports');
       render();
     } else if (input.id === 'market-search') {
-      ui.marketQuery = input.value;
+      setMarketQuery(input.value);
       render();
     } else if (input.dataset.stake) {
       const p = state().selections.find(x => pickKey(x) === input.dataset.stake);
@@ -398,6 +402,13 @@ export function bindEvents() {
 
   window.addEventListener('keydown', e => {
     const target = e.target as HTMLElement;
+    if (target.id === 'market-search' && e.key === 'Escape') {
+      e.preventDefault();
+      setMarketQuery('');
+      render();
+      return;
+    }
+    if (e.key === 'Enter' && ['global-search', 'market-search'].includes(target.id)) target.blur();
     if (e.key === 'Escape' && target.id === 'global-search' && ui.query) {
       e.preventDefault();
       ui.query = '';
@@ -413,6 +424,7 @@ export function bindEvents() {
   window.addEventListener('hashchange', () => {
     closeDialog();
     ui.category = 'Popular';
+    ui.searchCategoryOrigin = null;
     ui.marketQuery = '';
     ui.collapsed.clear();
     ui.scorerTeam = 0;

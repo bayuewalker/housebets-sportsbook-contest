@@ -1,5 +1,13 @@
 # Housebets Sports — QA Report
 
+## 2026-11-14 final polish
+
+Implemented the PR #15 audit follow-ups: scoped empty-state search with an explicit all-markets action; restoration of the original category when clearing; team labels and cross-squad search context; a readable mobile league breadcrumb; viewport-based keyboard handling; resize-aware strip fades; corrected color documentation.
+
+Validation for this pass: `pnpm lint` PASS, `pnpm test` **41/41**, `pnpm build` PASS, `node --check scripts/qa-browser.mjs` PASS, `git diff --check` PASS. Four new unit regressions cover cross-category search/restoration, unknown queries, market-name squad scope and keyboard dismissal with retained focus. The browser script now also checks scoped search, player team labels, filter restoration and retained-focus keyboard dismissal.
+
+The full browser and stress suites have **not been rerun in this pass**. The 192/192 and 52/52 results below belong to the previous release. Physical mobile keyboards, Safari/Firefox and screen readers remain unverified. The published `build-info.json` identifies the deployed source; final live verification is recorded in the release PR.
+
 ## Scope and environment
 
 Frontend-only prototype. Data flow: UI action → in-memory state transition → validation/calculation → DOM feedback and local demo history. There is no backend, database, payment or betting API.

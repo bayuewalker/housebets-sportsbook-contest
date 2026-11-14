@@ -36,7 +36,7 @@ No UI framework, component library, sportsbook template, UI kit, icon set, stock
 
 | Name | Role |
 | --- | --- |
-| OpenAI ChatGPT / Codex | Initial build of the prototype (earlier branches) |
+| OpenAI ChatGPT / Codex | Initial build and 14 November final polish, tests and release |
 | [Cursor](https://cursor.com/) Cloud Agent, running Anthropic Claude (Claude Opus) | Finishing passes and this redesign: fictional sample data, market pricing, UI modules, styling, accessibility, QA scripts, screenshots and documentation |
 | Grok Bot | Contest audit, review and QA prompts |
 

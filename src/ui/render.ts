@@ -137,7 +137,19 @@ export function refreshOutcome(key: string) {
   });
 }
 
+function paintStrip(el: HTMLElement) {
+  const overflow = el.scrollWidth - el.clientWidth > 2;
+  const atStart = el.scrollLeft <= 2;
+  const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+  el.dataset.fade = !overflow || (atStart && atEnd) ? 'none' : !atStart && !atEnd ? 'both' : atStart ? 'end' : 'start';
+}
+
+const stripObserver = new ResizeObserver(entries => {
+  entries.forEach(entry => paintStrip(entry.target as HTMLElement));
+});
+
 function restoreStrips(saved: Array<{ key: string; left: number }>) {
+  stripObserver.disconnect();
   document.querySelectorAll<HTMLElement>('.h-scroll').forEach(el => {
     const key = el.getAttribute('aria-label') ?? el.className;
     const previous = saved.find(item => item.key === key);
@@ -149,13 +161,9 @@ function restoreStrips(saved: Array<{ key: string; left: number }>) {
       if (box.left < frame.left + 8) el.scrollLeft -= frame.left + 8 - box.left;
       else if (box.right > frame.right - 8) el.scrollLeft += box.right - (frame.right - 8);
     }
-    const paint = () => {
-      const overflow = el.scrollWidth - el.clientWidth > 2;
-      const atStart = el.scrollLeft <= 2;
-      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
-      el.dataset.fade = !overflow || (atStart && atEnd) ? 'none' : !atStart && !atEnd ? 'both' : atStart ? 'end' : 'start';
-    };
+    const paint = () => paintStrip(el);
     paint();
+    stripObserver.observe(el);
     el.addEventListener('scroll', paint, { passive: true });
   });
 }
